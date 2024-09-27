@@ -1,4 +1,9 @@
 .gitkeep
+background.png
+bucket.png
+drop.mp3
+drop.png
+music.mp3
 ui/font-list.fnt
 ui/font-subtitle.fnt
 ui/font-window.fnt
