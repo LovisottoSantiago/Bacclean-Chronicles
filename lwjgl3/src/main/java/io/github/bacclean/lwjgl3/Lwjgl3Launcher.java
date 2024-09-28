@@ -14,9 +14,10 @@ public class Lwjgl3Launcher {
         "Bacclean Chronicles: ¡Las aventuras de Lauty en Miramar!",
         "Bacclean Chronicles: ¡Quiero 5 litros de suavizante!",
         "Bacclean Chronicles: ¡Oh no! ¡Se llevan en cana a Mr. Bacclean!",
-        "Bacclean Chronicles: ¿Cuántos son? ¿Son 7?",
+        "Bacclean Chronicles: ¿Cuántos son? ¿Son 7? ¿Van a pelear los 7?",
         "Bacclean Chronicles: Colgando el Ford Ka en 2 ruedas.",
         "Bacclean Chronicles: Hazlo, perra.",
+        "Bacclean Chronicles: La leyenda del Twingo verde agua."
     };
 
 

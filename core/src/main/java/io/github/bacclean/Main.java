@@ -2,61 +2,49 @@ package io.github.bacclean;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game {
     Texture backgroundTexture;
-    Texture bucketTexture;
-    Texture dropTexture;
-    Sound dropSound;
-    Music music;  
-
-    Sprite bucketSprite; // Declare a new Sprite variable
 
 
+    // Always
     SpriteBatch spriteBatch;
-    FitViewport viewport;
+    ExtendViewport extendViewport;
+    Camera camera;
 
 
-     Vector2 touchPos;
-    
-    // Definición de worldWidth y worldHeight
-    final float worldWidth = 8;
-    final float worldHeight = 5;
+    // Player
+    Player baccleanPlayer;
 
     @Override
     public void create() {
         setScreen(new FirstScreen());
-        backgroundTexture = new Texture("background.png");
-        bucketTexture = new Texture("bucket.png");
-        dropTexture = new Texture("drop.png");
-
-        dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.mp3"));
-        music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
+        backgroundTexture = new Texture("backgrounds/bg_1.png");
 
 
-        bucketSprite = new Sprite(bucketTexture); // Initialize the sprite based on the texture
-        bucketSprite.setSize(1, 1); // Define the size of the sprite
-        
-        touchPos = new Vector2();
+        // Player
+        baccleanPlayer = new Player("baccleanPlayer/walk.png", "baccleanPlayer/stance.png");
+        baccleanPlayer.setPosition(0, 0);
 
+        // Always
+        camera = new OrthographicCamera();
         spriteBatch = new SpriteBatch();
-        viewport = new FitViewport(worldWidth, worldHeight);
+        extendViewport = new ExtendViewport(1024, 768);
+        extendViewport.getCamera().position.set(extendViewport.getWorldWidth() / 2, extendViewport.getWorldHeight() / 2, 0);
+
     }
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true); // true centers the camera
+        extendViewport.update(width, height, true); // true centers the camera
     }
 
     @Override
@@ -69,43 +57,37 @@ public class Main extends Game {
 
     private void input() {
         float speed = 4f;
-        float delta = Gdx.graphics.getDeltaTime(); // retrieve the current delta
-
-        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-            speed = 6f; // Acelerate
-            } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-        bucketSprite.translateY(speed * delta); // Move the bucket up
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-        bucketSprite.translateX(-speed * delta); // Move the bucket left
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-        bucketSprite.translateY(-speed * delta); // Move the bucket down
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            bucketSprite.translateX(speed * delta); // Move the bucket right
-        }
+        float delta = Gdx.graphics.getDeltaTime();
+        baccleanPlayer.playerMove(speed, delta);
         
-        if (Gdx.input.isTouched()) { // If the user has clicked or tapped the screen
-            // todo:React to the player touching the screen
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY()); // Get where the touch happened on screen
-            viewport.unproject(touchPos); // Convert the units to the world units of the viewport
-            // bucketSprite.setCenterX(touchPos.x); // Change the horizontally centered position of the bucket            
-        }
+        baccleanPlayer.update(delta);
+        /*
+        screenViewport.getCamera().position.set(baccleanPlayer, baccleanPlayer, 0)
+        */
 
     }
 
-    // ! Continue here
+    // todo: continue here
     private void logic() {
 
     }
 
     private void draw() {
-        ScreenUtils.clear(Color.BLACK);
-        viewport.apply();
-        spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
-        spriteBatch.begin();
-        // draw stuff here
+        ScreenUtils.clear(Color.BLUE);
+        extendViewport.apply();
+        spriteBatch.setProjectionMatrix(extendViewport.getCamera().combined);
+         
 
+        // draw stuff here
+        spriteBatch.begin();
+        
+        // store the worldWidth and worldHeight as local variables for brevity
+        float worldWidth = extendViewport.getWorldWidth();
+        float worldHeight = extendViewport.getWorldHeight();
+
+        
         spriteBatch.draw(backgroundTexture, 0, 0, worldWidth, worldHeight); // draw the background
-        bucketSprite.draw(spriteBatch); // Sprites have their own draw method
+        baccleanPlayer.draw(spriteBatch);
 
         spriteBatch.end();
     }
