@@ -1,11 +1,14 @@
 .gitkeep
 baccleanPlayer/drop.aseprite
+baccleanPlayer/player-spritemap-v9.png
+baccleanPlayer/player-v9.aseprite
+baccleanPlayer/player-v9.png
 baccleanPlayer/player.png
 baccleanPlayer/stance.aseprite
 baccleanPlayer/stance.png
+baccleanPlayer/walk-v9.png
 baccleanPlayer/walk.aseprite
 baccleanPlayer/walk.png
-baccleanPlayer.png
 background.png
 backgrounds/bg_1.png
 bucket.png
