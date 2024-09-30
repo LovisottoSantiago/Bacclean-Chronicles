@@ -71,6 +71,7 @@ public class Player extends Sprite {
         // Handle movement input
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             //*  jump logic here */
+            
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             this.translateX(-speed * delta); // Move left
