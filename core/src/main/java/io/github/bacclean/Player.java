@@ -28,7 +28,7 @@ public class Player extends Sprite {
 
         // WALK
         TextureRegion[][] tmpWalk = TextureRegion.split(walkSheet, walkSheet.getWidth() / walkFrNumber, walkSheet.getHeight());
-        walkFrames = new TextureRegion[walkFrNumber]; // Assuming 3 frames
+        walkFrames = new TextureRegion[walkFrNumber]; 
         System.arraycopy(tmpWalk[0], 0, walkFrames, 0, walkFrNumber); // Assuming 1 row of animation frames
 
         walkFramesLeft = new TextureRegion[walkFrNumber]; // Assuming 3 frames

@@ -1,20 +1,824 @@
 .gitkeep
+baccleanPlayer/bacclean_idle.png
+baccleanPlayer/bacclean_running.png
 baccleanPlayer/drop.aseprite
 baccleanPlayer/player-spritemap-v9.png
 baccleanPlayer/player-v9.aseprite
 baccleanPlayer/player-v9.png
-baccleanPlayer/player.png
+baccleanPlayer/Scientist.png
 baccleanPlayer/stance.aseprite
-baccleanPlayer/stance.png
 baccleanPlayer/walk-v9.png
 baccleanPlayer/walk.aseprite
-baccleanPlayer/walk.png
+bacclean_idle.png
+bacclean_jump.png
+bacclean_running.png
 background.png
 backgrounds/bg_1.png
 bucket.png
 drop.mp3
 drop.png
+jump.png
 music.mp3
+Pirate Bomb.zip
+player_models/Aseprite Files/1-Player-Bomb Guy.aseprite
+player_models/Aseprite Files/2-Enemy-Bold Pirate.aseprite
+player_models/Aseprite Files/3-Enemy-Cucumber.aseprite
+player_models/Aseprite Files/4-Enemy-Big Guy.aseprite
+player_models/Aseprite Files/5-Enemy-Captain.aseprite
+player_models/Aseprite Files/6-Enemy-Whale.aseprite
+player_models/Aseprite Files/7-Objects.aseprite
+player_models/Aseprite Files/8-Tile-Sets.aseprite
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/1.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/10.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/11.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/12.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/13.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/14.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/15.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/16.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/17.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/18.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/19.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/2.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/20.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/21.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/22.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/23.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/24.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/25.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/26.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/3.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/4.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/5.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/6.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/7.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/8.png
+player_models/Sprites/1-Player-Bomb Guy/1-Idle/9.png
+player_models/Sprites/1-Player-Bomb Guy/10-Door In/1.png
+player_models/Sprites/1-Player-Bomb Guy/10-Door In/10.png
+player_models/Sprites/1-Player-Bomb Guy/10-Door In/11.png
+player_models/Sprites/1-Player-Bomb Guy/10-Door In/12.png
+player_models/Sprites/1-Player-Bomb Guy/10-Door In/13.png
+player_models/Sprites/1-Player-Bomb Guy/10-Door In/14.png
+player_models/Sprites/1-Player-Bomb Guy/10-Door In/15.png
+player_models/Sprites/1-Player-Bomb Guy/10-Door In/16.png
+player_models/Sprites/1-Player-Bomb Guy/10-Door In/2.png
+player_models/Sprites/1-Player-Bomb Guy/10-Door In/3.png
+player_models/Sprites/1-Player-Bomb Guy/10-Door In/4.png
+player_models/Sprites/1-Player-Bomb Guy/10-Door In/5.png
+player_models/Sprites/1-Player-Bomb Guy/10-Door In/6.png
+player_models/Sprites/1-Player-Bomb Guy/10-Door In/7.png
+player_models/Sprites/1-Player-Bomb Guy/10-Door In/8.png
+player_models/Sprites/1-Player-Bomb Guy/10-Door In/9.png
+player_models/Sprites/1-Player-Bomb Guy/11-Door Out/1.png
+player_models/Sprites/1-Player-Bomb Guy/11-Door Out/10.png
+player_models/Sprites/1-Player-Bomb Guy/11-Door Out/11.png
+player_models/Sprites/1-Player-Bomb Guy/11-Door Out/12.png
+player_models/Sprites/1-Player-Bomb Guy/11-Door Out/13.png
+player_models/Sprites/1-Player-Bomb Guy/11-Door Out/14.png
+player_models/Sprites/1-Player-Bomb Guy/11-Door Out/15.png
+player_models/Sprites/1-Player-Bomb Guy/11-Door Out/16.png
+player_models/Sprites/1-Player-Bomb Guy/11-Door Out/2.png
+player_models/Sprites/1-Player-Bomb Guy/11-Door Out/3.png
+player_models/Sprites/1-Player-Bomb Guy/11-Door Out/4.png
+player_models/Sprites/1-Player-Bomb Guy/11-Door Out/5.png
+player_models/Sprites/1-Player-Bomb Guy/11-Door Out/6.png
+player_models/Sprites/1-Player-Bomb Guy/11-Door Out/7.png
+player_models/Sprites/1-Player-Bomb Guy/11-Door Out/8.png
+player_models/Sprites/1-Player-Bomb Guy/11-Door Out/9.png
+player_models/Sprites/1-Player-Bomb Guy/2-Run/1.png
+player_models/Sprites/1-Player-Bomb Guy/2-Run/10.png
+player_models/Sprites/1-Player-Bomb Guy/2-Run/11.png
+player_models/Sprites/1-Player-Bomb Guy/2-Run/12.png
+player_models/Sprites/1-Player-Bomb Guy/2-Run/13.png
+player_models/Sprites/1-Player-Bomb Guy/2-Run/14.png
+player_models/Sprites/1-Player-Bomb Guy/2-Run/2.png
+player_models/Sprites/1-Player-Bomb Guy/2-Run/3.png
+player_models/Sprites/1-Player-Bomb Guy/2-Run/4.png
+player_models/Sprites/1-Player-Bomb Guy/2-Run/5.png
+player_models/Sprites/1-Player-Bomb Guy/2-Run/6.png
+player_models/Sprites/1-Player-Bomb Guy/2-Run/7.png
+player_models/Sprites/1-Player-Bomb Guy/2-Run/8.png
+player_models/Sprites/1-Player-Bomb Guy/2-Run/9.png
+player_models/Sprites/1-Player-Bomb Guy/3-Jump Anticipation/1.png
+player_models/Sprites/1-Player-Bomb Guy/4-Jump/1.png
+player_models/Sprites/1-Player-Bomb Guy/4-Jump/2.png
+player_models/Sprites/1-Player-Bomb Guy/4-Jump/3.png
+player_models/Sprites/1-Player-Bomb Guy/4-Jump/4.png
+player_models/Sprites/1-Player-Bomb Guy/5-Fall/1.png
+player_models/Sprites/1-Player-Bomb Guy/5-Fall/2.png
+player_models/Sprites/1-Player-Bomb Guy/6-Ground/1.png
+player_models/Sprites/1-Player-Bomb Guy/6-Ground/2.png
+player_models/Sprites/1-Player-Bomb Guy/6-Ground/3.png
+player_models/Sprites/1-Player-Bomb Guy/7-Hit/1.png
+player_models/Sprites/1-Player-Bomb Guy/7-Hit/2.png
+player_models/Sprites/1-Player-Bomb Guy/7-Hit/3.png
+player_models/Sprites/1-Player-Bomb Guy/7-Hit/4.png
+player_models/Sprites/1-Player-Bomb Guy/7-Hit/5.png
+player_models/Sprites/1-Player-Bomb Guy/7-Hit/6.png
+player_models/Sprites/1-Player-Bomb Guy/7-Hit/7.png
+player_models/Sprites/1-Player-Bomb Guy/7-Hit/8.png
+player_models/Sprites/1-Player-Bomb Guy/8-Dead Hit/1.png
+player_models/Sprites/1-Player-Bomb Guy/8-Dead Hit/2.png
+player_models/Sprites/1-Player-Bomb Guy/8-Dead Hit/3.png
+player_models/Sprites/1-Player-Bomb Guy/8-Dead Hit/4.png
+player_models/Sprites/1-Player-Bomb Guy/8-Dead Hit/5.png
+player_models/Sprites/1-Player-Bomb Guy/8-Dead Hit/6.png
+player_models/Sprites/1-Player-Bomb Guy/9-Dead Ground/1.png
+player_models/Sprites/1-Player-Bomb Guy/9-Dead Ground/2.png
+player_models/Sprites/1-Player-Bomb Guy/9-Dead Ground/3.png
+player_models/Sprites/1-Player-Bomb Guy/9-Dead Ground/4.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/1.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/10.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/11.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/12.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/13.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/14.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/15.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/16.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/17.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/18.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/19.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/2.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/20.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/21.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/22.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/23.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/24.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/25.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/26.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/27.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/28.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/29.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/3.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/30.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/31.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/32.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/33.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/34.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/4.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/5.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/6.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/7.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/8.png
+player_models/Sprites/2-Enemy-Bald Pirate/1-Idle/9.png
+player_models/Sprites/2-Enemy-Bald Pirate/10-Dead Ground/1.png
+player_models/Sprites/2-Enemy-Bald Pirate/10-Dead Ground/2.png
+player_models/Sprites/2-Enemy-Bald Pirate/10-Dead Ground/3.png
+player_models/Sprites/2-Enemy-Bald Pirate/10-Dead Ground/4.png
+player_models/Sprites/2-Enemy-Bald Pirate/2-Run/1.png
+player_models/Sprites/2-Enemy-Bald Pirate/2-Run/10.png
+player_models/Sprites/2-Enemy-Bald Pirate/2-Run/11.png
+player_models/Sprites/2-Enemy-Bald Pirate/2-Run/12.png
+player_models/Sprites/2-Enemy-Bald Pirate/2-Run/13.png
+player_models/Sprites/2-Enemy-Bald Pirate/2-Run/14.png
+player_models/Sprites/2-Enemy-Bald Pirate/2-Run/2.png
+player_models/Sprites/2-Enemy-Bald Pirate/2-Run/3.png
+player_models/Sprites/2-Enemy-Bald Pirate/2-Run/4.png
+player_models/Sprites/2-Enemy-Bald Pirate/2-Run/5.png
+player_models/Sprites/2-Enemy-Bald Pirate/2-Run/6.png
+player_models/Sprites/2-Enemy-Bald Pirate/2-Run/7.png
+player_models/Sprites/2-Enemy-Bald Pirate/2-Run/8.png
+player_models/Sprites/2-Enemy-Bald Pirate/2-Run/9.png
+player_models/Sprites/2-Enemy-Bald Pirate/3-Jump Anticipation/1.png
+player_models/Sprites/2-Enemy-Bald Pirate/4-Jump/1.png
+player_models/Sprites/2-Enemy-Bald Pirate/4-Jump/2.png
+player_models/Sprites/2-Enemy-Bald Pirate/4-Jump/3.png
+player_models/Sprites/2-Enemy-Bald Pirate/4-Jump/4.png
+player_models/Sprites/2-Enemy-Bald Pirate/5-Fall/1.png
+player_models/Sprites/2-Enemy-Bald Pirate/5-Fall/2.png
+player_models/Sprites/2-Enemy-Bald Pirate/6-Ground/1.png
+player_models/Sprites/2-Enemy-Bald Pirate/6-Ground/2.png
+player_models/Sprites/2-Enemy-Bald Pirate/6-Ground/3.png
+player_models/Sprites/2-Enemy-Bald Pirate/7-Attack/1.png
+player_models/Sprites/2-Enemy-Bald Pirate/7-Attack/10.png
+player_models/Sprites/2-Enemy-Bald Pirate/7-Attack/11.png
+player_models/Sprites/2-Enemy-Bald Pirate/7-Attack/12.png
+player_models/Sprites/2-Enemy-Bald Pirate/7-Attack/2.png
+player_models/Sprites/2-Enemy-Bald Pirate/7-Attack/3.png
+player_models/Sprites/2-Enemy-Bald Pirate/7-Attack/4.png
+player_models/Sprites/2-Enemy-Bald Pirate/7-Attack/5.png
+player_models/Sprites/2-Enemy-Bald Pirate/7-Attack/6.png
+player_models/Sprites/2-Enemy-Bald Pirate/7-Attack/7.png
+player_models/Sprites/2-Enemy-Bald Pirate/7-Attack/8.png
+player_models/Sprites/2-Enemy-Bald Pirate/7-Attack/9.png
+player_models/Sprites/2-Enemy-Bald Pirate/8-Hit/1.png
+player_models/Sprites/2-Enemy-Bald Pirate/8-Hit/2.png
+player_models/Sprites/2-Enemy-Bald Pirate/8-Hit/3.png
+player_models/Sprites/2-Enemy-Bald Pirate/8-Hit/4.png
+player_models/Sprites/2-Enemy-Bald Pirate/8-Hit/5.png
+player_models/Sprites/2-Enemy-Bald Pirate/8-Hit/6.png
+player_models/Sprites/2-Enemy-Bald Pirate/8-Hit/7.png
+player_models/Sprites/2-Enemy-Bald Pirate/8-Hit/8.png
+player_models/Sprites/2-Enemy-Bald Pirate/9-Dead Hit/1.png
+player_models/Sprites/2-Enemy-Bald Pirate/9-Dead Hit/2.png
+player_models/Sprites/2-Enemy-Bald Pirate/9-Dead Hit/3.png
+player_models/Sprites/2-Enemy-Bald Pirate/9-Dead Hit/4.png
+player_models/Sprites/2-Enemy-Bald Pirate/9-Dead Hit/5.png
+player_models/Sprites/2-Enemy-Bald Pirate/9-Dead Hit/6.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/1.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/10.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/11.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/12.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/13.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/14.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/15.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/16.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/17.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/18.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/19.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/2.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/20.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/21.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/22.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/23.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/24.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/25.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/26.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/27.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/28.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/29.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/3.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/30.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/31.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/32.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/33.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/34.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/35.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/36.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/4.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/5.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/6.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/7.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/8.png
+player_models/Sprites/3-Enemy-Cucumber/1-Idle/9.png
+player_models/Sprites/3-Enemy-Cucumber/10-Dead Hit/1.png
+player_models/Sprites/3-Enemy-Cucumber/10-Dead Hit/2.png
+player_models/Sprites/3-Enemy-Cucumber/10-Dead Hit/3.png
+player_models/Sprites/3-Enemy-Cucumber/10-Dead Hit/4.png
+player_models/Sprites/3-Enemy-Cucumber/10-Dead Hit/5.png
+player_models/Sprites/3-Enemy-Cucumber/10-Dead Hit/6.png
+player_models/Sprites/3-Enemy-Cucumber/11-Dead Ground/1.png
+player_models/Sprites/3-Enemy-Cucumber/11-Dead Ground/2.png
+player_models/Sprites/3-Enemy-Cucumber/11-Dead Ground/3.png
+player_models/Sprites/3-Enemy-Cucumber/11-Dead Ground/4.png
+player_models/Sprites/3-Enemy-Cucumber/2-Run/1.png
+player_models/Sprites/3-Enemy-Cucumber/2-Run/10.png
+player_models/Sprites/3-Enemy-Cucumber/2-Run/11.png
+player_models/Sprites/3-Enemy-Cucumber/2-Run/12.png
+player_models/Sprites/3-Enemy-Cucumber/2-Run/2.png
+player_models/Sprites/3-Enemy-Cucumber/2-Run/3.png
+player_models/Sprites/3-Enemy-Cucumber/2-Run/4.png
+player_models/Sprites/3-Enemy-Cucumber/2-Run/5.png
+player_models/Sprites/3-Enemy-Cucumber/2-Run/6.png
+player_models/Sprites/3-Enemy-Cucumber/2-Run/7.png
+player_models/Sprites/3-Enemy-Cucumber/2-Run/8.png
+player_models/Sprites/3-Enemy-Cucumber/2-Run/9.png
+player_models/Sprites/3-Enemy-Cucumber/3-Jump Anticipation/1.png
+player_models/Sprites/3-Enemy-Cucumber/4-Jump/1.png
+player_models/Sprites/3-Enemy-Cucumber/4-Jump/2.png
+player_models/Sprites/3-Enemy-Cucumber/4-Jump/3.png
+player_models/Sprites/3-Enemy-Cucumber/4-Jump/4.png
+player_models/Sprites/3-Enemy-Cucumber/5-Fall/1.png
+player_models/Sprites/3-Enemy-Cucumber/5-Fall/2.png
+player_models/Sprites/3-Enemy-Cucumber/6-Ground/1.png
+player_models/Sprites/3-Enemy-Cucumber/6-Ground/2.png
+player_models/Sprites/3-Enemy-Cucumber/6-Ground/3.png
+player_models/Sprites/3-Enemy-Cucumber/7-Attack/1.png
+player_models/Sprites/3-Enemy-Cucumber/7-Attack/10.png
+player_models/Sprites/3-Enemy-Cucumber/7-Attack/11.png
+player_models/Sprites/3-Enemy-Cucumber/7-Attack/2.png
+player_models/Sprites/3-Enemy-Cucumber/7-Attack/3.png
+player_models/Sprites/3-Enemy-Cucumber/7-Attack/4.png
+player_models/Sprites/3-Enemy-Cucumber/7-Attack/5.png
+player_models/Sprites/3-Enemy-Cucumber/7-Attack/6.png
+player_models/Sprites/3-Enemy-Cucumber/7-Attack/7.png
+player_models/Sprites/3-Enemy-Cucumber/7-Attack/8.png
+player_models/Sprites/3-Enemy-Cucumber/7-Attack/9.png
+player_models/Sprites/3-Enemy-Cucumber/8-Blow the wick/1.png
+player_models/Sprites/3-Enemy-Cucumber/8-Blow the wick/10.png
+player_models/Sprites/3-Enemy-Cucumber/8-Blow the wick/11.png
+player_models/Sprites/3-Enemy-Cucumber/8-Blow the wick/2.png
+player_models/Sprites/3-Enemy-Cucumber/8-Blow the wick/3.png
+player_models/Sprites/3-Enemy-Cucumber/8-Blow the wick/4.png
+player_models/Sprites/3-Enemy-Cucumber/8-Blow the wick/5.png
+player_models/Sprites/3-Enemy-Cucumber/8-Blow the wick/6.png
+player_models/Sprites/3-Enemy-Cucumber/8-Blow the wick/7.png
+player_models/Sprites/3-Enemy-Cucumber/8-Blow the wick/8.png
+player_models/Sprites/3-Enemy-Cucumber/8-Blow the wick/9.png
+player_models/Sprites/3-Enemy-Cucumber/9-Hit/1.png
+player_models/Sprites/3-Enemy-Cucumber/9-Hit/2.png
+player_models/Sprites/3-Enemy-Cucumber/9-Hit/3.png
+player_models/Sprites/3-Enemy-Cucumber/9-Hit/4.png
+player_models/Sprites/3-Enemy-Cucumber/9-Hit/5.png
+player_models/Sprites/3-Enemy-Cucumber/9-Hit/6.png
+player_models/Sprites/3-Enemy-Cucumber/9-Hit/7.png
+player_models/Sprites/3-Enemy-Cucumber/9-Hit/8.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/1.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/10.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/11.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/12.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/13.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/14.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/15.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/16.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/17.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/18.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/19.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/2.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/20.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/21.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/22.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/23.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/24.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/25.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/26.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/27.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/28.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/29.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/3.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/30.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/31.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/32.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/33.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/34.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/35.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/36.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/37.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/38.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/4.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/5.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/6.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/7.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/8.png
+player_models/Sprites/4-Enemy-Big Guy/1-Idle/9.png
+player_models/Sprites/4-Enemy-Big Guy/10-Run (Bomb)/1.png
+player_models/Sprites/4-Enemy-Big Guy/10-Run (Bomb)/10.png
+player_models/Sprites/4-Enemy-Big Guy/10-Run (Bomb)/11.png
+player_models/Sprites/4-Enemy-Big Guy/10-Run (Bomb)/12.png
+player_models/Sprites/4-Enemy-Big Guy/10-Run (Bomb)/13.png
+player_models/Sprites/4-Enemy-Big Guy/10-Run (Bomb)/14.png
+player_models/Sprites/4-Enemy-Big Guy/10-Run (Bomb)/15.png
+player_models/Sprites/4-Enemy-Big Guy/10-Run (Bomb)/16.png
+player_models/Sprites/4-Enemy-Big Guy/10-Run (Bomb)/2.png
+player_models/Sprites/4-Enemy-Big Guy/10-Run (Bomb)/3.png
+player_models/Sprites/4-Enemy-Big Guy/10-Run (Bomb)/4.png
+player_models/Sprites/4-Enemy-Big Guy/10-Run (Bomb)/5.png
+player_models/Sprites/4-Enemy-Big Guy/10-Run (Bomb)/6.png
+player_models/Sprites/4-Enemy-Big Guy/10-Run (Bomb)/7.png
+player_models/Sprites/4-Enemy-Big Guy/10-Run (Bomb)/8.png
+player_models/Sprites/4-Enemy-Big Guy/10-Run (Bomb)/9.png
+player_models/Sprites/4-Enemy-Big Guy/11-Throw (Bomb)/1.png
+player_models/Sprites/4-Enemy-Big Guy/11-Throw (Bomb)/10.png
+player_models/Sprites/4-Enemy-Big Guy/11-Throw (Bomb)/11.png
+player_models/Sprites/4-Enemy-Big Guy/11-Throw (Bomb)/2.png
+player_models/Sprites/4-Enemy-Big Guy/11-Throw (Bomb)/3.png
+player_models/Sprites/4-Enemy-Big Guy/11-Throw (Bomb)/4.png
+player_models/Sprites/4-Enemy-Big Guy/11-Throw (Bomb)/5.png
+player_models/Sprites/4-Enemy-Big Guy/11-Throw (Bomb)/6.png
+player_models/Sprites/4-Enemy-Big Guy/11-Throw (Bomb)/7.png
+player_models/Sprites/4-Enemy-Big Guy/11-Throw (Bomb)/8.png
+player_models/Sprites/4-Enemy-Big Guy/11-Throw (Bomb)/9.png
+player_models/Sprites/4-Enemy-Big Guy/12-Hit/1.png
+player_models/Sprites/4-Enemy-Big Guy/12-Hit/2.png
+player_models/Sprites/4-Enemy-Big Guy/12-Hit/3.png
+player_models/Sprites/4-Enemy-Big Guy/12-Hit/4.png
+player_models/Sprites/4-Enemy-Big Guy/12-Hit/5.png
+player_models/Sprites/4-Enemy-Big Guy/12-Hit/6.png
+player_models/Sprites/4-Enemy-Big Guy/12-Hit/7.png
+player_models/Sprites/4-Enemy-Big Guy/12-Hit/8.png
+player_models/Sprites/4-Enemy-Big Guy/13-Dead Hit/1.png
+player_models/Sprites/4-Enemy-Big Guy/13-Dead Hit/2.png
+player_models/Sprites/4-Enemy-Big Guy/13-Dead Hit/3.png
+player_models/Sprites/4-Enemy-Big Guy/13-Dead Hit/4.png
+player_models/Sprites/4-Enemy-Big Guy/13-Dead Hit/5.png
+player_models/Sprites/4-Enemy-Big Guy/13-Dead Hit/6.png
+player_models/Sprites/4-Enemy-Big Guy/14-Dead Ground/1.png
+player_models/Sprites/4-Enemy-Big Guy/14-Dead Ground/2.png
+player_models/Sprites/4-Enemy-Big Guy/14-Dead Ground/3.png
+player_models/Sprites/4-Enemy-Big Guy/14-Dead Ground/4.png
+player_models/Sprites/4-Enemy-Big Guy/2-Run/1.png
+player_models/Sprites/4-Enemy-Big Guy/2-Run/10.png
+player_models/Sprites/4-Enemy-Big Guy/2-Run/11.png
+player_models/Sprites/4-Enemy-Big Guy/2-Run/12.png
+player_models/Sprites/4-Enemy-Big Guy/2-Run/13.png
+player_models/Sprites/4-Enemy-Big Guy/2-Run/14.png
+player_models/Sprites/4-Enemy-Big Guy/2-Run/15.png
+player_models/Sprites/4-Enemy-Big Guy/2-Run/16.png
+player_models/Sprites/4-Enemy-Big Guy/2-Run/2.png
+player_models/Sprites/4-Enemy-Big Guy/2-Run/3.png
+player_models/Sprites/4-Enemy-Big Guy/2-Run/4.png
+player_models/Sprites/4-Enemy-Big Guy/2-Run/5.png
+player_models/Sprites/4-Enemy-Big Guy/2-Run/6.png
+player_models/Sprites/4-Enemy-Big Guy/2-Run/7.png
+player_models/Sprites/4-Enemy-Big Guy/2-Run/8.png
+player_models/Sprites/4-Enemy-Big Guy/2-Run/9.png
+player_models/Sprites/4-Enemy-Big Guy/3-Jump Anticipation/1.png
+player_models/Sprites/4-Enemy-Big Guy/4-Jump/1.png
+player_models/Sprites/4-Enemy-Big Guy/4-Jump/2.png
+player_models/Sprites/4-Enemy-Big Guy/4-Jump/3.png
+player_models/Sprites/4-Enemy-Big Guy/4-Jump/4.png
+player_models/Sprites/4-Enemy-Big Guy/5-Fall/1.png
+player_models/Sprites/4-Enemy-Big Guy/5-Fall/2.png
+player_models/Sprites/4-Enemy-Big Guy/6-Ground/1.png
+player_models/Sprites/4-Enemy-Big Guy/6-Ground/2.png
+player_models/Sprites/4-Enemy-Big Guy/6-Ground/3.png
+player_models/Sprites/4-Enemy-Big Guy/7-Attack/1.png
+player_models/Sprites/4-Enemy-Big Guy/7-Attack/10.png
+player_models/Sprites/4-Enemy-Big Guy/7-Attack/11.png
+player_models/Sprites/4-Enemy-Big Guy/7-Attack/2.png
+player_models/Sprites/4-Enemy-Big Guy/7-Attack/3.png
+player_models/Sprites/4-Enemy-Big Guy/7-Attack/4.png
+player_models/Sprites/4-Enemy-Big Guy/7-Attack/5.png
+player_models/Sprites/4-Enemy-Big Guy/7-Attack/6.png
+player_models/Sprites/4-Enemy-Big Guy/7-Attack/7.png
+player_models/Sprites/4-Enemy-Big Guy/7-Attack/8.png
+player_models/Sprites/4-Enemy-Big Guy/7-Attack/9.png
+player_models/Sprites/4-Enemy-Big Guy/8-Pick (Bomb)/1.png
+player_models/Sprites/4-Enemy-Big Guy/8-Pick (Bomb)/2.png
+player_models/Sprites/4-Enemy-Big Guy/8-Pick (Bomb)/3.png
+player_models/Sprites/4-Enemy-Big Guy/8-Pick (Bomb)/4.png
+player_models/Sprites/4-Enemy-Big Guy/8-Pick (Bomb)/5.png
+player_models/Sprites/4-Enemy-Big Guy/8-Pick (Bomb)/6.png
+player_models/Sprites/4-Enemy-Big Guy/8-Pick (Bomb)/7.png
+player_models/Sprites/4-Enemy-Big Guy/8-Pick (Bomb)/8.png
+player_models/Sprites/4-Enemy-Big Guy/9-Idle (Bomb)/1.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/1.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/10.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/11.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/12.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/13.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/14.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/15.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/16.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/17.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/18.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/19.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/2.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/20.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/21.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/22.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/23.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/24.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/25.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/26.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/27.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/28.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/29.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/3.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/30.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/31.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/32.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/4.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/5.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/6.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/7.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/8.png
+player_models/Sprites/5-Enemy-Captain/1-Idle/9.png
+player_models/Sprites/5-Enemy-Captain/10-Dead Hit/1.png
+player_models/Sprites/5-Enemy-Captain/10-Dead Hit/2.png
+player_models/Sprites/5-Enemy-Captain/10-Dead Hit/3.png
+player_models/Sprites/5-Enemy-Captain/10-Dead Hit/4.png
+player_models/Sprites/5-Enemy-Captain/10-Dead Hit/5.png
+player_models/Sprites/5-Enemy-Captain/10-Dead Hit/6.png
+player_models/Sprites/5-Enemy-Captain/11-Dead Ground/1.png
+player_models/Sprites/5-Enemy-Captain/11-Dead Ground/2.png
+player_models/Sprites/5-Enemy-Captain/11-Dead Ground/3.png
+player_models/Sprites/5-Enemy-Captain/11-Dead Ground/4.png
+player_models/Sprites/5-Enemy-Captain/2-Run/1.png
+player_models/Sprites/5-Enemy-Captain/2-Run/10.png
+player_models/Sprites/5-Enemy-Captain/2-Run/11.png
+player_models/Sprites/5-Enemy-Captain/2-Run/12.png
+player_models/Sprites/5-Enemy-Captain/2-Run/13.png
+player_models/Sprites/5-Enemy-Captain/2-Run/14.png
+player_models/Sprites/5-Enemy-Captain/2-Run/2.png
+player_models/Sprites/5-Enemy-Captain/2-Run/3.png
+player_models/Sprites/5-Enemy-Captain/2-Run/4.png
+player_models/Sprites/5-Enemy-Captain/2-Run/5.png
+player_models/Sprites/5-Enemy-Captain/2-Run/6.png
+player_models/Sprites/5-Enemy-Captain/2-Run/7.png
+player_models/Sprites/5-Enemy-Captain/2-Run/8.png
+player_models/Sprites/5-Enemy-Captain/2-Run/9.png
+player_models/Sprites/5-Enemy-Captain/3-Jump Anticipation/1.png
+player_models/Sprites/5-Enemy-Captain/4-Jump/1.png
+player_models/Sprites/5-Enemy-Captain/4-Jump/2.png
+player_models/Sprites/5-Enemy-Captain/4-Jump/3.png
+player_models/Sprites/5-Enemy-Captain/4-Jump/4.png
+player_models/Sprites/5-Enemy-Captain/5-Fall/1.png
+player_models/Sprites/5-Enemy-Captain/5-Fall/2.png
+player_models/Sprites/5-Enemy-Captain/6-Ground/1.png
+player_models/Sprites/5-Enemy-Captain/6-Ground/2.png
+player_models/Sprites/5-Enemy-Captain/6-Ground/3.png
+player_models/Sprites/5-Enemy-Captain/7-Attack/1.png
+player_models/Sprites/5-Enemy-Captain/7-Attack/2.png
+player_models/Sprites/5-Enemy-Captain/7-Attack/3.png
+player_models/Sprites/5-Enemy-Captain/7-Attack/4.png
+player_models/Sprites/5-Enemy-Captain/7-Attack/5.png
+player_models/Sprites/5-Enemy-Captain/7-Attack/6.png
+player_models/Sprites/5-Enemy-Captain/7-Attack/7.png
+player_models/Sprites/5-Enemy-Captain/8-Scare Run/1.png
+player_models/Sprites/5-Enemy-Captain/8-Scare Run/10.png
+player_models/Sprites/5-Enemy-Captain/8-Scare Run/11.png
+player_models/Sprites/5-Enemy-Captain/8-Scare Run/12.png
+player_models/Sprites/5-Enemy-Captain/8-Scare Run/2.png
+player_models/Sprites/5-Enemy-Captain/8-Scare Run/3.png
+player_models/Sprites/5-Enemy-Captain/8-Scare Run/4.png
+player_models/Sprites/5-Enemy-Captain/8-Scare Run/5.png
+player_models/Sprites/5-Enemy-Captain/8-Scare Run/6.png
+player_models/Sprites/5-Enemy-Captain/8-Scare Run/7.png
+player_models/Sprites/5-Enemy-Captain/8-Scare Run/8.png
+player_models/Sprites/5-Enemy-Captain/8-Scare Run/9.png
+player_models/Sprites/5-Enemy-Captain/9-Hit/1.png
+player_models/Sprites/5-Enemy-Captain/9-Hit/2.png
+player_models/Sprites/5-Enemy-Captain/9-Hit/3.png
+player_models/Sprites/5-Enemy-Captain/9-Hit/4.png
+player_models/Sprites/5-Enemy-Captain/9-Hit/5.png
+player_models/Sprites/5-Enemy-Captain/9-Hit/6.png
+player_models/Sprites/5-Enemy-Captain/9-Hit/7.png
+player_models/Sprites/5-Enemy-Captain/9-Hit/8.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/1.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/10.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/11.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/12.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/13.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/14.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/15.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/16.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/17.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/18.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/19.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/2.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/20.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/21.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/22.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/23.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/24.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/25.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/26.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/27.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/28.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/29.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/3.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/30.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/31.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/32.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/33.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/34.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/35.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/36.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/37.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/38.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/39.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/4.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/40.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/41.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/42.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/43.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/44.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/5.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/6.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/7.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/8.png
+player_models/Sprites/6-Enemy-Whale/1-Idle/9.png
+player_models/Sprites/6-Enemy-Whale/10-Dead Hit/1.png
+player_models/Sprites/6-Enemy-Whale/10-Dead Hit/2.png
+player_models/Sprites/6-Enemy-Whale/10-Dead Hit/3.png
+player_models/Sprites/6-Enemy-Whale/10-Dead Hit/4.png
+player_models/Sprites/6-Enemy-Whale/10-Dead Hit/5.png
+player_models/Sprites/6-Enemy-Whale/10-Dead Hit/6.png
+player_models/Sprites/6-Enemy-Whale/11-Dead Ground/1.png
+player_models/Sprites/6-Enemy-Whale/11-Dead Ground/2.png
+player_models/Sprites/6-Enemy-Whale/11-Dead Ground/3.png
+player_models/Sprites/6-Enemy-Whale/11-Dead Ground/4.png
+player_models/Sprites/6-Enemy-Whale/2-Run/1.png
+player_models/Sprites/6-Enemy-Whale/2-Run/10.png
+player_models/Sprites/6-Enemy-Whale/2-Run/11.png
+player_models/Sprites/6-Enemy-Whale/2-Run/12.png
+player_models/Sprites/6-Enemy-Whale/2-Run/13.png
+player_models/Sprites/6-Enemy-Whale/2-Run/14.png
+player_models/Sprites/6-Enemy-Whale/2-Run/2.png
+player_models/Sprites/6-Enemy-Whale/2-Run/3.png
+player_models/Sprites/6-Enemy-Whale/2-Run/4.png
+player_models/Sprites/6-Enemy-Whale/2-Run/5.png
+player_models/Sprites/6-Enemy-Whale/2-Run/6.png
+player_models/Sprites/6-Enemy-Whale/2-Run/7.png
+player_models/Sprites/6-Enemy-Whale/2-Run/8.png
+player_models/Sprites/6-Enemy-Whale/2-Run/9.png
+player_models/Sprites/6-Enemy-Whale/3-Jump Anticipation/1.png
+player_models/Sprites/6-Enemy-Whale/4-Jump/1.png
+player_models/Sprites/6-Enemy-Whale/4-Jump/2.png
+player_models/Sprites/6-Enemy-Whale/4-Jump/3.png
+player_models/Sprites/6-Enemy-Whale/4-Jump/4.png
+player_models/Sprites/6-Enemy-Whale/5-Fall/1.png
+player_models/Sprites/6-Enemy-Whale/5-Fall/2.png
+player_models/Sprites/6-Enemy-Whale/6-Ground/1.png
+player_models/Sprites/6-Enemy-Whale/6-Ground/2.png
+player_models/Sprites/6-Enemy-Whale/6-Ground/3.png
+player_models/Sprites/6-Enemy-Whale/7-Attack/1.png
+player_models/Sprites/6-Enemy-Whale/7-Attack/10.png
+player_models/Sprites/6-Enemy-Whale/7-Attack/11.png
+player_models/Sprites/6-Enemy-Whale/7-Attack/2.png
+player_models/Sprites/6-Enemy-Whale/7-Attack/3.png
+player_models/Sprites/6-Enemy-Whale/7-Attack/4.png
+player_models/Sprites/6-Enemy-Whale/7-Attack/5.png
+player_models/Sprites/6-Enemy-Whale/7-Attack/6.png
+player_models/Sprites/6-Enemy-Whale/7-Attack/7.png
+player_models/Sprites/6-Enemy-Whale/7-Attack/8.png
+player_models/Sprites/6-Enemy-Whale/7-Attack/9.png
+player_models/Sprites/6-Enemy-Whale/8-Swalow (Bomb)/1.png
+player_models/Sprites/6-Enemy-Whale/8-Swalow (Bomb)/10.png
+player_models/Sprites/6-Enemy-Whale/8-Swalow (Bomb)/2.png
+player_models/Sprites/6-Enemy-Whale/8-Swalow (Bomb)/3.png
+player_models/Sprites/6-Enemy-Whale/8-Swalow (Bomb)/4.png
+player_models/Sprites/6-Enemy-Whale/8-Swalow (Bomb)/5.png
+player_models/Sprites/6-Enemy-Whale/8-Swalow (Bomb)/6.png
+player_models/Sprites/6-Enemy-Whale/8-Swalow (Bomb)/7.png
+player_models/Sprites/6-Enemy-Whale/8-Swalow (Bomb)/8.png
+player_models/Sprites/6-Enemy-Whale/8-Swalow (Bomb)/9.png
+player_models/Sprites/6-Enemy-Whale/9-Hit/1.png
+player_models/Sprites/6-Enemy-Whale/9-Hit/2.png
+player_models/Sprites/6-Enemy-Whale/9-Hit/3.png
+player_models/Sprites/6-Enemy-Whale/9-Hit/4.png
+player_models/Sprites/6-Enemy-Whale/9-Hit/5.png
+player_models/Sprites/6-Enemy-Whale/9-Hit/6.png
+player_models/Sprites/6-Enemy-Whale/9-Hit/7.png
+player_models/Sprites/7-Objects/1-BOMB/1-Bomb Off/1.png
+player_models/Sprites/7-Objects/1-BOMB/2-Bomb On/1.png
+player_models/Sprites/7-Objects/1-BOMB/2-Bomb On/10.png
+player_models/Sprites/7-Objects/1-BOMB/2-Bomb On/2.png
+player_models/Sprites/7-Objects/1-BOMB/2-Bomb On/3.png
+player_models/Sprites/7-Objects/1-BOMB/2-Bomb On/4.png
+player_models/Sprites/7-Objects/1-BOMB/2-Bomb On/5.png
+player_models/Sprites/7-Objects/1-BOMB/2-Bomb On/6.png
+player_models/Sprites/7-Objects/1-BOMB/2-Bomb On/7.png
+player_models/Sprites/7-Objects/1-BOMB/2-Bomb On/8.png
+player_models/Sprites/7-Objects/1-BOMB/2-Bomb On/9.png
+player_models/Sprites/7-Objects/1-BOMB/3-Explotion/1.png
+player_models/Sprites/7-Objects/1-BOMB/3-Explotion/2.png
+player_models/Sprites/7-Objects/1-BOMB/3-Explotion/3.png
+player_models/Sprites/7-Objects/1-BOMB/3-Explotion/4.png
+player_models/Sprites/7-Objects/1-BOMB/3-Explotion/5.png
+player_models/Sprites/7-Objects/1-BOMB/3-Explotion/6.png
+player_models/Sprites/7-Objects/1-BOMB/3-Explotion/7.png
+player_models/Sprites/7-Objects/1-BOMB/3-Explotion/8.png
+player_models/Sprites/7-Objects/1-BOMB/3-Explotion/9.png
+player_models/Sprites/7-Objects/10-Big Chain/1.png
+player_models/Sprites/7-Objects/10-Big Chain/10.png
+player_models/Sprites/7-Objects/10-Big Chain/2.png
+player_models/Sprites/7-Objects/10-Big Chain/3.png
+player_models/Sprites/7-Objects/10-Big Chain/4.png
+player_models/Sprites/7-Objects/10-Big Chain/5.png
+player_models/Sprites/7-Objects/10-Big Chain/6.png
+player_models/Sprites/7-Objects/10-Big Chain/7.png
+player_models/Sprites/7-Objects/10-Big Chain/8.png
+player_models/Sprites/7-Objects/10-Big Chain/9.png
+player_models/Sprites/7-Objects/11-Health Bar/Health Bar.png
+player_models/Sprites/7-Objects/11-Health Bar/Heart.png
+player_models/Sprites/7-Objects/12-Other Objects/Barrel.png
+player_models/Sprites/7-Objects/12-Other Objects/Blue Bottle.png
+player_models/Sprites/7-Objects/12-Other Objects/Chair.png
+player_models/Sprites/7-Objects/12-Other Objects/Green Bottle.png
+player_models/Sprites/7-Objects/12-Other Objects/Red Bottle.png
+player_models/Sprites/7-Objects/12-Other Objects/Skull.png
+player_models/Sprites/7-Objects/12-Other Objects/Table.png
+player_models/Sprites/7-Objects/12-Other Objects/Windows.png
+player_models/Sprites/7-Objects/13-Run Particles/1.png
+player_models/Sprites/7-Objects/13-Run Particles/2.png
+player_models/Sprites/7-Objects/13-Run Particles/3.png
+player_models/Sprites/7-Objects/13-Run Particles/4.png
+player_models/Sprites/7-Objects/13-Run Particles/5.png
+player_models/Sprites/7-Objects/13-Run Particles/6.png
+player_models/Sprites/7-Objects/14-Jump Particles/1.png
+player_models/Sprites/7-Objects/14-Jump Particles/2.png
+player_models/Sprites/7-Objects/14-Jump Particles/3.png
+player_models/Sprites/7-Objects/14-Jump Particles/4.png
+player_models/Sprites/7-Objects/14-Jump Particles/5.png
+player_models/Sprites/7-Objects/14-Jump Particles/6.png
+player_models/Sprites/7-Objects/15-Fall Particles/1.png
+player_models/Sprites/7-Objects/15-Fall Particles/2.png
+player_models/Sprites/7-Objects/15-Fall Particles/3.png
+player_models/Sprites/7-Objects/15-Fall Particles/4.png
+player_models/Sprites/7-Objects/15-Fall Particles/5.png
+player_models/Sprites/7-Objects/15-Fall Particles/6.png
+player_models/Sprites/7-Objects/16-Enemy-Cannon/1-Idle/1.png
+player_models/Sprites/7-Objects/16-Enemy-Cannon/2-Attack/1.png
+player_models/Sprites/7-Objects/16-Enemy-Cannon/2-Attack/2.png
+player_models/Sprites/7-Objects/16-Enemy-Cannon/2-Attack/3.png
+player_models/Sprites/7-Objects/16-Enemy-Cannon/2-Attack/4.png
+player_models/Sprites/7-Objects/16-Enemy-Cannon/2-Attack/5.png
+player_models/Sprites/7-Objects/16-Enemy-Cannon/2-Attack/6.png
+player_models/Sprites/7-Objects/16-Enemy-Cannon/2-Attack/7.png
+player_models/Sprites/7-Objects/16-Enemy-Cannon/2-Attack/8.png
+player_models/Sprites/7-Objects/16-Enemy-Cannon/2-Attack/9.png
+player_models/Sprites/7-Objects/16-Enemy-Cannon/3-Cannon Ball/1.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/1.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/10.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/11.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/12.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/13.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/14.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/15.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/16.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/17.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/18.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/19.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/2.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/20.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/21.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/22.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/3.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/4.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/5.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/6.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/7.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/8.png
+player_models/Sprites/7-Objects/17-Heart/1-Idle/9.png
+player_models/Sprites/7-Objects/17-Heart/2-Live+1/1.png
+player_models/Sprites/7-Objects/17-Heart/2-Live+1/2.png
+player_models/Sprites/7-Objects/17-Heart/2-Live+1/3.png
+player_models/Sprites/7-Objects/17-Heart/2-Live+1/4.png
+player_models/Sprites/7-Objects/2-Door/1-Closed/1.png
+player_models/Sprites/7-Objects/2-Door/2-Opening/1.png
+player_models/Sprites/7-Objects/2-Door/2-Opening/2.png
+player_models/Sprites/7-Objects/2-Door/2-Opening/3.png
+player_models/Sprites/7-Objects/2-Door/2-Opening/4.png
+player_models/Sprites/7-Objects/2-Door/2-Opening/5.png
+player_models/Sprites/7-Objects/2-Door/3-Closing/1.png
+player_models/Sprites/7-Objects/2-Door/3-Closing/2.png
+player_models/Sprites/7-Objects/2-Door/3-Closing/3.png
+player_models/Sprites/7-Objects/2-Door/3-Closing/4.png
+player_models/Sprites/7-Objects/2-Door/3-Closing/5.png
+player_models/Sprites/7-Objects/3-Bomb Bar/1-Charging Bar/1.png
+player_models/Sprites/7-Objects/3-Bomb Bar/1-Charging Bar/10.png
+player_models/Sprites/7-Objects/3-Bomb Bar/1-Charging Bar/11.png
+player_models/Sprites/7-Objects/3-Bomb Bar/1-Charging Bar/2.png
+player_models/Sprites/7-Objects/3-Bomb Bar/1-Charging Bar/3.png
+player_models/Sprites/7-Objects/3-Bomb Bar/1-Charging Bar/4.png
+player_models/Sprites/7-Objects/3-Bomb Bar/1-Charging Bar/5.png
+player_models/Sprites/7-Objects/3-Bomb Bar/1-Charging Bar/6.png
+player_models/Sprites/7-Objects/3-Bomb Bar/1-Charging Bar/7.png
+player_models/Sprites/7-Objects/3-Bomb Bar/1-Charging Bar/8.png
+player_models/Sprites/7-Objects/3-Bomb Bar/1-Charging Bar/9.png
+player_models/Sprites/7-Objects/3-Bomb Bar/2-Full (Intermitent)/1.png
+player_models/Sprites/7-Objects/3-Bomb Bar/2-Full (Intermitent)/2.png
+player_models/Sprites/7-Objects/3-Bomb Bar/2-Full (Intermitent)/3.png
+player_models/Sprites/7-Objects/3-Bomb Bar/3-Closing/1.png
+player_models/Sprites/7-Objects/4-Interrogation Dialog/1-Opening/1.png
+player_models/Sprites/7-Objects/4-Interrogation Dialog/1-Opening/2.png
+player_models/Sprites/7-Objects/4-Interrogation Dialog/1-Opening/3.png
+player_models/Sprites/7-Objects/4-Interrogation Dialog/1-Opening/4.png
+player_models/Sprites/7-Objects/4-Interrogation Dialog/2-Closing/1.png
+player_models/Sprites/7-Objects/5-Exclamation Dialog/1-Opening/1.png
+player_models/Sprites/7-Objects/5-Exclamation Dialog/1-Opening/2.png
+player_models/Sprites/7-Objects/5-Exclamation Dialog/1-Opening/3.png
+player_models/Sprites/7-Objects/5-Exclamation Dialog/1-Opening/4.png
+player_models/Sprites/7-Objects/5-Exclamation Dialog/2-Closing/1.png
+player_models/Sprites/7-Objects/6-Candle/1.png
+player_models/Sprites/7-Objects/6-Candle/2.png
+player_models/Sprites/7-Objects/6-Candle/3.png
+player_models/Sprites/7-Objects/6-Candle/4.png
+player_models/Sprites/7-Objects/6-Candle/5.png
+player_models/Sprites/7-Objects/6-Candle/6.png
+player_models/Sprites/7-Objects/6-Candle/7.png
+player_models/Sprites/7-Objects/6-Candle/8.png
+player_models/Sprites/7-Objects/7-Candle Light/1.png
+player_models/Sprites/7-Objects/7-Candle Light/2.png
+player_models/Sprites/7-Objects/7-Candle Light/3.png
+player_models/Sprites/7-Objects/7-Candle Light/4.png
+player_models/Sprites/7-Objects/7-Candle Light/5.png
+player_models/Sprites/7-Objects/8-Window Light/1.png
+player_models/Sprites/7-Objects/8-Window Light/2.png
+player_models/Sprites/7-Objects/8-Window Light/3.png
+player_models/Sprites/7-Objects/8-Window Light/4.png
+player_models/Sprites/7-Objects/9-Small Chain/1.png
+player_models/Sprites/7-Objects/9-Small Chain/10.png
+player_models/Sprites/7-Objects/9-Small Chain/2.png
+player_models/Sprites/7-Objects/9-Small Chain/3.png
+player_models/Sprites/7-Objects/9-Small Chain/4.png
+player_models/Sprites/7-Objects/9-Small Chain/5.png
+player_models/Sprites/7-Objects/9-Small Chain/6.png
+player_models/Sprites/7-Objects/9-Small Chain/7.png
+player_models/Sprites/7-Objects/9-Small Chain/8.png
+player_models/Sprites/7-Objects/9-Small Chain/9.png
+player_models/Sprites/8-Tile-Sets/Tile-Sets (64-64).png
+player_models/Sprites/8-Tile-Sets/Variations/1.png
+player_models/Sprites/8-Tile-Sets/Variations/2.png
+player_models/Sprites/8-Tile-Sets/Variations/3.png
+player_models/Sprites/8-Tile-Sets/Variations/4.png
+player_models/Sprites/8-Tile-Sets/Variations/5.png
+player_models/Sprites/8-Tile-Sets/Variations/6.png
+player_models/Sprites/8-Tile-Sets/Variations/7.png
+player_models/Sprites/8-Tile-Sets/Variations/8.png
+recycle_items.png
+tiles/cave.png
+tiles/character.png
+tiles/credits.txt
+tiles/font.png
+tiles/Inner.png
+tiles/log.png
+tiles/NPC_test.png
+tiles/objects.png
+tiles/Overworld.png
 ui/font-list.fnt
 ui/font-subtitle.fnt
 ui/font-window.fnt
