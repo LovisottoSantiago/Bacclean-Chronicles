@@ -2,12 +2,13 @@ package io.github.bacclean;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
@@ -18,10 +19,11 @@ public class Main extends Game {
     // Always
     SpriteBatch spriteBatch;
     ExtendViewport extendViewport;
-    Camera camera;
+    OrthographicCamera camera;
 
     // Player
     Player baccleanPlayer;
+
 
     @Override
     public void create() {
@@ -29,19 +31,22 @@ public class Main extends Game {
         backgroundTexture = new Texture("backgrounds/bg_1.png");        
         
     
-        // Always
-        camera = new OrthographicCamera();
-        extendViewport = new ExtendViewport(1024, 768, camera);  // Initialize viewport and camera
-        camera.position.set(extendViewport.getWorldWidth() / 2, extendViewport.getWorldHeight() / 2, 0);  // Center camera
+        // Initialize camera and viewport
+        camera = new OrthographicCamera(); // Initialize the camera without size
+        extendViewport = new ExtendViewport(1280, 720, camera);  // Set viewport dimensions
+        camera.position.set(extendViewport.getWorldWidth() / 2, extendViewport.getWorldHeight() / 2, 0); // Center camera
         extendViewport.apply();
+
+        // Set initial zoom
+        camera.zoom = 1.0f;
         
         spriteBatch = new SpriteBatch();
     
         // Player
         baccleanPlayer = new Player("sprites-player/player-idle.png", 4, 1, "sprites-player/player-run.png", 6, 1);
 
-        baccleanPlayer.setSize(256, 256);
-        baccleanPlayer.setPosition(extendViewport.getWorldWidth() / 2 - baccleanPlayer.getWidth() / 2, extendViewport.getWorldHeight() / 2 - baccleanPlayer.getHeight() / 2);
+        baccleanPlayer.setSize(100, 59);
+        baccleanPlayer.setPosition(0, 1);
 
 
     }
@@ -55,15 +60,29 @@ public class Main extends Game {
     @Override
     public void render() {
         input();
-        logic();
+        logic();        
         draw();
     }
 
 
+
     private void input() {
-        float speed = baccleanPlayer.getHeight();
+        float speed = baccleanPlayer.getHeight(); // Use player height for speed
         float delta = Gdx.graphics.getDeltaTime();
         baccleanPlayer.playerMove(speed, delta);
+
+        
+        // Implement zooming functionality with key presses
+        if (Gdx.input.isKeyPressed(Input.Keys.PAGE_UP)) {
+            camera.zoom -= 0.1f; // Zoom in
+            camera.zoom = MathUtils.clamp(camera.zoom, 0.5f, 2.0f); // Clamp the zoom levels
+            Gdx.app.log("Zoom", "Zooming In: " + camera.zoom); // Debug log
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.PAGE_DOWN)) {
+            camera.zoom += 0.2f; // Zoom out
+            camera.zoom = MathUtils.clamp(camera.zoom, 0.5f, 1.0f); // Clamp the zoom levels
+        }     
+
 
     }
 

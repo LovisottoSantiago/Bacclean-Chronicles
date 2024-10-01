@@ -19,10 +19,13 @@ public class Player extends Sprite {
     // A variable for tracking elapsed time for the animation
     private float stateTime;
     private final SpriteBatch spriteBatch;
+    private boolean isWalking;
+    private final float idleFrameDuration = 0.2f;
+    private final float walkFrameDuration = 0.05f;
 
     public Player(String idleSheetPath, int columnsIdleSheet, int rowsIdleSheet, String walkSheetPath, int columnsWalkSheet, int rowsWalkSheet) {
         
-        //! IDLE ANIMATION -
+        //* IDLE ANIMATION -
         idleSheet = new Texture(Gdx.files.internal(idleSheetPath));
         if (idleSheet == null) {
             Gdx.app.log("Player", "Idle sheet not loaded!");
@@ -31,10 +34,10 @@ public class Player extends Sprite {
         }
         TextureRegion[] idleFrames = AnimationMaker(idleSheet, columnsIdleSheet, rowsIdleSheet);
         Gdx.app.log("Player", "Idle frames count: " + idleFrames.length);
-        idleAnimation = new Animation<>(0.025f, idleFrames);
+        idleAnimation = new Animation<>(idleFrameDuration, idleFrames);
 
     
-        //! WALK ANIMATION -
+        //* WALK ANIMATION -
         walkSheet = new Texture(Gdx.files.internal(walkSheetPath));
         if (walkSheet == null) {
             Gdx.app.log("Player", "Walk sheet not loaded!");
@@ -43,7 +46,7 @@ public class Player extends Sprite {
         }
         TextureRegion[] walkFrames = AnimationMaker(walkSheet, columnsWalkSheet, rowsWalkSheet);
         Gdx.app.log("Player", "Walk frames count: " + walkFrames.length);
-        walkAnimation = new Animation<>(0.025f, walkFrames);
+        walkAnimation = new Animation<>(walkFrameDuration, walkFrames);
 
 
         // Instantiate a SpriteBatch for drawing and reset the elapsed animation
@@ -78,26 +81,28 @@ public class Player extends Sprite {
 
     // Method to move the player
     public void playerMove(float speed, float delta) {
+        isWalking = false; // Reset walking state
 
         // Handle movement input
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            //*  jump logic here */
-            
-        }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             this.translateX(-speed * delta); // Move left
-
+            isWalking = true; // Set walking state to true
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             this.translateX(speed * delta); // Move right
+            isWalking = true; // Set walking state to true
         }
-
     }
 
 
     public TextureRegion getCurrentFrame() {
         stateTime += Gdx.graphics.getDeltaTime();
-        return idleAnimation.getKeyFrame(stateTime, true);
+        // Return the appropriate animation based on the walking state
+        if (isWalking) {
+            return walkAnimation.getKeyFrame(stateTime, true);
+        } else {
+            return idleAnimation.getKeyFrame(stateTime, true);
+        }
     }
 
     
