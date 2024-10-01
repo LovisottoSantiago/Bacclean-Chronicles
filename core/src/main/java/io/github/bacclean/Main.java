@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -14,7 +13,6 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game {
-    Texture backgroundTexture;
 
     // Always
     SpriteBatch spriteBatch;
@@ -27,9 +25,7 @@ public class Main extends Game {
 
     @Override
     public void create() {
-        setScreen(new FirstScreen());
-        backgroundTexture = new Texture("backgrounds/bg_1.png");        
-        
+        setScreen(new FirstScreen());       
     
         // Initialize camera and viewport
         camera = new OrthographicCamera(); // Initialize the camera without size
@@ -45,9 +41,8 @@ public class Main extends Game {
         // Player
         baccleanPlayer = new Player("sprites-player/player-idle.png", 4, 1, "sprites-player/player-run.png", 6, 1);
 
-        baccleanPlayer.setSize(100, 59);
-        baccleanPlayer.setPosition(0, 1);
-
+        baccleanPlayer.setSize(200, 118); // original 100 x 59
+        baccleanPlayer.setPosition(0, 0);
 
     }
     
@@ -59,9 +54,14 @@ public class Main extends Game {
 
     @Override
     public void render() {
-        input();
-        logic();        
-        draw();
+        input(); // Handle player input
+        logic(); // Update game logic
+    
+        // Center the camera on the player
+        camera.position.set(baccleanPlayer.getX() + baccleanPlayer.getWidth()/2, baccleanPlayer.getY() + baccleanPlayer.getHeight(), 0);       
+        camera.update(); // Update the camera
+    
+        draw(); // Draw the scene
     }
 
 
@@ -74,12 +74,12 @@ public class Main extends Game {
         
         // Implement zooming functionality with key presses
         if (Gdx.input.isKeyPressed(Input.Keys.PAGE_UP)) {
-            camera.zoom -= 0.1f; // Zoom in
+            camera.zoom -= 0.02f; // Zoom in
             camera.zoom = MathUtils.clamp(camera.zoom, 0.5f, 2.0f); // Clamp the zoom levels
             Gdx.app.log("Zoom", "Zooming In: " + camera.zoom); // Debug log
         }
         if (Gdx.input.isKeyPressed(Input.Keys.PAGE_DOWN)) {
-            camera.zoom += 0.2f; // Zoom out
+            camera.zoom += 0.01f; // Zoom out
             camera.zoom = MathUtils.clamp(camera.zoom, 0.5f, 1.0f); // Clamp the zoom levels
         }     
 
@@ -93,13 +93,13 @@ public class Main extends Game {
 
 
     private void draw() {
-        ScreenUtils.clear(Color.BLUE); // Clear screen before drawing
+        ScreenUtils.clear(Color.GRAY); // Clear screen before drawing
         camera.update(); // Ensure the camera is updated
         spriteBatch.setProjectionMatrix(camera.combined); // Sync the SpriteBatch with the camera
 
         spriteBatch.begin();
         // Draw background first
-        spriteBatch.draw(backgroundTexture, 0, 0, extendViewport.getWorldWidth(), extendViewport.getWorldHeight());
+        // no background
 
         // Draw the player
         TextureRegion currentFrame = baccleanPlayer.getCurrentFrame();
@@ -113,7 +113,7 @@ public class Main extends Game {
     @Override
     public void dispose() {
         spriteBatch.dispose();
-        backgroundTexture.dispose();
+        //backgroundTexture.dispose();
         baccleanPlayer.dispose(); // Call dispose for the player as well
     }
     

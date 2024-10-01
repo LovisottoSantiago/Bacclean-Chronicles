@@ -14,18 +14,22 @@ public class Player extends Sprite {
     private final Texture idleSheet;
     private final Texture walkSheet;
     private final Animation<TextureRegion> idleAnimation;
+    private final Animation<TextureRegion> leftIdleAnimation;
     private final Animation<TextureRegion> walkAnimation;
+    private final Animation<TextureRegion> leftWalkAnimation;
+    private final float idleFrameDuration = 0.2f;
+    private final float walkFrameDuration = 0.05f;
 
     // A variable for tracking elapsed time for the animation
     private float stateTime;
     private final SpriteBatch spriteBatch;
     private boolean isWalking;
-    private final float idleFrameDuration = 0.2f;
-    private final float walkFrameDuration = 0.05f;
+    private boolean leftFlag;
 
+    
     public Player(String idleSheetPath, int columnsIdleSheet, int rowsIdleSheet, String walkSheetPath, int columnsWalkSheet, int rowsWalkSheet) {
         
-        //* IDLE ANIMATION -
+        //* IDLE ANIMATION *//
         idleSheet = new Texture(Gdx.files.internal(idleSheetPath));
         if (idleSheet == null) {
             Gdx.app.log("Player", "Idle sheet not loaded!");
@@ -35,9 +39,17 @@ public class Player extends Sprite {
         TextureRegion[] idleFrames = AnimationMaker(idleSheet, columnsIdleSheet, rowsIdleSheet);
         Gdx.app.log("Player", "Idle frames count: " + idleFrames.length);
         idleAnimation = new Animation<>(idleFrameDuration, idleFrames);
-
+        // LEFT IDLE ANIMATION -
+        TextureRegion[] leftIdleFrames = AnimationMaker(idleSheet, columnsIdleSheet, rowsIdleSheet);
+        for (int i = 0; i < leftIdleFrames.length; i++) {
+            leftIdleFrames[i].flip(true, false); // Flip horizontally
+        }
+        Gdx.app.log("Player", "Left walk frames count: " + leftIdleFrames.length);
+        leftIdleAnimation = new Animation<>(idleFrameDuration, leftIdleFrames);
+        
+        
     
-        //* WALK ANIMATION -
+        //* WALK ANIMATION *//
         walkSheet = new Texture(Gdx.files.internal(walkSheetPath));
         if (walkSheet == null) {
             Gdx.app.log("Player", "Walk sheet not loaded!");
@@ -47,9 +59,17 @@ public class Player extends Sprite {
         TextureRegion[] walkFrames = AnimationMaker(walkSheet, columnsWalkSheet, rowsWalkSheet);
         Gdx.app.log("Player", "Walk frames count: " + walkFrames.length);
         walkAnimation = new Animation<>(walkFrameDuration, walkFrames);
+        // LEFT WALK ANIMATION -       
+        TextureRegion[] leftWalkFrames = AnimationMaker(walkSheet, columnsWalkSheet, rowsWalkSheet);
+        for (int i = 0; i < leftWalkFrames.length; i++) {
+            leftWalkFrames[i].flip(true, false); // Flip horizontally
+        }
+        Gdx.app.log("Player", "Left walk frames count: " + leftWalkFrames.length);
+        leftWalkAnimation = new Animation<>(walkFrameDuration, leftWalkFrames);
 
 
-        // Instantiate a SpriteBatch for drawing and reset the elapsed animation
+
+        //* Instantiate a SpriteBatch for drawing and reset the elapsed animation
 		// time to 0
 		spriteBatch = new SpriteBatch();
 		stateTime = 0f;
@@ -86,12 +106,15 @@ public class Player extends Sprite {
         // Handle movement input
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             this.translateX(-speed * delta); // Move left
+            leftFlag = true;
             isWalking = true; // Set walking state to true
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             this.translateX(speed * delta); // Move right
+            leftFlag = false;
             isWalking = true; // Set walking state to true
         }
+
     }
 
 
@@ -99,11 +122,23 @@ public class Player extends Sprite {
         stateTime += Gdx.graphics.getDeltaTime();
         // Return the appropriate animation based on the walking state
         if (isWalking) {
-            return walkAnimation.getKeyFrame(stateTime, true);
-        } else {
-            return idleAnimation.getKeyFrame(stateTime, true);
+            if (leftFlag) {
+                return leftWalkAnimation.getKeyFrame(stateTime, true); // Left walk animation
+            } else {
+                return walkAnimation.getKeyFrame(stateTime, true); // Right walk animation
+            }
+        } 
+        else {
+            if (leftFlag){
+                return leftIdleAnimation.getKeyFrame(stateTime, true); // Left idle animation;
+            }
+            else {
+                return idleAnimation.getKeyFrame(stateTime, true); // Right idle animation
+            }
         }
+
     }
+    
 
     
 
