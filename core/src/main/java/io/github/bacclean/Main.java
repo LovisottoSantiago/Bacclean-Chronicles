@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
@@ -25,7 +26,8 @@ public class Main extends Game {
     @Override
     public void create() {
         setScreen(new FirstScreen());
-        backgroundTexture = new Texture("backgrounds/bg_1.png");
+        backgroundTexture = new Texture("backgrounds/bg_1.png");        
+        
     
         // Always
         camera = new OrthographicCamera();
@@ -36,10 +38,11 @@ public class Main extends Game {
         spriteBatch = new SpriteBatch();
     
         // Player
-        baccleanPlayer = new Player("baccleanPlayer/walk-v9.png", 8, "baccleanPlayer/player-v9.png", 1);
-        
+        baccleanPlayer = new Player("sprites-player/player-idle.png", 4, 1, "sprites-player/player-run.png", 6, 1);
+
         baccleanPlayer.setSize(256, 256);
-        baccleanPlayer.setPosition(extendViewport.getWorldWidth() / 2, extendViewport.getWorldHeight() / 2); 
+        baccleanPlayer.setPosition(extendViewport.getWorldWidth() / 2 - baccleanPlayer.getWidth() / 2, extendViewport.getWorldHeight() / 2 - baccleanPlayer.getHeight() / 2);
+
 
     }
     
@@ -56,6 +59,7 @@ public class Main extends Game {
         draw();
     }
 
+
     private void input() {
         float speed = baccleanPlayer.getHeight();
         float delta = Gdx.graphics.getDeltaTime();
@@ -63,25 +67,37 @@ public class Main extends Game {
 
     }
 
+
     private void logic() {
         // Game logic here
     }
 
+
     private void draw() {
-        ScreenUtils.clear(Color.BLUE);  // Clear screen before drawing
-        camera.update();  // Ensure the camera is updated
-        spriteBatch.setProjectionMatrix(camera.combined);  // Sync the SpriteBatch with the camera
-        
+        ScreenUtils.clear(Color.BLUE); // Clear screen before drawing
+        camera.update(); // Ensure the camera is updated
+        spriteBatch.setProjectionMatrix(camera.combined); // Sync the SpriteBatch with the camera
+
         spriteBatch.begin();
+        // Draw background first
+        spriteBatch.draw(backgroundTexture, 0, 0, extendViewport.getWorldWidth(), extendViewport.getWorldHeight());
 
-        // Store the worldWidth and worldHeight as local variables for brevity
-        float worldWidth = extendViewport.getWorldWidth();
-        float worldHeight = extendViewport.getWorldHeight();
-
-        // Draw background and player
-        spriteBatch.draw(backgroundTexture, 0, 0, worldWidth, worldHeight);  // Draw the background first
-        baccleanPlayer.draw(spriteBatch);  // Then draw the player on top
+        // Draw the player
+        TextureRegion currentFrame = baccleanPlayer.getCurrentFrame();
+        spriteBatch.draw(currentFrame, baccleanPlayer.getX(), baccleanPlayer.getY(), baccleanPlayer.getWidth(), baccleanPlayer.getHeight());
 
         spriteBatch.end();
     }
+
+    
+
+    @Override
+    public void dispose() {
+        spriteBatch.dispose();
+        backgroundTexture.dispose();
+        baccleanPlayer.dispose(); // Call dispose for the player as well
+    }
+    
+
+    
 }

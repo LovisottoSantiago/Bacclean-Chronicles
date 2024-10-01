@@ -2,7 +2,6 @@ package io.github.bacclean;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -14,28 +13,38 @@ public class Player extends Sprite {
     // Objects used
     private final Texture idleSheet;
     private final Texture walkSheet;
-    private Animation<TextureRegion> idleAnimation;
-    private Animation<TextureRegion> walkAnimation;
+    private final Animation<TextureRegion> idleAnimation;
+    private final Animation<TextureRegion> walkAnimation;
 
     // A variable for tracking elapsed time for the animation
     private float stateTime;
-
-    private SpriteBatch spriteBatch;
-
+    private final SpriteBatch spriteBatch;
 
     public Player(String idleSheetPath, int columnsIdleSheet, int rowsIdleSheet, String walkSheetPath, int columnsWalkSheet, int rowsWalkSheet) {
         
-        //*  Player class logic (Stance{sheet path, number of frames} | Walk{sheet path, number of frames})                
-        
-        // Load the texture sheets
+        //! IDLE ANIMATION -
         idleSheet = new Texture(Gdx.files.internal(idleSheetPath));
-        walkSheet = new Texture(Gdx.files.internal(walkSheetPath));
-
+        if (idleSheet == null) {
+            Gdx.app.log("Player", "Idle sheet not loaded!");
+        } else {
+            Gdx.app.log("Player", "Idle sheet loaded successfully: " + idleSheetPath);
+        }
         TextureRegion[] idleFrames = AnimationMaker(idleSheet, columnsIdleSheet, rowsIdleSheet);
-        idleAnimation = new Animation<TextureRegion>(0.025f, idleFrames);
+        Gdx.app.log("Player", "Idle frames count: " + idleFrames.length);
+        idleAnimation = new Animation<>(0.025f, idleFrames);
 
+    
+        //! WALK ANIMATION -
+        walkSheet = new Texture(Gdx.files.internal(walkSheetPath));
+        if (walkSheet == null) {
+            Gdx.app.log("Player", "Walk sheet not loaded!");
+        } else {
+            Gdx.app.log("Player", "Walk sheet loaded successfully: " + walkSheetPath);
+        }
         TextureRegion[] walkFrames = AnimationMaker(walkSheet, columnsWalkSheet, rowsWalkSheet);
-        walkAnimation = new Animation<TextureRegion>(0.025f, walkFrames);
+        Gdx.app.log("Player", "Walk frames count: " + walkFrames.length);
+        walkAnimation = new Animation<>(0.025f, walkFrames);
+
 
         // Instantiate a SpriteBatch for drawing and reset the elapsed animation
 		// time to 0
@@ -85,19 +94,17 @@ public class Player extends Sprite {
 
     }
 
-	public void render() {
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear screen
-		stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
 
+    public TextureRegion getCurrentFrame() {
+        stateTime += Gdx.graphics.getDeltaTime();
+        return idleAnimation.getKeyFrame(stateTime, true);
+    }
 
-		spriteBatch.begin();
-
-        
-		spriteBatch.end();
-	}
+    
 
 	public void dispose() { // SpriteBatches and Textures must always be disposed
 		spriteBatch.dispose();
+        idleSheet.dispose();
 		walkSheet.dispose();
 	}
 
