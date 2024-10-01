@@ -2,71 +2,73 @@ package io.github.bacclean;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Player extends Sprite {
+
+    // Objects used
+    private final Texture idleSheet;
     private final Texture walkSheet;
-    private final TextureRegion[] walkFrames;
-    private final TextureRegion[] walkFramesLeft;
+    private Animation<TextureRegion> idleAnimation;
+    private Animation<TextureRegion> walkAnimation;
 
-    private final Texture stanceSheet;
-    private final TextureRegion[] stanceFrames;
-    private final TextureRegion[] stanceFramesLeft;
-
+    // A variable for tracking elapsed time for the animation
     private float stateTime;
-    private int currentFrame;
-    private boolean facingLeft; // Track the player's facing direction
 
-    public Player(String walkSheetPath, int walkFrNumber, String stanceSheetPath, int stanceFrNumber) {
+    private SpriteBatch spriteBatch;
+
+
+    public Player(String idleSheetPath, int columnsIdleSheet, int rowsIdleSheet, String walkSheetPath, int columnsWalkSheet, int rowsWalkSheet) {
+        
+        //*  Player class logic (Stance{sheet path, number of frames} | Walk{sheet path, number of frames})                
+        
         // Load the texture sheets
+        idleSheet = new Texture(Gdx.files.internal(idleSheetPath));
         walkSheet = new Texture(Gdx.files.internal(walkSheetPath));
-        stanceSheet = new Texture(Gdx.files.internal(stanceSheetPath));
 
+        TextureRegion[] idleFrames = AnimationMaker(idleSheet, columnsIdleSheet, rowsIdleSheet);
+        idleAnimation = new Animation<TextureRegion>(0.025f, idleFrames);
 
-        // WALK
-        TextureRegion[][] tmpWalk = TextureRegion.split(walkSheet, walkSheet.getWidth() / walkFrNumber, walkSheet.getHeight());
-        walkFrames = new TextureRegion[walkFrNumber]; 
-        System.arraycopy(tmpWalk[0], 0, walkFrames, 0, walkFrNumber); // Assuming 1 row of animation frames
+        TextureRegion[] walkFrames = AnimationMaker(walkSheet, columnsWalkSheet, rowsWalkSheet);
+        walkAnimation = new Animation<TextureRegion>(0.025f, walkFrames);
 
-        walkFramesLeft = new TextureRegion[walkFrNumber]; // Assuming 3 frames
-        for (int i = 0; i < walkFramesLeft.length; i++) {
-            walkFramesLeft[i] = new TextureRegion(walkFrames[i]); // Copy the frame
-            walkFramesLeft[i].flip(true, false); // Flip it in the X-axis
-        }
-
-
-
-        // STANCE
-        TextureRegion[][] tmpStance = TextureRegion.split(stanceSheet, stanceSheet.getWidth() / stanceFrNumber, stanceSheet.getHeight());
-        stanceFrames = new TextureRegion[stanceFrNumber]; // Assuming 3 frames for stance
-        System.arraycopy(tmpStance[0], 0, stanceFrames, 0, stanceFrNumber);
-
-        stanceFramesLeft = new TextureRegion[stanceFrNumber];
-        for (int i = 0; i < stanceFramesLeft.length; i++) {
-            stanceFramesLeft[i] = new TextureRegion(stanceFrames[i]);
-            stanceFramesLeft[i].flip(true, false);
-        }
-
-
-
-
-        // Set the player's initial texture (default stance)
-        //setRegion(stanceFrames[0]);
-        facingLeft = false; // Initially facing right
-
-        // Initialize animation variables
-        stateTime = 0f;
-        currentFrame = 0;
+        // Instantiate a SpriteBatch for drawing and reset the elapsed animation
+		// time to 0
+		spriteBatch = new SpriteBatch();
+		stateTime = 0f;
     }
+
+
+    // Method to handle animations
+    public static TextureRegion[] AnimationMaker(Texture sheet, int columns, int rows){
+        // Use the split utility method to create a 2D array of TextureRegions. This is
+		// possible because this sprite sheet contains frames of equal size and they are
+		// all aligned.
+        TextureRegion[][] tmp = TextureRegion.split(sheet,
+            sheet.getWidth() / columns,
+            sheet.getHeight() / rows);
+        
+        // Place the regions into a 1D array in the correct order, starting from the top
+		// left, going across first. The Animation constructor requires a 1D array.
+        TextureRegion[] frames = new TextureRegion[columns * rows]; // asuming there is only 1 row
+        int index = 0;
+        for (int i = 0; i < rows; i++){
+            for (int j= 0; j < columns; j++){
+                frames[index++] = tmp[i][j];
+            }
+        }
+        return frames;
+    }
+
+
 
     // Method to move the player
     public void playerMove(float speed, float delta) {
-        // Handle movement input
-        boolean isMoving = false;
-        boolean movingLeft = false;
 
         // Handle movement input
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -75,62 +77,29 @@ public class Player extends Sprite {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             this.translateX(-speed * delta); // Move left
-            movingLeft = true; // Set movingLeft to true
-            isMoving = true;
+
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             this.translateX(speed * delta); // Move right
-            isMoving = true;
         }
 
-        if (isMoving) {
-            // Update facing direction based on movement
-            if (movingLeft) {
-                facingLeft = true; // Set facing left
-            } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                facingLeft = false; // Set facing right
-            }
-            updateAnimation(delta, movingLeft);
-        } else {
-            // Reset to idle stance if not moving
-            currentFrame = 0; // Reset to the first idle frame
-            if (facingLeft) {
-                setRegion(stanceFramesLeft[currentFrame]);
-            } else {
-                setRegion(stanceFrames[currentFrame]);
-            }
-        }
     }
 
-    // Method to draw the player using a SpriteBatch
-    public void draw(SpriteBatch batch) {
-        super.draw(batch); // Calls Sprite's draw method to render the texture
-    }
-
-    private void updateAnimation(float delta, boolean movingLeft) {
-        // Update current frame for walking animation
-        stateTime += delta;
-        if (stateTime >= 0.1f) { // Update frame every 0.1 seconds
-            currentFrame = (currentFrame + 1) % walkFrames.length;
-
-            // Set the region based on direction
-            if (movingLeft) {
-                setRegion(walkFramesLeft[currentFrame]); // Use left-facing frames if moving left
-            } else {
-                setRegion(walkFrames[currentFrame]); // Use right-facing frames
-            }
-
-            stateTime = 0f;
-        }
-    }
-
-    // Method to dispose resources
-    public void dispose() {
-        walkSheet.dispose();
-        stanceSheet.dispose();
-    }
+	public void render() {
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear screen
+		stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
 
 
-    // ! TO DO:
-    // ! fix stance
+		spriteBatch.begin();
+
+        
+		spriteBatch.end();
+	}
+
+	public void dispose() { // SpriteBatches and Textures must always be disposed
+		spriteBatch.dispose();
+		walkSheet.dispose();
+	}
+
+
 }
