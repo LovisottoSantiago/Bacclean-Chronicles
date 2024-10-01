@@ -882,6 +882,9 @@ player_models/Sprites/8-Tile-Sets/Variations/6.png
 player_models/Sprites/8-Tile-Sets/Variations/7.png
 player_models/Sprites/8-Tile-Sets/Variations/8.png
 recycle_items.png
+sprites-player/player-attack-plasma.aseprite
+sprites-player/player-attack-plasma.png
+sprites-player/player-attack-test.png
 sprites-player/player-attack.aseprite
 sprites-player/player-attack.png
 sprites-player/player-idle.aseprite

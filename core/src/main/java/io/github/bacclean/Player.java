@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+
 public class Player extends Sprite {
 
     // Objects used
@@ -22,21 +23,22 @@ public class Player extends Sprite {
     private final Animation<TextureRegion> leftAttackAnimation;
     private final float idleFrameDuration = 0.2f;
     private final float walkFrameDuration = 0.05f;
-    private final float attackFrameDuration = 0.5f;
+    private final float attackFrameDuration = 0.02f;
     
 
     // A variable for tracking elapsed time for the animation
     private float stateTime;
     private final SpriteBatch spriteBatch;
-    private boolean isWalking;
     private boolean leftFlag;
-    private boolean attacking;
+    
+    public PlayerState playerState;
 
     
     public Player(String idleSheetPath, int columnsIdleSheet, int rowsIdleSheet, String walkSheetPath, int columnsWalkSheet, int rowsWalkSheet, String attackSheetPath, int columnsAttackSheet, int rowsAttackSheet) {
         this.idleSheet = new Texture(Gdx.files.internal(idleSheetPath));
         this.walkSheet = new Texture(Gdx.files.internal(walkSheetPath));
         this.attackSheet = new Texture(Gdx.files.internal(attackSheetPath));
+        this.playerState = PlayerState.IDLE;
         
         idleAnimation = createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, false);
         leftIdleAnimation = createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, true);
@@ -53,6 +55,11 @@ public class Player extends Sprite {
 		// time to 0
 		spriteBatch = new SpriteBatch();
 		stateTime = 0f;
+    }
+
+
+    public enum PlayerState{
+        IDLE, RUNNING, ATTACKING;
     }
 
 
@@ -94,54 +101,66 @@ public class Player extends Sprite {
 
     // Method to move the player
     public void playerMove(float speed, float delta) {
-        isWalking = false; // Reset walking state
-        attacking = false;
-
-        // Handle movement input
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            this.translateX(-speed * delta); // Move left
-            leftFlag = true;
-            isWalking = true; // Set walking state to true
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            this.translateX(speed * delta); // Move right
-            leftFlag = false;
-            isWalking = true; // Set walking state to true
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W)){
-            // handle attack mov
-            attacking = true;
+        // Handle attack input
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            // Set the attacking state and reset the state time
+            playerState = PlayerState.ATTACKING;
+            stateTime = 0; // Reset state time for attack animation
+        } 
+        else {
+            // Handle movement input
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                this.translateX(-speed * delta); // Move left
+                leftFlag = true;
+                playerState = PlayerState.RUNNING;
+            } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                this.translateX(speed * delta); // Move right
+                leftFlag = false;
+                playerState = PlayerState.RUNNING;
+            } else {
+                // If no movement and not attacking, set to idle
+                if (playerState != PlayerState.ATTACKING) {
+                    playerState = PlayerState.IDLE;
+                } else {
+                    // Check if attack animation is finished
+                    if (stateTime >= attackAnimation.getAnimationDuration()) {
+                        playerState = PlayerState.IDLE; // Transition to IDLE after attack
+                    }
+                }
+            }
         }
 
     }
-
+    
 
     public TextureRegion getCurrentFrame() {
         stateTime += Gdx.graphics.getDeltaTime();
-        // Return the appropriate animation based on the walking state
-        if (isWalking) {
-            if (leftFlag) {
-                return leftWalkAnimation.getKeyFrame(stateTime, true); // Left walk animation
-            } else {
-                return walkAnimation.getKeyFrame(stateTime, true); // Right walk animation
-            }
-        } 
-        else if (attacking){
-            if (leftFlag) {
-                return leftAttackAnimation.getKeyFrame(stateTime, true);
-            } else {
-                return attackAnimation.getKeyFrame(stateTime, true);
-            }
+    
+        switch (playerState) {
+            case ATTACKING:
+                // Play attack animation without looping
+                if (leftFlag) {
+                    return leftAttackAnimation.getKeyFrame(stateTime, false); // Don't loop for attack
+                } else {
+                    return attackAnimation.getKeyFrame(stateTime, false); // Don't loop for attack
+                }
+            case RUNNING:
+                if (leftFlag) {
+                    return leftWalkAnimation.getKeyFrame(stateTime, true); // Loop for left walk animation
+                } else {
+                    return walkAnimation.getKeyFrame(stateTime, true); // Loop for right walk animation
+                }
+            case IDLE:
+            default:
+                if (leftFlag) {
+                    return leftIdleAnimation.getKeyFrame(stateTime, true); // Loop for left idle animation
+                } else {
+                    return idleAnimation.getKeyFrame(stateTime, true); // Loop for right idle animation
+                }
         }
-        else {
-            if (leftFlag) {
-                return leftIdleAnimation.getKeyFrame(stateTime, true); // Left idle animation;
-            } else {
-                return idleAnimation.getKeyFrame(stateTime, true); // Right idle animation
-            }
-        }
-
     }
+    
+
     
 
     

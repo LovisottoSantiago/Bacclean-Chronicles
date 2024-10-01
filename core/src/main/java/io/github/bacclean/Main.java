@@ -39,7 +39,7 @@ public class Main extends Game {
         spriteBatch = new SpriteBatch();
     
         // Player
-        baccleanPlayer = new Player("sprites-player/player-idle.png", 4, 1, "sprites-player/player-run.png", 6, 1, "sprites-player/player-attack.png", 5, 1);
+        baccleanPlayer = new Player("sprites-player/player-idle.png", 4, 1, "sprites-player/player-run.png", 6, 1, "sprites-player/player-attack-test.png", 11, 1);
 
         baccleanPlayer.setSize(200, 118); // original 100 x 59
         baccleanPlayer.setPosition(0, 0);
