@@ -100,14 +100,6 @@ gothic_assets/PSD/sprites/skeleton-rise.psd
 gothic_assets/PSD/sprites/skeleton.psd
 gothic_assets/public-license.txt
 music.mp3
-player_models/Aseprite Files/1-Player-Bomb Guy.aseprite
-player_models/Aseprite Files/2-Enemy-Bold Pirate.aseprite
-player_models/Aseprite Files/3-Enemy-Cucumber.aseprite
-player_models/Aseprite Files/4-Enemy-Big Guy.aseprite
-player_models/Aseprite Files/5-Enemy-Captain.aseprite
-player_models/Aseprite Files/6-Enemy-Whale.aseprite
-player_models/Aseprite Files/7-Objects.aseprite
-player_models/Aseprite Files/8-Tile-Sets.aseprite
 player_models/Sprites/1-Player-Bomb Guy/1-Idle/1.png
 player_models/Sprites/1-Player-Bomb Guy/1-Idle/10.png
 player_models/Sprites/1-Player-Bomb Guy/1-Idle/11.png
@@ -890,6 +882,8 @@ player_models/Sprites/8-Tile-Sets/Variations/6.png
 player_models/Sprites/8-Tile-Sets/Variations/7.png
 player_models/Sprites/8-Tile-Sets/Variations/8.png
 recycle_items.png
+sprites-player/player-attack.aseprite
+sprites-player/player-attack.png
 sprites-player/player-idle.aseprite
 sprites-player/player-idle.png
 sprites-player/player-run.aseprite

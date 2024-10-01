@@ -13,59 +13,39 @@ public class Player extends Sprite {
     // Objects used
     private final Texture idleSheet;
     private final Texture walkSheet;
+    private final Texture attackSheet;
     private final Animation<TextureRegion> idleAnimation;
     private final Animation<TextureRegion> leftIdleAnimation;
     private final Animation<TextureRegion> walkAnimation;
     private final Animation<TextureRegion> leftWalkAnimation;
+    private final Animation<TextureRegion> attackAnimation;
+    private final Animation<TextureRegion> leftAttackAnimation;
     private final float idleFrameDuration = 0.2f;
     private final float walkFrameDuration = 0.05f;
+    private final float attackFrameDuration = 0.5f;
+    
 
     // A variable for tracking elapsed time for the animation
     private float stateTime;
     private final SpriteBatch spriteBatch;
     private boolean isWalking;
     private boolean leftFlag;
+    private boolean attacking;
 
     
-    public Player(String idleSheetPath, int columnsIdleSheet, int rowsIdleSheet, String walkSheetPath, int columnsWalkSheet, int rowsWalkSheet) {
+    public Player(String idleSheetPath, int columnsIdleSheet, int rowsIdleSheet, String walkSheetPath, int columnsWalkSheet, int rowsWalkSheet, String attackSheetPath, int columnsAttackSheet, int rowsAttackSheet) {
+        this.idleSheet = new Texture(Gdx.files.internal(idleSheetPath));
+        this.walkSheet = new Texture(Gdx.files.internal(walkSheetPath));
+        this.attackSheet = new Texture(Gdx.files.internal(attackSheetPath));
         
-        //* IDLE ANIMATION *//
-        idleSheet = new Texture(Gdx.files.internal(idleSheetPath));
-        if (idleSheet == null) {
-            Gdx.app.log("Player", "Idle sheet not loaded!");
-        } else {
-            Gdx.app.log("Player", "Idle sheet loaded successfully: " + idleSheetPath);
-        }
-        TextureRegion[] idleFrames = AnimationMaker(idleSheet, columnsIdleSheet, rowsIdleSheet);
-        Gdx.app.log("Player", "Idle frames count: " + idleFrames.length);
-        idleAnimation = new Animation<>(idleFrameDuration, idleFrames);
-        // LEFT IDLE ANIMATION -
-        TextureRegion[] leftIdleFrames = AnimationMaker(idleSheet, columnsIdleSheet, rowsIdleSheet);
-        for (int i = 0; i < leftIdleFrames.length; i++) {
-            leftIdleFrames[i].flip(true, false); // Flip horizontally
-        }
-        Gdx.app.log("Player", "Left walk frames count: " + leftIdleFrames.length);
-        leftIdleAnimation = new Animation<>(idleFrameDuration, leftIdleFrames);
-        
-        
-    
-        //* WALK ANIMATION *//
-        walkSheet = new Texture(Gdx.files.internal(walkSheetPath));
-        if (walkSheet == null) {
-            Gdx.app.log("Player", "Walk sheet not loaded!");
-        } else {
-            Gdx.app.log("Player", "Walk sheet loaded successfully: " + walkSheetPath);
-        }
-        TextureRegion[] walkFrames = AnimationMaker(walkSheet, columnsWalkSheet, rowsWalkSheet);
-        Gdx.app.log("Player", "Walk frames count: " + walkFrames.length);
-        walkAnimation = new Animation<>(walkFrameDuration, walkFrames);
-        // LEFT WALK ANIMATION -       
-        TextureRegion[] leftWalkFrames = AnimationMaker(walkSheet, columnsWalkSheet, rowsWalkSheet);
-        for (int i = 0; i < leftWalkFrames.length; i++) {
-            leftWalkFrames[i].flip(true, false); // Flip horizontally
-        }
-        Gdx.app.log("Player", "Left walk frames count: " + leftWalkFrames.length);
-        leftWalkAnimation = new Animation<>(walkFrameDuration, leftWalkFrames);
+        idleAnimation = createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, false);
+        leftIdleAnimation = createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, true);
+
+        walkAnimation = createAnimation(walkSheetPath, columnsWalkSheet, rowsWalkSheet, walkFrameDuration, false);
+        leftWalkAnimation = createAnimation(walkSheetPath, columnsWalkSheet, rowsWalkSheet, walkFrameDuration, true);
+
+        attackAnimation = createAnimation(attackSheetPath, columnsAttackSheet, rowsAttackSheet, attackFrameDuration, false);
+        leftAttackAnimation = createAnimation(attackSheetPath, columnsAttackSheet, rowsAttackSheet, attackFrameDuration, true);
 
 
 
@@ -98,10 +78,24 @@ public class Player extends Sprite {
     }
 
 
+    private Animation<TextureRegion> createAnimation(String sheetPath, int columns, int rows, float frameDuration, boolean flip) {
+        Texture sheet = new Texture(Gdx.files.internal(sheetPath));
+        if (flip) {
+            TextureRegion[] frames = AnimationMaker(sheet, columns, rows);
+            for (int i = 0; i < frames.length; i++) {
+                frames[i].flip(true, false); // Flip horizontally
+            }
+            return new Animation<>(frameDuration, frames);
+        }
+        return new Animation<>(frameDuration, AnimationMaker(sheet, columns, rows));
+    }
+
+
 
     // Method to move the player
     public void playerMove(float speed, float delta) {
         isWalking = false; // Reset walking state
+        attacking = false;
 
         // Handle movement input
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
@@ -113,6 +107,10 @@ public class Player extends Sprite {
             this.translateX(speed * delta); // Move right
             leftFlag = false;
             isWalking = true; // Set walking state to true
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W)){
+            // handle attack mov
+            attacking = true;
         }
 
     }
@@ -128,11 +126,17 @@ public class Player extends Sprite {
                 return walkAnimation.getKeyFrame(stateTime, true); // Right walk animation
             }
         } 
-        else {
-            if (leftFlag){
-                return leftIdleAnimation.getKeyFrame(stateTime, true); // Left idle animation;
+        else if (attacking){
+            if (leftFlag) {
+                return leftAttackAnimation.getKeyFrame(stateTime, true);
+            } else {
+                return attackAnimation.getKeyFrame(stateTime, true);
             }
-            else {
+        }
+        else {
+            if (leftFlag) {
+                return leftIdleAnimation.getKeyFrame(stateTime, true); // Left idle animation;
+            } else {
                 return idleAnimation.getKeyFrame(stateTime, true); // Right idle animation
             }
         }
@@ -146,6 +150,7 @@ public class Player extends Sprite {
 		spriteBatch.dispose();
         idleSheet.dispose();
 		walkSheet.dispose();
+        attackSheet.dispose();
 	}
 
 
