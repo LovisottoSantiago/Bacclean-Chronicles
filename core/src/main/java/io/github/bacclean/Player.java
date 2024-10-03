@@ -9,10 +9,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-
 public class Player extends Sprite {
 
-    // Objects used
+    // Objetos y variables
     private final Texture idleSheet;
     private final Texture walkSheet;
     private final Texture attackSheet;
@@ -25,29 +24,22 @@ public class Player extends Sprite {
     private final float idleFrameDuration = 0.2f;
     private final float walkFrameDuration = 0.05f;
     private final float attackFrameDuration = 0.02f;
-    
 
-    // A variable for tracking elapsed time for the animation
+    // Tiempo de animación
     private float stateTime;
     private final SpriteBatch spriteBatch;
     private boolean leftFlag;
 
     // Stamina
     private float stamina = 100;
-    // New field to track time for stamina regeneration
     private float staminaRegenTime = 0f;
-    private final float regenInterval = 1f; // Regenerate stamina every 1 second
-    private final float regenAmount = 5f; // Amount of stamina to regenerate per interval
+    private final float regenInterval = 1f;
+    private final float regenAmount = 10f;
     private final float staminaUsed = 20;
     private final ShapeRenderer shapeRenderer;
 
-
-
-
-    
     public PlayerState playerState;
 
-    
     public Player(String idleSheetPath, int columnsIdleSheet, int rowsIdleSheet, String walkSheetPath, int columnsWalkSheet, int rowsWalkSheet, String attackSheetPath, int columnsAttackSheet, int rowsAttackSheet) {
         this.idleSheet = new Texture(Gdx.files.internal(idleSheetPath));
         this.walkSheet = new Texture(Gdx.files.internal(walkSheetPath));
@@ -55,21 +47,18 @@ public class Player extends Sprite {
         this.playerState = PlayerState.IDLE;
         shapeRenderer = new ShapeRenderer();
 
-        idleAnimation = createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, false);
-        leftIdleAnimation = createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, true);
+        // Usar AnimationController para crear las animaciones
+        idleAnimation = AnimationController.createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, false);
+        leftIdleAnimation = AnimationController.createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, true);
 
-        walkAnimation = createAnimation(walkSheetPath, columnsWalkSheet, rowsWalkSheet, walkFrameDuration, false);
-        leftWalkAnimation = createAnimation(walkSheetPath, columnsWalkSheet, rowsWalkSheet, walkFrameDuration, true);
+        walkAnimation = AnimationController.createAnimation(walkSheetPath, columnsWalkSheet, rowsWalkSheet, walkFrameDuration, false);
+        leftWalkAnimation = AnimationController.createAnimation(walkSheetPath, columnsWalkSheet, rowsWalkSheet, walkFrameDuration, true);
 
-        attackAnimation = createAnimation(attackSheetPath, columnsAttackSheet, rowsAttackSheet, attackFrameDuration, false);
-        leftAttackAnimation = createAnimation(attackSheetPath, columnsAttackSheet, rowsAttackSheet, attackFrameDuration, true);
+        attackAnimation = AnimationController.createAnimation(attackSheetPath, columnsAttackSheet, rowsAttackSheet, attackFrameDuration, false);
+        leftAttackAnimation = AnimationController.createAnimation(attackSheetPath, columnsAttackSheet, rowsAttackSheet, attackFrameDuration, true);
 
-
-
-        //* Instantiate a SpriteBatch for drawing and reset the elapsed animation
-		// time to 0
-		spriteBatch = new SpriteBatch();
-		stateTime = 0f;
+        spriteBatch = new SpriteBatch();
+        stateTime = 0f;
     }
 
 
@@ -124,41 +113,6 @@ public class Player extends Sprite {
         }
     }
 
-
-
-    // Method to handle animations
-    public static TextureRegion[] AnimationMaker(Texture sheet, int columns, int rows){
-        // Use the split utility method to create a 2D array of TextureRegions. This is
-		// possible because this sprite sheet contains frames of equal size and they are
-		// all aligned.
-        TextureRegion[][] tmp = TextureRegion.split(sheet,
-            sheet.getWidth() / columns,
-            sheet.getHeight() / rows);
-        
-        // Place the regions into a 1D array in the correct order, starting from the top
-		// left, going across first. The Animation constructor requires a 1D array.
-        TextureRegion[] frames = new TextureRegion[columns * rows]; // asuming there is only 1 row
-        int index = 0;
-        for (int i = 0; i < rows; i++){
-            for (int j= 0; j < columns; j++){
-                frames[index++] = tmp[i][j];
-            }
-        }
-        return frames;
-    }
-
-
-    private Animation<TextureRegion> createAnimation(String sheetPath, int columns, int rows, float frameDuration, boolean flip) {
-        Texture sheet = new Texture(Gdx.files.internal(sheetPath));
-        if (flip) {
-            TextureRegion[] frames = AnimationMaker(sheet, columns, rows);
-            for (TextureRegion frame : frames) {
-                frame.flip(true, false); // Flip horizontally
-            }
-            return new Animation<>(frameDuration, frames);
-        }
-        return new Animation<>(frameDuration, AnimationMaker(sheet, columns, rows));
-    }
 
     public void playerMove(float speed, float delta) {
         
