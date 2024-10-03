@@ -39,12 +39,15 @@ public class Main extends Game {
         spriteBatch = new SpriteBatch();
     
         // Player
-        baccleanPlayer = new Player("sprites-player/player-idle.png", 4, 1, "sprites-player/player-run.png", 6, 1, "sprites-player/player-attack-test.png", 11, 1);
-
+        baccleanPlayer = new Player("sprites-player/player-idle.png", 4, 1, "sprites-player/player-run.png", 6, 1, "sprites-player/player-attack.png", 5, 1);        
         baccleanPlayer.setSize(200, 118); // original 100 x 59
-        baccleanPlayer.setPosition(0, 0);
+        
+        // Center player in the x-axis
+        float playerX = (extendViewport.getWorldWidth() - baccleanPlayer.getWidth()) / 2;
+        baccleanPlayer.setPosition(playerX, 0);
 
     }
+    
     
 
     @Override
@@ -106,6 +109,7 @@ public class Main extends Game {
         spriteBatch.draw(currentFrame, baccleanPlayer.getX(), baccleanPlayer.getY(), baccleanPlayer.getWidth(), baccleanPlayer.getHeight());
 
         spriteBatch.end();
+        baccleanPlayer.renderStaminaBar();
     }
 
     

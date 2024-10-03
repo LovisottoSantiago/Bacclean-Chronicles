@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 
 public class Player extends Sprite {
@@ -30,6 +31,19 @@ public class Player extends Sprite {
     private float stateTime;
     private final SpriteBatch spriteBatch;
     private boolean leftFlag;
+
+    // Stamina
+    private float stamina = 100;
+    // New field to track time for stamina regeneration
+    private float staminaRegenTime = 0f;
+    private final float regenInterval = 1f; // Regenerate stamina every 1 second
+    private final float regenAmount = 5f; // Amount of stamina to regenerate per interval
+    private final float staminaUsed = 20;
+    private final ShapeRenderer shapeRenderer;
+
+
+
+
     
     public PlayerState playerState;
 
@@ -39,7 +53,8 @@ public class Player extends Sprite {
         this.walkSheet = new Texture(Gdx.files.internal(walkSheetPath));
         this.attackSheet = new Texture(Gdx.files.internal(attackSheetPath));
         this.playerState = PlayerState.IDLE;
-        
+        shapeRenderer = new ShapeRenderer();
+
         idleAnimation = createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, false);
         leftIdleAnimation = createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, true);
 
@@ -61,6 +76,54 @@ public class Player extends Sprite {
     public enum PlayerState{
         IDLE, RUNNING, ATTACKING;
     }
+
+    public void renderStaminaBar() {
+        // Set up bar dimensions
+        float maxBarWidth = 100; // Maximum width of the stamina bar
+        float barHeight = 6; // Height of the stamina bar
+        float barX = 460;
+        float barY = 300; // Position the bar slightly above the player's head
+
+    
+        // Calculate the current width of the stamina bar based on the player's stamina
+        float currentBarWidth = (stamina / 100) * maxBarWidth;
+    
+        // Begin drawing the shapes
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        
+        // Draw the background of the stamina bar (empty portion)
+        shapeRenderer.setColor(0.522f, 0.502f, 0.259f, 1); // #858042 for the empty bar
+        shapeRenderer.rect(barX, barY, maxBarWidth, barHeight);
+        
+        // Draw the current stamina (filled portion)
+        shapeRenderer.setColor(0.890f, 0.851f, 0.302f, 1); // #e3d94d for the filled bar
+        shapeRenderer.rect(barX, barY, currentBarWidth, barHeight);
+    
+        shapeRenderer.end();
+    }
+    
+    
+
+    // Method to decrease stamina
+    public void useStamina(float value) {
+        stamina -= value;
+        stamina = Math.max(0, stamina); // Ensure stamina doesn't go below 0
+        Gdx.app.log("Stamina", "Stamina decreased: " + stamina);
+    }
+
+    // Method to regenerate stamina over time
+    public void regenerateStamina(float delta) {
+        staminaRegenTime += delta; // Increment the time by the delta time
+        
+        // Only regenerate if enough time has passed (e.g., 1 second)
+        if (staminaRegenTime >= regenInterval) {
+            stamina += regenAmount; // Regenerate stamina
+            stamina = Math.min(100, stamina); // Ensure stamina doesn't exceed 100
+            staminaRegenTime = 0; // Reset the timer
+            Gdx.app.log("Stamina", "Stamina regenerated: " + stamina);
+        }
+    }
+
 
 
     // Method to handle animations
@@ -89,67 +152,77 @@ public class Player extends Sprite {
         Texture sheet = new Texture(Gdx.files.internal(sheetPath));
         if (flip) {
             TextureRegion[] frames = AnimationMaker(sheet, columns, rows);
-            for (int i = 0; i < frames.length; i++) {
-                frames[i].flip(true, false); // Flip horizontally
+            for (TextureRegion frame : frames) {
+                frame.flip(true, false); // Flip horizontally
             }
             return new Animation<>(frameDuration, frames);
         }
         return new Animation<>(frameDuration, AnimationMaker(sheet, columns, rows));
     }
 
-
-
-    // Method to move the player
     public void playerMove(float speed, float delta) {
-        // Handle attack input
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            // Set the attacking state and reset the state time
-            playerState = PlayerState.ATTACKING;
-            stateTime = 0; // Reset state time for attack animation
+        
+        //! Handle attack input
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            if (stamina > staminaUsed) {
+                playerState = PlayerState.ATTACKING;
+                stateTime = 0; 
+                useStamina(staminaUsed);
+            } else {
+                Gdx.app.log("Stamina", "Not enough stamina to perform attacks.");
+                return; // Exit early if not enough stamina
+            }
+        }
+
+        if (playerState == PlayerState.ATTACKING) {
+            if (stateTime >= attackAnimation.getAnimationDuration()) {
+                playerState = PlayerState.IDLE;
+            }
         } 
+        
         else {
-            // Handle movement input
+            regenerateStamina(delta); // Pass delta to ensure time-based regeneration
+            
+            //! Handle movement input
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 this.translateX(-speed * delta); // Move left
                 leftFlag = true;
                 playerState = PlayerState.RUNNING;
-            } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            } 
+            else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
                 this.translateX(speed * delta); // Move right
                 leftFlag = false;
                 playerState = PlayerState.RUNNING;
-            } else {
-                // If no movement and not attacking, set to idle
-                if (playerState != PlayerState.ATTACKING) {
-                    playerState = PlayerState.IDLE;
-                } else {
-                    // Check if attack animation is finished
-                    if (stateTime >= attackAnimation.getAnimationDuration()) {
-                        playerState = PlayerState.IDLE; // Transition to IDLE after attack
-                    }
-                }
+            } 
+            else {
+                // Set to idle and regenerate stamina slowly
+                playerState = PlayerState.IDLE;
             }
         }
 
     }
     
+    
 
     public TextureRegion getCurrentFrame() {
         stateTime += Gdx.graphics.getDeltaTime();
-    
+        
         switch (playerState) {
             case ATTACKING:
-                // Play attack animation without looping
-                if (leftFlag) {
-                    return leftAttackAnimation.getKeyFrame(stateTime, false); // Don't loop for attack
-                } else {
-                    return attackAnimation.getKeyFrame(stateTime, false); // Don't loop for attack
-                }
+            // Only return the attack animation frame; stamina check is handled in playerMove()
+            if (leftFlag) {
+                return leftAttackAnimation.getKeyFrame(stateTime, false); // Don't loop for attack
+            } else {
+                return attackAnimation.getKeyFrame(stateTime, false); // Don't loop for attack
+            }
+
             case RUNNING:
                 if (leftFlag) {
                     return leftWalkAnimation.getKeyFrame(stateTime, true); // Loop for left walk animation
                 } else {
                     return walkAnimation.getKeyFrame(stateTime, true); // Loop for right walk animation
                 }
+
             case IDLE:
             default:
                 if (leftFlag) {
