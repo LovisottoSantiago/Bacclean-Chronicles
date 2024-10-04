@@ -56,7 +56,7 @@ public class GameScreen implements Screen {
 
     private void loadMap() {
         TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());
-        map = mapLoader.load("maps/map-test.tmx"); //each frame = 16px.
+        map = mapLoader.load("maps/map-1.tmx"); //each frame = 16px.
 
         // Crea el renderer para el mapa
         mapRenderer = new OrthogonalTiledMapRenderer(map, spriteBatch);
@@ -67,7 +67,7 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         input();
         logic();
-        camera.position.set(baccleanPlayer.getX() + baccleanPlayer.getWidth() / 2, baccleanPlayer.getY(), 0);       
+        camera.position.set(baccleanPlayer.getX() + baccleanPlayer.getWidth() / 2, baccleanPlayer.getY() + 176, 0);       
         camera.update();
         draw();
     }

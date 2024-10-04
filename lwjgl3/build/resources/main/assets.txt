@@ -101,6 +101,7 @@ gothic_assets/PSD/sprites/hero/hero-run.psd
 gothic_assets/PSD/sprites/skeleton-rise.psd
 gothic_assets/PSD/sprites/skeleton.psd
 gothic_assets/public-license.txt
+maps/map-1.tmx
 maps/map-test.tmx
 maps/map_1.tide
 maps/sets/background.png

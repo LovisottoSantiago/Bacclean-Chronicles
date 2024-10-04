@@ -12,63 +12,66 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Player extends Sprite {
 
-    // Objetos y variables
+    // Textures for different player states
     private final Texture idleSheet;
     private final Texture walkSheet;
     private final Texture attackSheet;
+
+    // Animations for the player
     private final Animation<TextureRegion> idleAnimation;
     private final Animation<TextureRegion> leftIdleAnimation;
     private final Animation<TextureRegion> walkAnimation;
     private final Animation<TextureRegion> leftWalkAnimation;
     private final Animation<TextureRegion> attackAnimation;
     private final Animation<TextureRegion> leftAttackAnimation;
+
+    // Animation frame durations
     private final float idleFrameDuration = 0.2f;
     private final float walkFrameDuration = 0.08f;
     private final float attackFrameDuration = 0.05f;
 
 
-    // Tiempo de animación
+    // State properties
     private float stateTime;
     private final SpriteBatch spriteBatch;
     private boolean leftFlag;
+    public PlayerState playerState;
 
-
-    // Stamina
+    // Stamina properties
     private float stamina = 100;
     private float staminaRegenTime = 0f;
     private final float regenInterval = 1f;
     private final float regenAmount = 10f;
-    private final float staminaUsed = 20;
-    private final ShapeRenderer shapeRenderer;
-    
-    // Collision
-    public Rectangle movementBounds; // For movements
-    public int movementBoundsX = 42;
-    public int movementBoundsY = 42;
-    public Rectangle attackBounds; // For attacks
-    public int attackBoundsY= 42;
-    public int attackBoundsX = 60;
+    private final float staminaCost = 20;
 
-    // Enum
-    public PlayerState playerState;
-
+    // Shape renderer for stamina bar
+    private final ShapeRenderer staminaBarRenderer;
     
+    // Collision properties
+    public Rectangle movementBounds;
+    public Rectangle attackBounds; 
+    public int movementBoundsWidth = 42;
+    public int movementBoundsHeight = 42;
+    public int attackBoundsWidth = 60;
+    public int attackBoundsHeight= 42;
+    
+    // Enum to define player states
+    public enum PlayerState {
+        IDLE, RUNNING, ATTACKING
+    }
+
+
     public Player(
                     String idleSheetPath, int columnsIdleSheet, int rowsIdleSheet, 
                     String walkSheetPath, int columnsWalkSheet, int rowsWalkSheet, 
                     String attackSheetPath, int columnsAttackSheet, int rowsAttackSheet
-                  ) {
+    ) {
+        // Load textures
         this.idleSheet = new Texture(Gdx.files.internal(idleSheetPath));
         this.walkSheet = new Texture(Gdx.files.internal(walkSheetPath));
         this.attackSheet = new Texture(Gdx.files.internal(attackSheetPath));
-        this.playerState = PlayerState.IDLE;
-        shapeRenderer = new ShapeRenderer();
 
-        // Collisions
-        movementBounds = new Rectangle(getX() + (getWidth() - movementBoundsX) / 2, getY() + (getHeight() - movementBoundsY) / 2, movementBoundsX, movementBoundsY);
-        attackBounds = new Rectangle(getX() + (getWidth() - attackBoundsX) / 2, getY() + (getHeight() - attackBoundsY) / 2, attackBoundsX, attackBoundsY);
-
-        // Animations
+        // Initialize animations
         idleAnimation = AnimationController.createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, false);
         leftIdleAnimation = AnimationController.createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, true);
         walkAnimation = AnimationController.createAnimation(walkSheetPath, columnsWalkSheet, rowsWalkSheet, walkFrameDuration, false);
@@ -76,18 +79,19 @@ public class Player extends Sprite {
         attackAnimation = AnimationController.createAnimation(attackSheetPath, columnsAttackSheet, rowsAttackSheet, attackFrameDuration, false);
         leftAttackAnimation = AnimationController.createAnimation(attackSheetPath, columnsAttackSheet, rowsAttackSheet, attackFrameDuration, true);
 
-        spriteBatch = new SpriteBatch();
-        stateTime = 0f;
+        // Initialize shape renderer and sprite batch
+        staminaBarRenderer = new ShapeRenderer();
+        this.spriteBatch = new SpriteBatch();
+        this.stateTime = 0f;
+        this.playerState = PlayerState.IDLE;
+
+        // Initialize collision bounds
+        movementBounds = new Rectangle(getX() + (getWidth() - movementBoundsWidth) / 2, getY() + (getHeight() - movementBoundsHeight) / 2, movementBoundsWidth, movementBoundsHeight);
+        attackBounds = new Rectangle(getX() + (getWidth() - attackBoundsWidth) / 2, getY() + (getHeight() - attackBoundsHeight) / 2, attackBoundsWidth, attackBoundsHeight);        
     }
 
 
-
-    public enum PlayerState{
-        IDLE, RUNNING, ATTACKING;
-    }
-
-
-
+    //? Stamina methods
     public void renderStaminaBar() {
         // Set up bar dimensions
         float maxBarWidth = 100; // Maximum width of the stamina bar
@@ -99,31 +103,26 @@ public class Player extends Sprite {
         float currentBarWidth = (stamina / 100) * maxBarWidth;
     
         // Begin drawing the shapes
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);        
+        staminaBarRenderer.begin(ShapeRenderer.ShapeType.Filled);        
         // Draw the background of the stamina bar (empty portion)
-        shapeRenderer.setColor(0.522f, 0.502f, 0.259f, 1); // #858042 for the empty bar
-        shapeRenderer.rect(barX, barY, maxBarWidth, barHeight);        
+        staminaBarRenderer.setColor(0.522f, 0.502f, 0.259f, 1); // #858042 for the empty bar
+        staminaBarRenderer.rect(barX, barY, maxBarWidth, barHeight);        
         // Draw the current stamina (filled portion)
-        shapeRenderer.setColor(0.890f, 0.851f, 0.302f, 1); // #e3d94d for the filled bar
-        shapeRenderer.rect(barX, barY, currentBarWidth, barHeight);    
-        shapeRenderer.end();
+        staminaBarRenderer.setColor(0.890f, 0.851f, 0.302f, 1); // #e3d94d for the filled bar
+        staminaBarRenderer.rect(barX, barY, currentBarWidth, barHeight);    
+        staminaBarRenderer.end();
     }
-    
 
     public void logStamina(float value){
         Gdx.app.log("Stamina", "Stamina: " + value);
     }
 
-
-    // Method to decrease stamina
-    public void useStamina(float value) {
+    public void decreaseStamina(float value) {
         stamina -= value;
         stamina = Math.max(0, stamina); // Ensure stamina doesn't go below 0
         logStamina(stamina);
     }
 
-
-    // Method to regenerate stamina over time
     public void regenerateStamina(float delta) {
         staminaRegenTime += delta; // Increment the time by the delta time        
         // Only regenerate if enough time has passed (e.g., 1 second)
@@ -136,66 +135,55 @@ public class Player extends Sprite {
     }
 
 
-    // <! -- General Input Method -- !> //
+    //! Input and movement
     public void playerMove(float speed, float delta) {        
         // Handle attack input
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            attackMovement();
+            performAttack();
         }
+
         if (playerState == PlayerState.ATTACKING) {
             if (stateTime >= attackAnimation.getAnimationDuration()) {
                 attackBounds.setSize(0, 0);
                 stateTime = 0; // Reset stateTime after attack completes
                 playerState = PlayerState.IDLE; // Return to idle state
             }
-        }
-        // ---------------------------------------------------------------------
-        else {
+        } else {
             regenerateStamina(delta); // Time-based regeneration            
             sideMovement(speed, delta);
-            movementBounds.setPosition(getX() + (getWidth() - movementBoundsX) / 2, getY()); // Update bounds position
+            movementBounds.setPosition(getX() + (getWidth() - movementBoundsWidth) / 2, getY()); // Update bounds position
         }
     }
-    
 
-    // <! -- Attack movement and logic -- !> //
-    public void attackMovement() {
-        if (stamina > staminaUsed) {
+    // Attack movement and logic
+    public void performAttack() {
+        if (stamina > staminaCost) {
             playerState = PlayerState.ATTACKING;
             stateTime = 0; 
-            useStamina(staminaUsed);
+            decreaseStamina(staminaCost);
             // Set the attack bounds based on the player direction
-            if (leftFlag) {
-                attackBounds.setPosition(getX() + (getWidth() - attackBoundsX) / 2 - 10, getY());
-            } else {
-                attackBounds.setPosition(getX() + (getWidth() - attackBoundsX) / 2 + 10, getY());
-            }
-            attackBounds.setSize(attackBoundsX, attackBoundsY); // Set the size of the attack bounds
+            attackBounds.setPosition(getX() + (getWidth() - attackBoundsWidth) / 2 + (leftFlag ? -10 : 10), getY());
+            attackBounds.setSize(attackBoundsWidth, attackBoundsHeight); // Set the size of the attack bounds
         } else {
             Gdx.app.log("Stamina", "Not enough stamina to perform attacks.");
         }
     }
 
-    
-
-    // <! -- WASD movement and logic -- !> //
-    public void sideMovement(float speed, float delta){
+    // WASD movement and logic
+    public void sideMovement(float speed, float delta) {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             this.translateX(-speed * delta); // Move left
             leftFlag = true;
             playerState = PlayerState.RUNNING;
-        } 
-        else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             this.translateX(speed * delta); // Move right
             leftFlag = false;
             playerState = PlayerState.RUNNING;
-        } 
-        else {
+        } else {
             // Set to idle and regenerate stamina slowly
             playerState = PlayerState.IDLE;
         }
     }
-    
 
 
     public TextureRegion getCurrentFrame() {
@@ -227,8 +215,6 @@ public class Player extends Sprite {
     }
     
     
-
-
 	public void dispose() { // SpriteBatches and Textures must always be disposed
 		spriteBatch.dispose();
         idleSheet.dispose();
