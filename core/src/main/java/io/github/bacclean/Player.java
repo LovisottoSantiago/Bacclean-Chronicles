@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Player extends Sprite {
 
@@ -39,7 +40,14 @@ public class Player extends Sprite {
     private final float regenAmount = 10f;
     private final float staminaUsed = 20;
     private final ShapeRenderer shapeRenderer;
-
+    
+    // Collision
+    public Rectangle movementBounds; // For movements
+    public int movementBoundsX = 42;
+    public int movementBoundsY = 42;
+    public Rectangle attackBounds; // For attacks
+    public int attackBoundsY= 42;
+    public int attackBoundsX = 60;
 
     // Enum
     public PlayerState playerState;
@@ -56,7 +64,11 @@ public class Player extends Sprite {
         this.playerState = PlayerState.IDLE;
         shapeRenderer = new ShapeRenderer();
 
-        // Usar AnimationController para crear las animaciones
+        // Collisions
+        movementBounds = new Rectangle(getX() + (getWidth() - movementBoundsX) / 2, getY() + (getHeight() - movementBoundsY) / 2, movementBoundsX, movementBoundsY);
+        attackBounds = new Rectangle(getX() + (getWidth() - attackBoundsX) / 2, getY() + (getHeight() - attackBoundsY) / 2, attackBoundsX, attackBoundsY);
+
+        // Animations
         idleAnimation = AnimationController.createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, false);
         leftIdleAnimation = AnimationController.createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, true);
         walkAnimation = AnimationController.createAnimation(walkSheetPath, columnsWalkSheet, rowsWalkSheet, walkFrameDuration, false);
@@ -132,23 +144,33 @@ public class Player extends Sprite {
         }
         if (playerState == PlayerState.ATTACKING) {
             if (stateTime >= attackAnimation.getAnimationDuration()) {
-                playerState = PlayerState.IDLE;
+                attackBounds.setSize(0, 0);
+                stateTime = 0; // Reset stateTime after attack completes
+                playerState = PlayerState.IDLE; // Return to idle state
             }
-        } 
+        }
         // ---------------------------------------------------------------------
         else {
             regenerateStamina(delta); // Time-based regeneration            
             sideMovement(speed, delta);
+            movementBounds.setPosition(getX() + (getWidth() - movementBoundsX) / 2, getY()); // Update bounds position
         }
     }
     
 
     // <! -- Attack movement and logic -- !> //
-    public void attackMovement(){
+    public void attackMovement() {
         if (stamina > staminaUsed) {
             playerState = PlayerState.ATTACKING;
             stateTime = 0; 
             useStamina(staminaUsed);
+            // Set the attack bounds based on the player direction
+            if (leftFlag) {
+                attackBounds.setPosition(getX() + (getWidth() - attackBoundsX) / 2 - 10, getY());
+            } else {
+                attackBounds.setPosition(getX() + (getWidth() - attackBoundsX) / 2 + 10, getY());
+            }
+            attackBounds.setSize(attackBoundsX, attackBoundsY); // Set the size of the attack bounds
         } else {
             Gdx.app.log("Stamina", "Not enough stamina to perform attacks.");
         }
@@ -203,6 +225,7 @@ public class Player extends Sprite {
                 }
         }
     }
+    
     
 
 
