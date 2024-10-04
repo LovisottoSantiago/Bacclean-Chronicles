@@ -80,8 +80,8 @@ public class Player extends Sprite {
         // Set up bar dimensions
         float maxBarWidth = 100; // Maximum width of the stamina bar
         float barHeight = 6; // Height of the stamina bar
-        float barX = 460;
-        float barY = 300; // Position the bar slightly above the player's head
+        float barX = 20;
+        float barY = 520; // Position the bar slightly above the player's head
     
         // Calculate the current width of the stamina bar based on the player's stamina
         float currentBarWidth = (stamina / 100) * maxBarWidth;

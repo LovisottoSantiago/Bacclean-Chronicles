@@ -1,5 +1,6 @@
 .gitkeep
 backgrounds/bg_1.png
+backgrounds/test_bg.png
 drop.mp3
 gothic_assets/PNG/Environment/background.png
 gothic_assets/PNG/Environment/graveyard.png
@@ -101,11 +102,8 @@ gothic_assets/PSD/sprites/skeleton.psd
 gothic_assets/public-license.txt
 music.mp3
 recycle_items.png
-sprites-player/player-attack.aseprite
-sprites-player/player-attack.png
-sprites-player/player-idle.aseprite
+sprites-player/player-attack1.png
 sprites-player/player-idle.png
-sprites-player/player-run.aseprite
 sprites-player/player-run.png
 ui/alagard_by_pix3m-d6awiwp.ttf
 ui/font-list.fnt

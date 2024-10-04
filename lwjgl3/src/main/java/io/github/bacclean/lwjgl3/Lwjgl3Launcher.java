@@ -16,8 +16,12 @@ public class Lwjgl3Launcher {
         "Bacclean Chronicles: ¡Oh no! ¡Se llevan en cana a Mr. Bacclean!",
         "Bacclean Chronicles: ¿Cuántos son? ¿Son 7? ¿Van a pelear los 7?",
         "Bacclean Chronicles: Colgando el Ford Ka en 2 ruedas.",
-        "Bacclean Chronicles: Hazlo, perra.",
-        "Bacclean Chronicles: La leyenda del Twingo verde agua."
+        "Bacclean Chronicles: El Trio con el Momo y los barberos.",
+        "Bacclean Chronicles: La leyenda del Twingo verde agua.",
+        "Bacclean Chronicles: ¡Lauty es un zombie!",
+        "Bacclean Chronicles: ¡AYUDENME WACHOO!",
+        "Bacclean Chronicles: La noche del tornado.",
+        "Bacclean Chronicles: ¡La máquina se apostó sola!"
     };
 
 
@@ -43,7 +47,7 @@ public class Lwjgl3Launcher {
         //// If you remove the above line and set Vsync to false, you can get unlimited FPS, which can be
         //// useful for testing performance, but can also be very stressful to some hardware.
         //// You may also need to configure GPU drivers to fully disable Vsync; this can cause screen tearing.
-        configuration.setWindowedMode(1024, 576);
+        configuration.setWindowedMode(1280, 720);
         //// You can change these files; they are in lwjgl3/src/main/resources/ .
         configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
         return configuration;
