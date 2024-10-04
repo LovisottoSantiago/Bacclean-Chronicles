@@ -36,6 +36,7 @@ public class Player extends Sprite {
     private final SpriteBatch spriteBatch;
     private boolean leftFlag;
     public PlayerState playerState;
+    public float speed;
 
     // Stamina properties
     private float stamina = 100;
@@ -136,7 +137,7 @@ public class Player extends Sprite {
 
 
     //! Input and movement
-    public void playerMove(float speed, float delta) {        
+    public void playerMove(float delta) {        
         // Handle attack input
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             performAttack();
@@ -150,7 +151,7 @@ public class Player extends Sprite {
             }
         } else {
             regenerateStamina(delta); // Time-based regeneration            
-            sideMovement(speed, delta);
+            sideMovement(delta);
             movementBounds.setPosition(getX() + (getWidth() - movementBoundsWidth) / 2, getY()); // Update bounds position
         }
     }
@@ -170,7 +171,13 @@ public class Player extends Sprite {
     }
 
     // WASD movement and logic
-    public void sideMovement(float speed, float delta) {
+    public void sideMovement(float delta) {
+        speed = 200f;
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
+            speed += 500f;
+            decreaseStamina(0.5f);
+        }
+
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             this.translateX(-speed * delta); // Move left
             leftFlag = true;

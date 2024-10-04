@@ -74,9 +74,8 @@ public class GameScreen implements Screen {
 
 
     private void input() {
-        float speed = baccleanPlayer.getHeight(); 
         float delta = Gdx.graphics.getDeltaTime();
-        baccleanPlayer.playerMove(speed, delta);
+        baccleanPlayer.playerMove(delta);
         if (Gdx.input.isKeyPressed(Input.Keys.PAGE_UP)) {
             camera.zoom -= 0.01f;
             camera.zoom = MathUtils.clamp(camera.zoom, 0.4f, 0.6f);
