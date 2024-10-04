@@ -153,6 +153,7 @@ public class Player extends Sprite {
             regenerateStamina(delta); // Time-based regeneration            
             sideMovement(delta);
             movementBounds.setPosition(getX() + (getWidth() - movementBoundsWidth) / 2, getY()); // Update bounds position
+            attackBounds.setPosition(1500, 1500);
         }
     }
 
@@ -173,9 +174,9 @@ public class Player extends Sprite {
     // WASD movement and logic
     public void sideMovement(float delta) {
         speed = 200f;
-        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
-            speed += 500f;
-            decreaseStamina(0.5f);
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && stamina > 5){
+            speed += 200f;
+            decreaseStamina(0.3f);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
