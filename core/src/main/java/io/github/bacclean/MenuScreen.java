@@ -36,7 +36,7 @@ public class MenuScreen implements Screen {
         background = new Texture("backgrounds/test_bg.png");
         try {
             menMusic = Gdx.audio.newMusic(Gdx.files.internal("Death of a Ninja (intro).mp3"));
-            menMusic.setLooping(true);
+            menMusic.setLooping(false);
             menMusic.setVolume(1.0f); // Set volume to maximum (0.0f to 1.0f)
             menMusic.play();            
         } catch (Exception e) {
@@ -70,6 +70,7 @@ public class MenuScreen implements Screen {
         // Comprobar entrada
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             game.setScreen(new GameScreen(game, camera, extendViewport));  // Al presionar ENTER, empieza el juego
+            this.dispose();
         }
     }
 
@@ -92,9 +93,7 @@ public class MenuScreen implements Screen {
         batch.dispose();
         font.dispose();
         background.dispose(); // Dispose of the background texture
-        if (menMusic != null) {
-            menMusic.stop(); // Stop the music if it's playing
-            menMusic.dispose(); // Dispose of the music resource
-        }
+        menMusic.stop(); // Stop the music if it's playing
+        menMusic.dispose(); // Dispose of the music resource        
     }
 }

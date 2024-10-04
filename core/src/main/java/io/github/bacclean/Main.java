@@ -19,7 +19,6 @@ public class Main extends Game {
         // Initialize camera and viewport
         camera = new OrthographicCamera();
         extendViewport = new ExtendViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
-        camera.position.set(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, 0);
         extendViewport.apply();
 
         // Initially show the menu
