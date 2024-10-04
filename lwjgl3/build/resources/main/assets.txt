@@ -1,6 +1,7 @@
 .gitkeep
 backgrounds/bg_1.png
 backgrounds/test_bg.png
+Death of a Ninja (intro).mp3
 drop.mp3
 gothic_assets/PNG/Environment/background.png
 gothic_assets/PNG/Environment/graveyard.png
@@ -105,6 +106,8 @@ recycle_items.png
 sprites-player/player-attack1.png
 sprites-player/player-idle.png
 sprites-player/player-run.png
+sprites-player/player_sprites.aseprite
+sprites-player/wind_hashashin.png
 ui/alagard_by_pix3m-d6awiwp.ttf
 ui/font-list.fnt
 ui/font-subtitle.fnt

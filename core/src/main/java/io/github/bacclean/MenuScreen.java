@@ -3,6 +3,7 @@ package io.github.bacclean;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,6 +17,7 @@ public class MenuScreen implements Screen {
     private SpriteBatch batch;
     private BitmapFont font;
     private Texture background;
+    private Music menMusic;
 
     private final OrthographicCamera camera;
     private final ExtendViewport extendViewport;
@@ -32,6 +34,14 @@ public class MenuScreen implements Screen {
         font = new BitmapFont();
         font.setColor(Color.WHITE);
         background = new Texture("backgrounds/test_bg.png");
+        try {
+            menMusic = Gdx.audio.newMusic(Gdx.files.internal("Death of a Ninja (intro).mp3"));
+            menMusic.setLooping(true);
+            menMusic.setVolume(1.0f); // Set volume to maximum (0.0f to 1.0f)
+            menMusic.play();            
+        } catch (Exception e) {
+            Gdx.app.log("Music Error", "Could not load music file: " + e.getMessage());
+        }
     }
 
     @Override
@@ -82,5 +92,9 @@ public class MenuScreen implements Screen {
         batch.dispose();
         font.dispose();
         background.dispose(); // Dispose of the background texture
+        if (menMusic != null) {
+            menMusic.stop(); // Stop the music if it's playing
+            menMusic.dispose(); // Dispose of the music resource
+        }
     }
 }

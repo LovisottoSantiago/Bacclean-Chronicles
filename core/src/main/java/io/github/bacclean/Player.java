@@ -22,8 +22,8 @@ public class Player extends Sprite {
     private final Animation<TextureRegion> attackAnimation;
     private final Animation<TextureRegion> leftAttackAnimation;
     private final float idleFrameDuration = 0.2f;
-    private final float walkFrameDuration = 0.05f;
-    private final float attackFrameDuration = 0.02f;
+    private final float walkFrameDuration = 0.08f;
+    private final float attackFrameDuration = 0.05f;
 
 
     // Tiempo de animación
