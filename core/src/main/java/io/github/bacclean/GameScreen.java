@@ -32,6 +32,7 @@ public class GameScreen implements Screen {
     // ShapeRenderer for rendering bounds
     private ShapeRenderer movementBoundRender;
     private ShapeRenderer attackBoundRender;
+    private ShapeRenderer groundBoundRender;
     public boolean showBounds;
 
     public GameScreen(Main game, OrthographicCamera camera, ExtendViewport extendViewport) {
@@ -57,6 +58,7 @@ public class GameScreen implements Screen {
         // Initialize ShapeRenderers
         movementBoundRender = new ShapeRenderer();
         attackBoundRender = new ShapeRenderer();
+        groundBoundRender = new ShapeRenderer ();
     }
 
     private void loadMap() {
@@ -93,9 +95,13 @@ public class GameScreen implements Screen {
         }  */
     }
 
-    private void updateLogic() {
-        // Placeholder for game logic
-    }
+private void updateLogic() {
+    // Update player movement
+    
+
+
+}
+
 
     private void updateCamera() {
         camera.position.set(
@@ -157,32 +163,31 @@ public class GameScreen implements Screen {
 
     private void renderTileGroundBounds() {
         if (groundtileLayer != null) {
-            // Set the projection matrix for ShapeRenderer
-            movementBoundRender.setProjectionMatrix(camera.combined);
-            movementBoundRender.begin(ShapeRenderer.ShapeType.Line);
-            movementBoundRender.setColor(Color.VIOLET); // Color for tile bounds
+            groundBoundRender.setProjectionMatrix(camera.combined);
+            groundBoundRender.begin(ShapeRenderer.ShapeType.Line);
+            groundBoundRender.setColor(Color.VIOLET); // Color for tile bounds
     
             // Loop through all tiles in the ground layer
-            for (int y = 0; y < groundtileLayer.getHeight(); y++) {
-                for (int x = 0; x < groundtileLayer.getWidth(); x++) {
+            for (int tileY = 0; tileY < groundtileLayer.getHeight(); tileY++) {
+                for (int tileX = 0; tileX < groundtileLayer.getWidth(); tileX++) {
                     // Get the tile at the current position
-                    TiledMapTileLayer.Cell cell = groundtileLayer.getCell(x, y);
-                    if (cell != null) {
+                    TiledMapTileLayer.Cell currentCell = groundtileLayer.getCell(tileX, tileY);
+                    if (currentCell != null) {
                         // Calculate the position and size of the tile
                         float tileWidth = groundtileLayer.getTileWidth();
                         float tileHeight = groundtileLayer.getTileHeight();
-                        float posX = x * tileWidth;
-                        float posY = y * tileHeight;
+                        float positionX = tileX * tileWidth;
+                        float positionY = tileY * tileHeight;
     
                         // Draw the rectangle for the tile
-                        movementBoundRender.rect(posX, posY, tileWidth, tileHeight);
+                        groundBoundRender.rect(positionX, positionY, tileWidth, tileHeight);
                     }
                 }
             }
-            
-            movementBoundRender.end();
+            groundBoundRender.end();
         }
     }
+    
 
     @Override
     public void resize(int width, int height) {
@@ -205,5 +210,6 @@ public class GameScreen implements Screen {
         map.dispose();
         movementBoundRender.dispose();
         attackBoundRender.dispose();
+        groundBoundRender.dispose();
     }
 }

@@ -153,7 +153,7 @@ public class Player extends Sprite {
             regenerateStamina(delta); // Time-based regeneration            
             sideMovement(delta);
             movementBounds.setPosition(getX() + (getWidth() - movementBoundsWidth) / 2, getY()); // Update bounds position
-            attackBounds.setPosition(1500, 1500);
+            attackBounds.setPosition(1500, 1500); //avoid attack bound appears on screen
         }
     }
 
