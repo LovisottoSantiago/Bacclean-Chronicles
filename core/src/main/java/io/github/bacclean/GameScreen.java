@@ -1,5 +1,8 @@
 package io.github.bacclean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -29,17 +32,13 @@ public class GameScreen implements Screen {
 
     // TileMap
     private TiledMapTileLayer groundtileLayer;
-    private Rectangle groundTileRectangle;
+    private final List<Rectangle> groundTileRectangles = new ArrayList<>();
 
     // ShapeRenderer for rendering bounds
     private ShapeRenderer movementBoundRender;
     private ShapeRenderer attackBoundRender;
     private ShapeRenderer groundBoundRender;
     public boolean showBounds;
-
-    // Collisions
-    boolean playerGrounded;
-
 
     public GameScreen(Main game, OrthographicCamera camera, ExtendViewport extendViewport) {
         this.camera = camera;
@@ -53,21 +52,21 @@ public class GameScreen implements Screen {
 
         // Initialize Player
         baccleanPlayer = new Player(
-                "sprites-player/player-idle.png", 8, 1, 
-                "sprites-player/player-run.png", 8, 1, 
-                "sprites-player/player-attack1.png", 8, 1);
+                "sprites-player/player-idle.png", 8, 1,
+                "sprites-player/player-run.png", 8, 1,
+                "sprites-player/player-attack1.png", 8, 1,
+                "sprites-player/player-up.png", 3, 1,
+                "sprites-player/player-down.png", 3, 1);
         baccleanPlayer.setSize(288, 128);
         baccleanPlayer.setPosition(0, 60);
 
         loadMap();
 
-
         // Initialize ShapeRenderers
         movementBoundRender = new ShapeRenderer();
         attackBoundRender = new ShapeRenderer();
-        groundBoundRender = new ShapeRenderer ();
+        groundBoundRender = new ShapeRenderer();
     }
-
 
     private void loadMap() {
         TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());
@@ -77,8 +76,30 @@ public class GameScreen implements Screen {
         mapRenderer.setView(camera);
 
         groundtileLayer = (TiledMapTileLayer) map.getLayers().get("ground");
+        loadGroundTileRectangles(); // Load rectangles for collision detection
     }
 
+    private void loadGroundTileRectangles() {
+        if (groundtileLayer != null) {
+            for (int tileY = 0; tileY < groundtileLayer.getHeight(); tileY++) {
+                for (int tileX = 0; tileX < groundtileLayer.getWidth(); tileX++) {
+                    // Get the tile at the current position
+                    TiledMapTileLayer.Cell currentCell = groundtileLayer.getCell(tileX, tileY);
+
+                    if (currentCell != null) {
+                        // Calculate the position and size of the tile
+                        float tileWidth = groundtileLayer.getTileWidth();
+                        float tileHeight = groundtileLayer.getTileHeight();
+                        float positionX = tileX * tileWidth;
+                        float positionY = tileY * tileHeight;
+
+                        // Add the rectangle to the list for collision detection
+                        groundTileRectangles.add(new Rectangle(positionX, positionY, tileWidth, tileHeight));
+                    }
+                }
+            }
+        }
+    }
 
     @Override
     public void render(float delta) {
@@ -95,28 +116,30 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
             showBounds = !showBounds; // Toggle the boolean flag
         }
-        
     }
 
-    private void handlePlayerCollision() {        
+    private void handlePlayerCollision() {
         Rectangle playerBounds = baccleanPlayer.movementBounds;
-        
-        if (playerGrounded){
-            Gdx.app.log("Collision", "Player is above the ground");
+
+        for (Rectangle tile : groundTileRectangles) {
+            if (playerBounds.overlaps(tile)) {
+                Gdx.app.log("Collision", "Collision detected");
+                if (playerBounds.y > tile.getY()) {
+                    // Log specifically when the player is below the ground
+                    
+                }
+                break; // Exit the loop if a collision is found
+            }
         }
-
-
     }
-
 
     private void updateCamera() {
         camera.position.set(
-                baccleanPlayer.getX() + baccleanPlayer.getWidth() / 2, 
-                baccleanPlayer.getY() + 176, 
+                baccleanPlayer.getX() + baccleanPlayer.getWidth() / 2,
+                baccleanPlayer.getY() + 176,
                 0);
         camera.update();
     }
-
 
     private void drawScene() {
         Color backgroundColor = new Color(0, 0, 34 / 255f, 1);
@@ -130,20 +153,18 @@ public class GameScreen implements Screen {
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
         TextureRegion currentFrame = baccleanPlayer.getCurrentFrame();
-        spriteBatch.draw(currentFrame, baccleanPlayer.getX(), baccleanPlayer.getY(), 
+        spriteBatch.draw(currentFrame, baccleanPlayer.getX(), baccleanPlayer.getY(),
                 baccleanPlayer.getWidth(), baccleanPlayer.getHeight());
         spriteBatch.end();
 
         // Render stamina bar
         baccleanPlayer.renderStaminaBar();
 
-        if (!showBounds) {
+        if (showBounds) {
             renderPlayerBounds();
             renderTileGroundBounds();
         }
-
     }
-
 
     private void renderPlayerBounds() {
         // Movement bounds
@@ -151,9 +172,9 @@ public class GameScreen implements Screen {
         movementBoundRender.begin(ShapeRenderer.ShapeType.Line);
         movementBoundRender.setColor(Color.RED);
         movementBoundRender.rect(
-                baccleanPlayer.movementBounds.x, 
-                baccleanPlayer.movementBounds.y, 
-                baccleanPlayer.movementBounds.width, 
+                baccleanPlayer.movementBounds.x,
+                baccleanPlayer.movementBounds.y,
+                baccleanPlayer.movementBounds.width,
                 baccleanPlayer.movementBounds.height);
         movementBoundRender.end();
 
@@ -162,48 +183,25 @@ public class GameScreen implements Screen {
         attackBoundRender.begin(ShapeRenderer.ShapeType.Line);
         attackBoundRender.setColor(Color.BLUE);
         attackBoundRender.rect(
-                baccleanPlayer.attackBounds.x, 
-                baccleanPlayer.attackBounds.y, 
-                baccleanPlayer.attackBounds.width, 
+                baccleanPlayer.attackBounds.x,
+                baccleanPlayer.attackBounds.y,
+                baccleanPlayer.attackBounds.width,
                 baccleanPlayer.attackBounds.height);
         attackBoundRender.end();
     }
 
-
     private void renderTileGroundBounds() {
-        if (groundtileLayer != null) {
-            groundBoundRender.setProjectionMatrix(camera.combined);
-            groundBoundRender.begin(ShapeRenderer.ShapeType.Line);
-            groundBoundRender.setColor(Color.VIOLET); // Color for tile bounds
+        groundBoundRender.setProjectionMatrix(camera.combined);
+        groundBoundRender.begin(ShapeRenderer.ShapeType.Line);
+        groundBoundRender.setColor(Color.VIOLET); // Color for tile bounds
 
-            // Loop through all tiles in the ground layer
-            for (int tileY = 0; tileY < groundtileLayer.getHeight(); tileY++) {
-                for (int tileX = 0; tileX < groundtileLayer.getWidth(); tileX++) {
-                    // Get the tile at the current position
-                    TiledMapTileLayer.Cell currentCell = groundtileLayer.getCell(tileX, tileY);
-                    if (currentCell != null) {
-                        // Calculate the position and size of the tile
-                        float tileWidth = groundtileLayer.getTileWidth();
-                        float tileHeight = groundtileLayer.getTileHeight();
-                        float positionX = tileX * tileWidth;
-                        float positionY = tileY * tileHeight;
-
-                        // Assign the Rectangle to the class-level variable
-                        groundTileRectangle = new Rectangle(positionX, positionY, tileWidth, tileHeight);
-
-                        // Draw the rectangle for the tile
-                        groundBoundRender.rect(positionX, positionY, tileWidth, tileHeight);
-
-                        if (baccleanPlayer.movementBounds.overlaps(groundTileRectangle)){
-                            playerGrounded = true;
-                        }   
-                    }
-                }
-            }
-            groundBoundRender.end();
+        // Draw the rectangle for each tile
+        for (Rectangle tile : groundTileRectangles) {
+            groundBoundRender.rect(tile.x, tile.y, tile.width, tile.height);
         }
+
+        groundBoundRender.end();
     }
-     
 
     @Override
     public void resize(int width, int height) {

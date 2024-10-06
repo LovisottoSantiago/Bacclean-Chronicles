@@ -10,12 +10,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
+
 public class Player extends Sprite {
 
     // Textures for different player states
     private final Texture idleSheet;
     private final Texture walkSheet;
     private final Texture attackSheet;
+    private final Texture jumpingUpSheet;
+    private final Texture jumpingDownSheet;
 
     // Animations for the player
     private final Animation<TextureRegion> idleAnimation;
@@ -24,11 +27,17 @@ public class Player extends Sprite {
     private final Animation<TextureRegion> leftWalkAnimation;
     private final Animation<TextureRegion> attackAnimation;
     private final Animation<TextureRegion> leftAttackAnimation;
+    private final Animation<TextureRegion> jumpingUpAnimation;
+    private final Animation<TextureRegion> leftJumpingUpAnimation;
+    private final Animation<TextureRegion> jumpingDownAnimation;
+    private final Animation<TextureRegion> leftJumpingDownAnimation;
 
     // Animation frame durations
     private final float idleFrameDuration = 0.2f;
     private final float walkFrameDuration = 0.08f;
     private final float attackFrameDuration = 0.05f;
+    private final float jumpingUpFrameDuration = 0.05f;
+    private final float jumpingDownFrameDuration = 0.05f;
 
 
     // State properties
@@ -55,22 +64,31 @@ public class Player extends Sprite {
     public int movementBoundsHeight = 42;
     public int attackBoundsWidth = 60;
     public int attackBoundsHeight= 42;
+
+    // Jump
+    private final float jumpVelocity = 400; 
+    private final float gravity = 500f; // Gravity effect (how fast the player falls back down)
+    private float verticalVelocity = 0f; // Current vertical speed
     
     // Enum to define player states
     public enum PlayerState {
-        IDLE, RUNNING, ATTACKING, JUMPING
+        IDLE, RUNNING, ATTACKING, JUMPING_UP, JUMPING_DOWN
     }
 
 
     public Player(
                     String idleSheetPath, int columnsIdleSheet, int rowsIdleSheet, 
                     String walkSheetPath, int columnsWalkSheet, int rowsWalkSheet, 
-                    String attackSheetPath, int columnsAttackSheet, int rowsAttackSheet
+                    String attackSheetPath, int columnsAttackSheet, int rowsAttackSheet,
+                    String jumpingUpSheetPath, int columnsjumpingUpSheet, int rowsjumpingUpSheet,
+                    String jumpingDownSheetPath, int columnsjumpingDownSheet, int rowsjumpingDownSheet
     ) {
         // Load textures
         this.idleSheet = new Texture(Gdx.files.internal(idleSheetPath));
         this.walkSheet = new Texture(Gdx.files.internal(walkSheetPath));
         this.attackSheet = new Texture(Gdx.files.internal(attackSheetPath));
+        this.jumpingUpSheet = new Texture(Gdx.files.internal(jumpingUpSheetPath));
+        this.jumpingDownSheet = new Texture(Gdx.files.internal(jumpingDownSheetPath));
 
         // Initialize animations
         idleAnimation = AnimationController.createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, false);
@@ -79,6 +97,10 @@ public class Player extends Sprite {
         leftWalkAnimation = AnimationController.createAnimation(walkSheetPath, columnsWalkSheet, rowsWalkSheet, walkFrameDuration, true);
         attackAnimation = AnimationController.createAnimation(attackSheetPath, columnsAttackSheet, rowsAttackSheet, attackFrameDuration, false);
         leftAttackAnimation = AnimationController.createAnimation(attackSheetPath, columnsAttackSheet, rowsAttackSheet, attackFrameDuration, true);
+        jumpingUpAnimation = AnimationController.createAnimation(jumpingUpSheetPath, columnsjumpingUpSheet, rowsjumpingUpSheet, jumpingUpFrameDuration, false);
+        leftJumpingUpAnimation = AnimationController.createAnimation(jumpingUpSheetPath, columnsjumpingUpSheet, rowsjumpingUpSheet, jumpingUpFrameDuration, true);
+        jumpingDownAnimation = AnimationController.createAnimation(jumpingDownSheetPath, columnsjumpingDownSheet, rowsjumpingDownSheet, jumpingDownFrameDuration, false);
+        leftJumpingDownAnimation = AnimationController.createAnimation(jumpingDownSheetPath, columnsjumpingDownSheet, rowsjumpingDownSheet, jumpingDownFrameDuration, true);
 
         // Initialize shape renderer and sprite batch
         staminaBarRenderer = new ShapeRenderer();
@@ -139,7 +161,7 @@ public class Player extends Sprite {
     //! Input and movement
     public void playerMove(float delta) {        
         // Handle attack input
-        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && playerState != PlayerState.JUMPING_UP && playerState != PlayerState.JUMPING_DOWN) {
             performAttack();
         }
 
@@ -171,31 +193,63 @@ public class Player extends Sprite {
         }
     }
 
-    // WASD movement and logic
-    public void sideMovement(float delta) {
-        speed = 200f;
-        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && stamina > 5){
-            speed += 200f;
-            decreaseStamina(0.3f);
+// WASD movement and logic
+public void sideMovement(float delta) {
+    speed = 200f;
+
+    if ((Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && stamina > 5) && playerState != PlayerState.JUMPING_UP && playerState != PlayerState.JUMPING_DOWN) {
+        speed += 200f;
+        decreaseStamina(0.3f);
+    }
+
+    // Handle horizontal movement
+    if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        this.translateX(-speed * delta); // Move left
+        leftFlag = true;
+        if (playerState != PlayerState.JUMPING_UP && playerState != PlayerState.JUMPING_DOWN) {
+            playerState = PlayerState.RUNNING;
+        }
+    } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        this.translateX(speed * delta); // Move right
+        leftFlag = false;
+        if (playerState != PlayerState.JUMPING_UP && playerState != PlayerState.JUMPING_DOWN) {
+            playerState = PlayerState.RUNNING;
+        }
+    } else if (playerState != PlayerState.JUMPING_UP && playerState != PlayerState.JUMPING_DOWN) {
+        playerState = PlayerState.IDLE; // Set to idle if no horizontal input
+    }
+
+    // Handle jumping
+    if (Gdx.input.isKeyPressed(Input.Keys.W) && playerState != PlayerState.JUMPING_UP && playerState != PlayerState.JUMPING_DOWN) {
+        playerState = PlayerState.JUMPING_UP;
+        verticalVelocity = jumpVelocity; // Set the initial jump velocity
+    }
+    jumpLogic(delta); // Handle jump logic
+}
+
+public void jumpLogic(float delta) {
+    if (playerState == PlayerState.JUMPING_UP || playerState == PlayerState.JUMPING_DOWN) {
+        verticalVelocity -= gravity * delta; // Apply gravity
+        this.translateY(verticalVelocity * delta); // Move the player vertically
+
+        // Handle transition between states
+        if (verticalVelocity > 0) {
+            playerState = PlayerState.JUMPING_UP; // Ascending
+        } else if (verticalVelocity < 0) {
+            playerState = PlayerState.JUMPING_DOWN; // Descending
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            this.translateX(-speed * delta); // Move left
-            leftFlag = true;
-            playerState = PlayerState.RUNNING;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            this.translateX(speed * delta); // Move right
-            leftFlag = false;
-            playerState = PlayerState.RUNNING;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            this.translateY(speed * delta); // Move up
-            playerState = PlayerState.JUMPING;
-        } else {
-            // Set to idle and regenerate stamina slowly
-            playerState = PlayerState.IDLE;
+        // Check if the player has landed
+        if (getY() <= 0) { // Assuming ground level is y = 0
+            this.setPosition(this.getX(), 0); // Reset position to ground
+            verticalVelocity = 0; // Reset vertical speed
+            playerState = PlayerState.IDLE; // Return to idle state after landing
         }
     }
-    
+}
+
+
+
 
 
     public TextureRegion getCurrentFrame() {
@@ -216,6 +270,20 @@ public class Player extends Sprite {
                     return walkAnimation.getKeyFrame(stateTime, true); // Loop for right walk animation
                 }
 
+            case JUMPING_UP:
+                if (leftFlag) {
+                    return leftJumpingUpAnimation.getKeyFrame(stateTime, true);
+                } else {
+                    return jumpingUpAnimation.getKeyFrame(stateTime, true);
+                }
+
+            case JUMPING_DOWN:
+                if (leftFlag) {
+                    return leftJumpingDownAnimation.getKeyFrame(stateTime, true);
+                } else {
+                    return jumpingDownAnimation.getKeyFrame(stateTime, true);
+                }
+
             case IDLE:
             default:
                 if (leftFlag) {
@@ -232,6 +300,8 @@ public class Player extends Sprite {
         idleSheet.dispose();
 		walkSheet.dispose();
         attackSheet.dispose();
+        jumpingUpSheet.dispose();
+        jumpingDownSheet.dispose();
 	}
 
 

@@ -126,8 +126,10 @@ maps/sets/tree-3.png
 maps/sets/tree.png
 music.mp3
 sprites-player/player-attack1.png
+sprites-player/player-down.png
 sprites-player/player-idle.png
 sprites-player/player-run.png
+sprites-player/player-up.png
 sprites-player/player_sprites.aseprite
 sprites-player/wind_hashashin.png
 ui/alagard_by_pix3m-d6awiwp.ttf
