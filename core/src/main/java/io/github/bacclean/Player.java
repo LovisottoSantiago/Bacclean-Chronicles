@@ -58,7 +58,7 @@ public class Player extends Sprite {
     
     // Enum to define player states
     public enum PlayerState {
-        IDLE, RUNNING, ATTACKING
+        IDLE, RUNNING, ATTACKING, JUMPING
     }
 
 
@@ -121,7 +121,7 @@ public class Player extends Sprite {
     public void decreaseStamina(float value) {
         stamina -= value;
         stamina = Math.max(0, stamina); // Ensure stamina doesn't go below 0
-        logStamina(stamina);
+        //logStamina(stamina);
     }
 
     public void regenerateStamina(float delta) {
@@ -131,7 +131,7 @@ public class Player extends Sprite {
             stamina += regenAmount; // Regenerate stamina
             stamina = Math.min(100, stamina); // Ensure stamina doesn't exceed 100
             staminaRegenTime = 0; // Reset the timer
-            logStamina(stamina);
+            //logStamina(stamina);
         }
     }
 
@@ -187,11 +187,15 @@ public class Player extends Sprite {
             this.translateX(speed * delta); // Move right
             leftFlag = false;
             playerState = PlayerState.RUNNING;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            this.translateY(speed * delta); // Move up
+            playerState = PlayerState.JUMPING;
         } else {
             // Set to idle and regenerate stamina slowly
             playerState = PlayerState.IDLE;
         }
     }
+    
 
 
     public TextureRegion getCurrentFrame() {

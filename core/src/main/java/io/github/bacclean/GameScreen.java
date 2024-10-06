@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
@@ -28,12 +29,17 @@ public class GameScreen implements Screen {
 
     // TileMap
     private TiledMapTileLayer groundtileLayer;
+    private Rectangle groundTileRectangle;
 
     // ShapeRenderer for rendering bounds
     private ShapeRenderer movementBoundRender;
     private ShapeRenderer attackBoundRender;
     private ShapeRenderer groundBoundRender;
     public boolean showBounds;
+
+    // Collisions
+    boolean playerGrounded;
+
 
     public GameScreen(Main game, OrthographicCamera camera, ExtendViewport extendViewport) {
         this.camera = camera;
@@ -55,11 +61,13 @@ public class GameScreen implements Screen {
 
         loadMap();
 
+
         // Initialize ShapeRenderers
         movementBoundRender = new ShapeRenderer();
         attackBoundRender = new ShapeRenderer();
         groundBoundRender = new ShapeRenderer ();
     }
+
 
     private void loadMap() {
         TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());
@@ -71,10 +79,11 @@ public class GameScreen implements Screen {
         groundtileLayer = (TiledMapTileLayer) map.getLayers().get("ground");
     }
 
+
     @Override
     public void render(float delta) {
         handleInput();
-        updateLogic();
+        handlePlayerCollision();
         updateCamera();
         drawScene();
     }
@@ -86,21 +95,18 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
             showBounds = !showBounds; // Toggle the boolean flag
         }
-        /* 
-        if (Gdx.input.isKeyPressed(Input.Keys.PAGE_UP)) {
-            camera.zoom = MathUtils.clamp(camera.zoom - 0.01f, 0.4f, 0.6f);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.PAGE_DOWN)) {
-            camera.zoom = MathUtils.clamp(camera.zoom + 0.01f, 0.4f, 0.6f);
-        }  */
+        
     }
 
-private void updateLogic() {
-    // Update player movement
-    
+    private void handlePlayerCollision() {        
+        Rectangle playerBounds = baccleanPlayer.movementBounds;
+        
+        if (playerGrounded){
+            Gdx.app.log("Collision", "Player is above the ground");
+        }
 
 
-}
+    }
 
 
     private void updateCamera() {
@@ -110,6 +116,7 @@ private void updateLogic() {
                 0);
         camera.update();
     }
+
 
     private void drawScene() {
         Color backgroundColor = new Color(0, 0, 34 / 255f, 1);
@@ -130,12 +137,13 @@ private void updateLogic() {
         // Render stamina bar
         baccleanPlayer.renderStaminaBar();
 
-        if (showBounds) {
+        if (!showBounds) {
             renderPlayerBounds();
             renderTileGroundBounds();
         }
 
     }
+
 
     private void renderPlayerBounds() {
         // Movement bounds
@@ -161,12 +169,13 @@ private void updateLogic() {
         attackBoundRender.end();
     }
 
+
     private void renderTileGroundBounds() {
         if (groundtileLayer != null) {
             groundBoundRender.setProjectionMatrix(camera.combined);
             groundBoundRender.begin(ShapeRenderer.ShapeType.Line);
             groundBoundRender.setColor(Color.VIOLET); // Color for tile bounds
-    
+
             // Loop through all tiles in the ground layer
             for (int tileY = 0; tileY < groundtileLayer.getHeight(); tileY++) {
                 for (int tileX = 0; tileX < groundtileLayer.getWidth(); tileX++) {
@@ -178,16 +187,23 @@ private void updateLogic() {
                         float tileHeight = groundtileLayer.getTileHeight();
                         float positionX = tileX * tileWidth;
                         float positionY = tileY * tileHeight;
-    
+
+                        // Assign the Rectangle to the class-level variable
+                        groundTileRectangle = new Rectangle(positionX, positionY, tileWidth, tileHeight);
+
                         // Draw the rectangle for the tile
                         groundBoundRender.rect(positionX, positionY, tileWidth, tileHeight);
+
+                        if (baccleanPlayer.movementBounds.overlaps(groundTileRectangle)){
+                            playerGrounded = true;
+                        }   
                     }
                 }
             }
             groundBoundRender.end();
         }
     }
-    
+     
 
     @Override
     public void resize(int width, int height) {
