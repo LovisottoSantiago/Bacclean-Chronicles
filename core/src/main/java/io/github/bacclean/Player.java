@@ -45,6 +45,7 @@ public class Player extends Sprite {
     private final SpriteBatch spriteBatch;
     private boolean leftFlag;
     public PlayerState playerState;
+    public PlayerState previousState = PlayerState.IDLE;
     public float speed;
 
     // Stamina properties
@@ -66,9 +67,9 @@ public class Player extends Sprite {
     public int attackBoundsHeight= 42;
 
     // Jump
-    private final float jumpVelocity = 400; 
-    private final float gravity = 500f; // Gravity effect (how fast the player falls back down)
-    private float verticalVelocity = 0f; // Current vertical speed
+    public final float jumpVelocity = 400; 
+    public final float gravity = 500f; // Gravity effect (how fast the player falls back down)
+    public float verticalVelocity = 0f; // Current vertical speed
     
     // Enum to define player states
     public enum PlayerState {
@@ -158,13 +159,11 @@ public class Player extends Sprite {
     }
 
 
-    //! Input and movement
     public void playerMove(float delta) {        
         // Handle attack input
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && playerState != PlayerState.JUMPING_UP && playerState != PlayerState.JUMPING_DOWN) {
             performAttack();
-        }
-
+        }        
         if (playerState == PlayerState.ATTACKING) {
             if (stateTime >= attackAnimation.getAnimationDuration()) {
                 attackBounds.setSize(0, 0);
@@ -175,8 +174,9 @@ public class Player extends Sprite {
             regenerateStamina(delta); // Time-based regeneration            
             sideMovement(delta);
             movementBounds.setPosition(getX() + (getWidth() - movementBoundsWidth) / 2, getY()); // Update bounds position
-            attackBounds.setPosition(1500, 1500); //avoid attack bound appears on screen
+            attackBounds.setPosition(1500, 1500); //avoid attack bound appears on screen            
         }
+        jumpLogic(delta);
     }
 
     // Attack movement and logic
@@ -193,116 +193,97 @@ public class Player extends Sprite {
         }
     }
 
-// WASD movement and logic
-public void sideMovement(float delta) {
-    speed = 200f;
 
-    if ((Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && stamina > 5) && playerState != PlayerState.JUMPING_UP && playerState != PlayerState.JUMPING_DOWN) {
-        speed += 200f;
-        decreaseStamina(0.3f);
+    private boolean isJumping() {
+        return playerState == PlayerState.JUMPING_UP || playerState == PlayerState.JUMPING_DOWN;
     }
 
-    // Handle horizontal movement
-    if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-        this.translateX(-speed * delta); // Move left
-        leftFlag = true;
-        if (playerState != PlayerState.JUMPING_UP && playerState != PlayerState.JUMPING_DOWN) {
-            playerState = PlayerState.RUNNING;
+
+    public void sideMovement(float delta) {
+        speed = 200f;
+        if ((Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && stamina > 5) && playerState != PlayerState.JUMPING_UP && playerState != PlayerState.JUMPING_DOWN) {
+            speed += 200f;
+            decreaseStamina(0.3f);
         }
-    } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-        this.translateX(speed * delta); // Move right
-        leftFlag = false;
-        if (playerState != PlayerState.JUMPING_UP && playerState != PlayerState.JUMPING_DOWN) {
-            playerState = PlayerState.RUNNING;
+        // Handle horizontal movement
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            this.translateX(-speed * delta);
+            leftFlag = true;
+            if (playerState != PlayerState.RUNNING && !isJumping()) {
+                playerState = PlayerState.RUNNING;
+            }
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            this.translateX(speed * delta);
+            leftFlag = false;
+            if (playerState != PlayerState.RUNNING && !isJumping()) {
+                playerState = PlayerState.RUNNING;
+            }
+        } else if (playerState != PlayerState.IDLE && !isJumping()) {
+            playerState = PlayerState.IDLE;
         }
-    } else if (playerState != PlayerState.JUMPING_UP && playerState != PlayerState.JUMPING_DOWN) {
-        playerState = PlayerState.IDLE; // Set to idle if no horizontal input
-    }
-
-    // Handle jumping
-    if (Gdx.input.isKeyPressed(Input.Keys.W) && playerState != PlayerState.JUMPING_UP && playerState != PlayerState.JUMPING_DOWN) {
-        playerState = PlayerState.JUMPING_UP;
-        verticalVelocity = jumpVelocity; // Set the initial jump velocity
-    }
-    jumpLogic(delta); // Handle jump logic
-}
-
-public void jumpLogic(float delta) {
-    if (playerState == PlayerState.JUMPING_UP || playerState == PlayerState.JUMPING_DOWN) {
-        verticalVelocity -= gravity * delta; // Apply gravity
-        this.translateY(verticalVelocity * delta); // Move the player vertically
-
-        // Handle transition between states
-        if (verticalVelocity > 0) {
-            playerState = PlayerState.JUMPING_UP; // Ascending
-        } else if (verticalVelocity < 0) {
-            playerState = PlayerState.JUMPING_DOWN; // Descending
-        }
-
-        // Check if the player has landed
-        if (getY() <= 0) { // Assuming ground level is y = 0
-            this.setPosition(this.getX(), 0); // Reset position to ground
-            verticalVelocity = 0; // Reset vertical speed
-            playerState = PlayerState.IDLE; // Return to idle state after landing
+        // JUMP
+        if (Gdx.input.isKeyPressed(Input.Keys.W) && playerState != PlayerState.JUMPING_UP && playerState != PlayerState.JUMPING_DOWN) {
+            playerState = PlayerState.JUMPING_UP;
+            verticalVelocity = jumpVelocity;
         }
     }
-}
 
 
+    public void jumpLogic(float delta) {
+        if (playerState == PlayerState.JUMPING_UP || playerState == PlayerState.JUMPING_DOWN) {
+            verticalVelocity -= gravity * delta; // Apply gravity
+            this.translateY(verticalVelocity * delta);
+            if (verticalVelocity > 0) {
+                playerState = PlayerState.JUMPING_UP; // Ascending
+            } else {
+                playerState = PlayerState.JUMPING_DOWN; // Descending
+            }
+        }        
+        if (playerState == PlayerState.JUMPING_DOWN && verticalVelocity < 0) {
+            playerState = PlayerState.IDLE; // Reset to IDLE if not falling anymore
+        }
+        
+    }
+    
+    
 
-
-
-    public TextureRegion getCurrentFrame() {
-        stateTime += Gdx.graphics.getDeltaTime();        
+    private Animation<TextureRegion> getCurrentAnimation() {
         switch (playerState) {
             case ATTACKING:
-                if (leftFlag) {
-                    return leftAttackAnimation.getKeyFrame(stateTime, false); // Don't loop for attack
-                } 
-                else {
-                    return attackAnimation.getKeyFrame(stateTime, false); // Don't loop for attack
-                }    
-
+                return leftFlag ? leftAttackAnimation : attackAnimation;
             case RUNNING:
-                if (leftFlag) {
-                    return leftWalkAnimation.getKeyFrame(stateTime, true); // Loop for left walk animation
-                } else {
-                    return walkAnimation.getKeyFrame(stateTime, true); // Loop for right walk animation
-                }
-
+                return leftFlag ? leftWalkAnimation : walkAnimation;
             case JUMPING_UP:
-                if (leftFlag) {
-                    return leftJumpingUpAnimation.getKeyFrame(stateTime, true);
-                } else {
-                    return jumpingUpAnimation.getKeyFrame(stateTime, true);
-                }
-
+                return leftFlag ? leftJumpingUpAnimation : jumpingUpAnimation;
             case JUMPING_DOWN:
-                if (leftFlag) {
-                    return leftJumpingDownAnimation.getKeyFrame(stateTime, true);
-                } else {
-                    return jumpingDownAnimation.getKeyFrame(stateTime, true);
-                }
-
-            case IDLE:
+                return leftFlag ? leftJumpingDownAnimation : jumpingDownAnimation;
             default:
-                if (leftFlag) {
-                    return leftIdleAnimation.getKeyFrame(stateTime, true); // Loop for left idle animation
-                } else {
-                    return idleAnimation.getKeyFrame(stateTime, true); // Loop for right idle animation
-                }
+                return leftFlag ? leftIdleAnimation : idleAnimation;
         }
+    }
+
+    
+    public TextureRegion getCurrentFrame() {
+        if (playerState != previousState) {
+            stateTime = 0;
+            previousState = playerState;
+        }
+    
+        stateTime += Gdx.graphics.getDeltaTime();
+        return getCurrentAnimation().getKeyFrame(stateTime, true);
     }
     
     
-	public void dispose() { // SpriteBatches and Textures must always be disposed
-		spriteBatch.dispose();
+    public void dispose() {
         idleSheet.dispose();
-		walkSheet.dispose();
+        walkSheet.dispose();
         attackSheet.dispose();
         jumpingUpSheet.dispose();
         jumpingDownSheet.dispose();
-	}
+        staminaBarRenderer.dispose();
+        spriteBatch.dispose();
+    }
+    
 
 
 }

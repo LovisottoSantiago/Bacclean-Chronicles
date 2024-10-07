@@ -20,6 +20,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
+import io.github.bacclean.Player.PlayerState;
+
 public class GameScreen implements Screen {
     private SpriteBatch spriteBatch;
     private final ExtendViewport extendViewport;
@@ -102,7 +104,7 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void render(float delta) {
+    public void render(float delta) {        
         handleInput();
         handlePlayerCollision();
         updateCamera();
@@ -118,20 +120,34 @@ public class GameScreen implements Screen {
         }
     }
 
+    public boolean grounded = false;
+    
     private void handlePlayerCollision() {
+        grounded = false; 
         Rectangle playerBounds = baccleanPlayer.movementBounds;
-
+        
         for (Rectangle tile : groundTileRectangles) {
             if (playerBounds.overlaps(tile)) {
-                Gdx.app.log("Collision", "Collision detected");
-                if (playerBounds.y > tile.getY()) {
-                    // Log specifically when the player is below the ground
-                    
+                //! check this
+                if (playerBounds.y >= tile.getY() + tile.getHeight() && baccleanPlayer.verticalVelocity <= 0) {
+                    baccleanPlayer.setPosition(baccleanPlayer.getX(), tile.getY() + tile.getHeight());
+                    baccleanPlayer.verticalVelocity = 0;
+                    grounded = true;
+                    baccleanPlayer.playerState = PlayerState.IDLE; 
+                } 
+                else if (playerBounds.y < tile.getY() && baccleanPlayer.verticalVelocity > 0) {
+                    baccleanPlayer.setPosition(baccleanPlayer.getX(), tile.getY() - playerBounds.height);
+                    baccleanPlayer.verticalVelocity = 0;
                 }
-                break; // Exit the loop if a collision is found
+                return; // Exit after handling the first collision
             }
+        }     
+        if (!grounded) {
+            baccleanPlayer.playerState = PlayerState.JUMPING_DOWN; // Set to jumping down if in the air
         }
     }
+    
+ 
 
     private void updateCamera() {
         camera.position.set(
