@@ -69,7 +69,7 @@ public class Player extends Sprite {
     public int attackBoundsHeight= 42;
 
     // Jump
-    public final float jumpVelocity = 10f; 
+    public final float jumpVelocity = 100f; 
     public final float gravity = -98f; // Gravity effect (how fast the player falls back down)
     public float verticalVelocity = 0; // Current vertical speed
     
@@ -236,15 +236,34 @@ public void playerMove(float delta) {
             playerState = PlayerState.IDLE;
         }
         // JUMP
-        if (Gdx.input.isKeyPressed(Input.Keys.W) && playerState != PlayerState.JUMPING && playerState != PlayerState.FALLING) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W) && (playerState == PlayerState.IDLE || playerState == PlayerState.RUNNING)) {
+            playerState = PlayerState.JUMPING;
+            jump();
+        } else if (playerState == PlayerState.JUMPING || playerState == PlayerState.FALLING) {
             gravityLogic(delta);
         }
     }
 
 
+    public void jump() {
+        verticalVelocity = jumpVelocity; // Apply initial jump velocity
+    }
+
     public void gravityLogic(float delta) {        
         verticalVelocity += gravity * delta; // Increase downward speed
         setPosition(getX(), getY() + verticalVelocity * delta); // Update the player position
+
+        if (verticalVelocity < 0 && playerState == PlayerState.JUMPING) {
+            playerState = PlayerState.FALLING;
+        }
+        // Assuming getY() <= ground level is a condition for landing
+        if (getY() <= 64 && playerState != PlayerState.RUNNING) {
+            verticalVelocity = 0;
+            setPosition(getX(), 64);
+            playerState = PlayerState.IDLE;
+        }
+
+
     }
     
     public boolean isFloating = true;
