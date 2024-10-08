@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 
 
+
 public class Player extends Sprite {
 
     // Textures for different player states
@@ -242,6 +243,8 @@ public void playerMove(float delta) {
         }
     }
 
+
+
     public void gravityLogic(float delta) {
         if (playerState != PlayerState.ATTACKING) { // Only apply gravity if not attacking
             verticalVelocity -= gravity * delta; // Apply gravity
@@ -268,8 +271,44 @@ public void playerMove(float delta) {
     }
     
     
-    
-    
+    public void checkGroundCollision(java.util.List<com.badlogic.gdx.math.Rectangle> groundTileRectangles) {
+        Rectangle playerBounds = this.movementBounds; // Assuming movementBounds is defined in Player class
+        boolean isTouchingTile = false;
+
+        for (Rectangle tile : groundTileRectangles) {
+            if (playerBounds.overlaps(tile)) {
+                isTouchingTile = true;
+
+                // Handle landing on the tile
+                if (playerBounds.y + playerBounds.height > tile.getY() &&
+                    playerBounds.y < tile.getY() + tile.getHeight() &&
+                    verticalVelocity < 0) {
+
+                    setPosition(getX(), tile.getY() + tile.getHeight());
+                    verticalVelocity = 0;
+                    playerState = PlayerState.IDLE;
+                    System.out.println("Player landed on tile. Y Position: " + getY());
+                    return;
+                }
+                // Check if the player is rising and hits the bottom of the tile
+                else if (playerBounds.y + playerBounds.height >= tile.getY() &&
+                         playerBounds.y + playerBounds.height <= tile.getY() + 5 && // Small threshold
+                         verticalVelocity > 0) {
+
+                    setPosition(getX(), tile.getY() - playerBounds.height);
+                    verticalVelocity = -1; // Apply downward velocity to push the player down
+                    playerState = PlayerState.FALLING;
+                    System.out.println("Player hit the bottom of the tile. New Y Position: " + getY());
+                    return;
+                }
+            }
+        }
+        // If not touching any tile, apply gravity logic
+        if (!isTouchingTile) {
+            gravityLogic(Gdx.graphics.getDeltaTime());
+        }
+    }
+
     
 
     private Animation<TextureRegion> getCurrentAnimation() {
