@@ -67,13 +67,13 @@ public class Player extends Sprite {
     public int attackBoundsHeight= 42;
 
     // Jump
-    public final float jumpVelocity = 400; 
-    public final float gravity = 500f; // Gravity effect (how fast the player falls back down)
-    public float verticalVelocity = 0f; // Current vertical speed
+    public final float jumpVelocity = 300f; 
+    public final float gravity = 400f; // Gravity effect (how fast the player falls back down)
+    public float verticalVelocity = 0; // Current vertical speed
     
     // Enum to define player states
     public enum PlayerState {
-        IDLE, RUNNING, ATTACKING, JUMPING_UP, JUMPING_DOWN
+        IDLE, RUNNING, ATTACKING, JUMPING_UP, FALLING
     }
 
 
@@ -159,30 +159,30 @@ public class Player extends Sprite {
     }
 
 
-    public void playerMove(float delta) {
-        // Handle attack input
-        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !isJumping()) {
-            performAttack();
+public void playerMove(float delta) {
+    // Handle attack input
+    if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !isFloating()) {
+        performAttack();
+    }
+
+    // Handle state transitions
+    if (playerState == PlayerState.ATTACKING) {
+        stateTime += delta; // Increment stateTime while attacking
+        if (stateTime >= attackAnimation.getAnimationDuration()) {
+            attackBounds.setSize(0, 0); // Reset attack bounds
+            playerState = PlayerState.IDLE; // Return to idle state after attack
+            stateTime = 0; // Reset stateTime only after finishing the attack
         }
-    
-        // Handle state transitions
-        if (playerState == PlayerState.ATTACKING) {
-            stateTime += delta; // Increment stateTime while attacking
-            if (stateTime >= attackAnimation.getAnimationDuration()) {
-                attackBounds.setSize(0, 0); // Reset attack bounds
-                playerState = PlayerState.IDLE; // Return to idle state after attack
-                stateTime = 0; // Reset stateTime only after finishing the attack
-            }
-        } else {
-            regenerateStamina(delta); // Time-based regeneration            
-            sideMovement(delta);
-            updateMovementBounds();
-            attackBounds.setSize(0, 0); // Ensure attack bounds are not visible when not attacking
-        }
-        
-        jumpLogic(delta);
+    } else {
+        regenerateStamina(delta); // Time-based regeneration            
+        sideMovement(delta);
+        updateMovementBounds();
+        attackBounds.setSize(0, 0); // Ensure attack bounds are not visible when not attacking
     }
     
+    jumpLogic(delta);
+}
+
     
     // Helper method to update movement bounds
     private void updateMovementBounds() {
@@ -205,14 +205,14 @@ public class Player extends Sprite {
     }
 
 
-    private boolean isJumping() {
-        return playerState == PlayerState.JUMPING_UP || playerState == PlayerState.JUMPING_DOWN;
+    public boolean isFloating() {
+        return playerState == PlayerState.JUMPING_UP || playerState == PlayerState.FALLING;
     }
 
 
     public void sideMovement(float delta) {
         speed = 200f;
-        if ((Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && stamina > 5) && playerState != PlayerState.JUMPING_UP && playerState != PlayerState.JUMPING_DOWN) {
+        if ((Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && stamina > 5) && playerState != PlayerState.JUMPING_UP && playerState != PlayerState.FALLING) {
             speed += 200f;
             decreaseStamina(0.3f);
         }
@@ -220,41 +220,39 @@ public class Player extends Sprite {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             this.translateX(-speed * delta);
             leftFlag = true;
-            if (playerState != PlayerState.RUNNING && !isJumping()) {
+            if (playerState != PlayerState.RUNNING && !isFloating()) {
                 playerState = PlayerState.RUNNING;
             }
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             this.translateX(speed * delta);
             leftFlag = false;
-            if (playerState != PlayerState.RUNNING && !isJumping()) {
+            if (playerState != PlayerState.RUNNING && !isFloating()) {
                 playerState = PlayerState.RUNNING;
             }
-        } else if (playerState != PlayerState.IDLE && !isJumping()) {
+        } else if (playerState != PlayerState.IDLE && !isFloating()) {
             playerState = PlayerState.IDLE;
         }
         // JUMP
-        if (Gdx.input.isKeyPressed(Input.Keys.W) && playerState != PlayerState.JUMPING_UP && playerState != PlayerState.JUMPING_DOWN) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W) && playerState != PlayerState.JUMPING_UP && playerState != PlayerState.FALLING) {
             playerState = PlayerState.JUMPING_UP;
             verticalVelocity = jumpVelocity;
         }
     }
 
-
     public void jumpLogic(float delta) {
-        if (playerState == PlayerState.JUMPING_UP || playerState == PlayerState.JUMPING_DOWN) {
+        if (isFloating()) {
             verticalVelocity -= gravity * delta; // Apply gravity
             this.translateY(verticalVelocity * delta);
+
             if (verticalVelocity > 0) {
                 playerState = PlayerState.JUMPING_UP; // Ascending
-            } else {
-                playerState = PlayerState.JUMPING_DOWN; // Descending
+            } else if (verticalVelocity < 0) {
+                playerState = PlayerState.FALLING; // Descending
             }
-        }        
-        if (playerState == PlayerState.JUMPING_DOWN && verticalVelocity == 0) {
-            playerState = PlayerState.IDLE; // Reset to IDLE if not falling anymore
-        }
-        
+        } 
+            
     }
+    
     
     
 
@@ -266,7 +264,7 @@ public class Player extends Sprite {
                 return leftFlag ? leftWalkAnimation : walkAnimation;
             case JUMPING_UP:
                 return leftFlag ? leftJumpingUpAnimation : jumpingUpAnimation;
-            case JUMPING_DOWN:
+            case FALLING:
                 return leftFlag ? leftJumpingDownAnimation : jumpingDownAnimation;
             default:
                 return leftFlag ? leftIdleAnimation : idleAnimation;

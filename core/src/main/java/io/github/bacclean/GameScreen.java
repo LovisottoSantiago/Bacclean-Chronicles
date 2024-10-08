@@ -119,15 +119,15 @@ public class GameScreen implements Screen {
             showBounds = !showBounds; // Toggle the boolean flag
         }
     }
-
-    public boolean grounded = false;
     
+    boolean isTouchingTile = true;
+
     private void handlePlayerCollision() {
-        grounded = false; 
-        Rectangle playerBounds = baccleanPlayer.movementBounds;
-        
+        Rectangle playerBounds = baccleanPlayer.movementBounds;                        
+
         for (Rectangle tile : groundTileRectangles) {
             if (playerBounds.overlaps(tile)) {
+                isTouchingTile = true;    
                 // Check if the player is falling onto the tile (from above)
                 if (playerBounds.y > tile.getY() && 
                     playerBounds.y + playerBounds.height > tile.getY() + tile.getHeight() && 
@@ -142,24 +142,25 @@ public class GameScreen implements Screen {
                 } 
                 // Check if the player is rising and hits the bottom of the tile
                 else if (playerBounds.y + playerBounds.height >= tile.getY() && 
-                        playerBounds.y + playerBounds.height <= tile.getY() + 5 && // Small threshold
-                        baccleanPlayer.verticalVelocity > 0) { 
+                         playerBounds.y + playerBounds.height <= tile.getY() + 5 && // Small threshold
+                         baccleanPlayer.verticalVelocity > 0) { 
                     
                     // Move the player down to the top of the tile
                     baccleanPlayer.setPosition(baccleanPlayer.getX(), tile.getY() - playerBounds.height);
                     baccleanPlayer.verticalVelocity = -1; // Apply downward velocity to push the player down
-                    baccleanPlayer.playerState = PlayerState.JUMPING_DOWN; // Change to a falling state, if applicable                     
+                    baccleanPlayer.playerState = PlayerState.FALLING;                     
                     System.out.println("Player hit the bottom of the tile. New Y Position: " + baccleanPlayer.getY());
                 }
-                
-                return; 
+                return;
             }
-        }     
-
-        // If no collision with any tile was detected, set player state to jumping down
-        if (!grounded) {
-            
+            isTouchingTile = false;
+            if (!isTouchingTile && baccleanPlayer.verticalVelocity == 0) {
+                System.out.println("Player is levitating.");
+                baccleanPlayer.playerState = PlayerState.FALLING;
+            }
         }
+
+        
     }
     
  
@@ -179,7 +180,6 @@ public class GameScreen implements Screen {
         // Render the map
         mapRenderer.setView(camera);
         mapRenderer.render();
-
         // Render the player
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
