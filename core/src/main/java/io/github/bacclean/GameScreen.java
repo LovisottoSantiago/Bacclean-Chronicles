@@ -128,22 +128,37 @@ public class GameScreen implements Screen {
         
         for (Rectangle tile : groundTileRectangles) {
             if (playerBounds.overlaps(tile)) {
-                //! check this
-                if (playerBounds.y >= tile.getY() + tile.getHeight() && baccleanPlayer.verticalVelocity <= 0) {
+                // Check if the player is falling onto the tile (from above)
+                if (playerBounds.y > tile.getY() && 
+                    playerBounds.y + playerBounds.height > tile.getY() + tile.getHeight() && 
+                    baccleanPlayer.verticalVelocity < 0) {
+                    
+                    // Set player position on top of the tile
                     baccleanPlayer.setPosition(baccleanPlayer.getX(), tile.getY() + tile.getHeight());
                     baccleanPlayer.verticalVelocity = 0;
-                    grounded = true;
-                    baccleanPlayer.playerState = PlayerState.IDLE; 
+                    baccleanPlayer.playerState = PlayerState.IDLE;                     
+                    System.out.println("Player landed on tile. Y Position: " + baccleanPlayer.getY());
+        
                 } 
-                else if (playerBounds.y < tile.getY() && baccleanPlayer.verticalVelocity > 0) {
+                // Check if the player is rising and hits the bottom of the tile
+                else if (playerBounds.y + playerBounds.height >= tile.getY() && 
+                        playerBounds.y + playerBounds.height <= tile.getY() + 5 && // Small threshold
+                        baccleanPlayer.verticalVelocity > 0) { 
+                    
+                    // Move the player down to the top of the tile
                     baccleanPlayer.setPosition(baccleanPlayer.getX(), tile.getY() - playerBounds.height);
-                    baccleanPlayer.verticalVelocity = 0;
+                    baccleanPlayer.verticalVelocity = -1; // Apply downward velocity to push the player down
+                    baccleanPlayer.playerState = PlayerState.JUMPING_DOWN; // Change to a falling state, if applicable                     
+                    System.out.println("Player hit the bottom of the tile. New Y Position: " + baccleanPlayer.getY());
                 }
-                return; // Exit after handling the first collision
+                
+                return; 
             }
         }     
+
+        // If no collision with any tile was detected, set player state to jumping down
         if (!grounded) {
-            baccleanPlayer.playerState = PlayerState.JUMPING_DOWN; // Set to jumping down if in the air
+            
         }
     }
     

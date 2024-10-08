@@ -159,25 +159,36 @@ public class Player extends Sprite {
     }
 
 
-    public void playerMove(float delta) {        
+    public void playerMove(float delta) {
         // Handle attack input
-        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && playerState != PlayerState.JUMPING_UP && playerState != PlayerState.JUMPING_DOWN) {
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !isJumping()) {
             performAttack();
-        }        
+        }
+    
+        // Handle state transitions
         if (playerState == PlayerState.ATTACKING) {
+            stateTime += delta; // Increment stateTime while attacking
             if (stateTime >= attackAnimation.getAnimationDuration()) {
-                attackBounds.setSize(0, 0);
-                stateTime = 0; // Reset stateTime after attack completes
-                playerState = PlayerState.IDLE; // Return to idle state
+                attackBounds.setSize(0, 0); // Reset attack bounds
+                playerState = PlayerState.IDLE; // Return to idle state after attack
+                stateTime = 0; // Reset stateTime only after finishing the attack
             }
         } else {
             regenerateStamina(delta); // Time-based regeneration            
             sideMovement(delta);
-            movementBounds.setPosition(getX() + (getWidth() - movementBoundsWidth) / 2, getY()); // Update bounds position
-            attackBounds.setPosition(1500, 1500); //avoid attack bound appears on screen            
+            updateMovementBounds();
+            attackBounds.setSize(0, 0); // Ensure attack bounds are not visible when not attacking
         }
+        
         jumpLogic(delta);
     }
+    
+    
+    // Helper method to update movement bounds
+    private void updateMovementBounds() {
+        movementBounds.setPosition(getX() + (getWidth() - movementBoundsWidth) / 2, getY());
+    }
+    
 
     // Attack movement and logic
     public void performAttack() {
@@ -239,7 +250,7 @@ public class Player extends Sprite {
                 playerState = PlayerState.JUMPING_DOWN; // Descending
             }
         }        
-        if (playerState == PlayerState.JUMPING_DOWN && verticalVelocity < 0) {
+        if (playerState == PlayerState.JUMPING_DOWN && verticalVelocity == 0) {
             playerState = PlayerState.IDLE; // Reset to IDLE if not falling anymore
         }
         
@@ -272,7 +283,7 @@ public class Player extends Sprite {
         stateTime += Gdx.graphics.getDeltaTime();
         return getCurrentAnimation().getKeyFrame(stateTime, true);
     }
-    
+        
     
     public void dispose() {
         idleSheet.dispose();
