@@ -120,48 +120,48 @@ public class GameScreen implements Screen {
         }
     }
     
-    boolean isTouchingTile = true;
+boolean isTouchingTile = false;
 
-    private void handlePlayerCollision() {
-        Rectangle playerBounds = baccleanPlayer.movementBounds;                        
 
-        for (Rectangle tile : groundTileRectangles) {
-            if (playerBounds.overlaps(tile)) {
-                isTouchingTile = true;    
-                // Check if the player is falling onto the tile (from above)
-                if (playerBounds.y > tile.getY() && 
-                    playerBounds.y + playerBounds.height > tile.getY() + tile.getHeight() && 
-                    baccleanPlayer.verticalVelocity < 0) {
-                    
-                    // Set player position on top of the tile
-                    baccleanPlayer.setPosition(baccleanPlayer.getX(), tile.getY() + tile.getHeight());
-                    baccleanPlayer.verticalVelocity = 0;
-                    baccleanPlayer.playerState = PlayerState.IDLE;                     
-                    System.out.println("Player landed on tile. Y Position: " + baccleanPlayer.getY());
-        
-                } 
-                // Check if the player is rising and hits the bottom of the tile
-                else if (playerBounds.y + playerBounds.height >= tile.getY() && 
-                         playerBounds.y + playerBounds.height <= tile.getY() + 5 && // Small threshold
-                         baccleanPlayer.verticalVelocity > 0) { 
-                    
-                    // Move the player down to the top of the tile
-                    baccleanPlayer.setPosition(baccleanPlayer.getX(), tile.getY() - playerBounds.height);
-                    baccleanPlayer.verticalVelocity = -1; // Apply downward velocity to push the player down
-                    baccleanPlayer.playerState = PlayerState.FALLING;                     
-                    System.out.println("Player hit the bottom of the tile. New Y Position: " + baccleanPlayer.getY());
-                }
+private void handlePlayerCollision() {
+    Rectangle playerBounds = baccleanPlayer.movementBounds;   
+    isTouchingTile = false; // Reset the touching tile flag at the beginning of each check
+
+    for (Rectangle tile : groundTileRectangles) {
+        if (playerBounds.overlaps(tile)) {
+            isTouchingTile = true;    
+            if (playerBounds.y + playerBounds.height > tile.getY() && 
+                playerBounds.y < tile.getY() + tile.getHeight() && 
+                baccleanPlayer.verticalVelocity < 0) {
+                
+                // Set player position on top of the tile
+                baccleanPlayer.setPosition(baccleanPlayer.getX(), tile.getY() + tile.getHeight());
+                baccleanPlayer.verticalVelocity = 0;
+                baccleanPlayer.playerState = PlayerState.IDLE;                     
+                System.out.println("Player landed on tile. Y Position: " + baccleanPlayer.getY());
+                return;
+            } 
+            // Check if the player is rising and hits the bottom of the tile
+            else if (playerBounds.y + playerBounds.height >= tile.getY() && 
+                     playerBounds.y + playerBounds.height <= tile.getY() + 5 && // Small threshold
+                     baccleanPlayer.verticalVelocity > 0) { 
+                
+                // Move the player down to the top of the tile
+                baccleanPlayer.setPosition(baccleanPlayer.getX(), tile.getY() - playerBounds.height);
+                baccleanPlayer.verticalVelocity = -1; // Apply downward velocity to push the player down
+                baccleanPlayer.playerState = PlayerState.FALLING;                     
+                System.out.println("Player hit the bottom of the tile. New Y Position: " + baccleanPlayer.getY());
                 return;
             }
-            isTouchingTile = false;
-            if (!isTouchingTile && baccleanPlayer.verticalVelocity == 0) {
-                System.out.println("Player is levitating.");
-                baccleanPlayer.playerState = PlayerState.FALLING;
-            }
         }
-
-        
     }
+    if (!isTouchingTile){
+        baccleanPlayer.gravityLogic(Gdx.graphics.getDeltaTime());
+    }
+
+}
+
+    
     
  
 

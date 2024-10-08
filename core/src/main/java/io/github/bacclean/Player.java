@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
 
+
+
 public class Player extends Sprite {
 
     // Textures for different player states
@@ -161,7 +163,7 @@ public class Player extends Sprite {
 
 public void playerMove(float delta) {
     // Handle attack input
-    if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !isFloating()) {
+    if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !isJumping()) {
         performAttack();
     }
 
@@ -178,9 +180,10 @@ public void playerMove(float delta) {
         sideMovement(delta);
         updateMovementBounds();
         attackBounds.setSize(0, 0); // Ensure attack bounds are not visible when not attacking
+        gravityLogic(delta);
     }
     
-    jumpLogic(delta);
+
 }
 
     
@@ -205,7 +208,7 @@ public void playerMove(float delta) {
     }
 
 
-    public boolean isFloating() {
+    public boolean isJumping() {
         return playerState == PlayerState.JUMPING_UP || playerState == PlayerState.FALLING;
     }
 
@@ -220,16 +223,16 @@ public void playerMove(float delta) {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             this.translateX(-speed * delta);
             leftFlag = true;
-            if (playerState != PlayerState.RUNNING && !isFloating()) {
+            if (playerState != PlayerState.RUNNING && !isJumping()) {
                 playerState = PlayerState.RUNNING;
             }
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             this.translateX(speed * delta);
             leftFlag = false;
-            if (playerState != PlayerState.RUNNING && !isFloating()) {
+            if (playerState != PlayerState.RUNNING && !isJumping()) {
                 playerState = PlayerState.RUNNING;
             }
-        } else if (playerState != PlayerState.IDLE && !isFloating()) {
+        } else if (playerState != PlayerState.IDLE && !isJumping()) {
             playerState = PlayerState.IDLE;
         }
         // JUMP
@@ -239,19 +242,32 @@ public void playerMove(float delta) {
         }
     }
 
-    public void jumpLogic(float delta) {
-        if (isFloating()) {
+    public void gravityLogic(float delta) {
+        if (playerState != PlayerState.ATTACKING) { // Only apply gravity if not attacking
             verticalVelocity -= gravity * delta; // Apply gravity
             this.translateY(verticalVelocity * delta);
-
-            if (verticalVelocity > 0) {
-                playerState = PlayerState.JUMPING_UP; // Ascending
-            } else if (verticalVelocity < 0) {
-                playerState = PlayerState.FALLING; // Descending
+    
+            // Check for landing on the ground (replace 'groundY' with your ground level)
+            if (getY() <= 64) {
+                setY(64); // Reset player's Y position to ground level
+                verticalVelocity = 0; // Reset vertical velocity
+                if (playerState == PlayerState.JUMPING_UP) {
+                    playerState = PlayerState.IDLE; // Set to idle or running if on ground
+                } else if (playerState == PlayerState.FALLING) {
+                    playerState = PlayerState.IDLE; // Adjust this if you want to allow for landing animations
+                }
+            } else {
+                // Update state based on vertical velocity
+                if (verticalVelocity > 0) {
+                    playerState = PlayerState.JUMPING_UP; // Ascending
+                } else if (verticalVelocity < 0) {
+                    playerState = PlayerState.FALLING; // Descending
+                }
             }
-        } 
-            
+        }
     }
+    
+    
     
     
     
