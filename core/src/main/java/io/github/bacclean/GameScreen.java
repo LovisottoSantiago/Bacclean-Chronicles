@@ -58,7 +58,7 @@ public class GameScreen implements Screen {
                 "sprites-player/player-up.png", 3, 1,
                 "sprites-player/player-down.png", 3, 1);
         baccleanPlayer.setSize(288, 128);
-        baccleanPlayer.setPosition(0, 60);
+        baccleanPlayer.setPosition(0, 150);
 
         loadMap();
 
@@ -162,10 +162,10 @@ public class GameScreen implements Screen {
         movementBoundRender.begin(ShapeRenderer.ShapeType.Line);
         movementBoundRender.setColor(Color.RED);
         movementBoundRender.rect(
-                baccleanPlayer.movementBounds.x,
-                baccleanPlayer.movementBounds.y,
-                baccleanPlayer.movementBounds.width,
-                baccleanPlayer.movementBounds.height);
+                baccleanPlayer.playerBounds.x,
+                baccleanPlayer.playerBounds.y,
+                baccleanPlayer.playerBounds.width,
+                baccleanPlayer.playerBounds.height);
         movementBoundRender.end();
 
         // Attack bounds

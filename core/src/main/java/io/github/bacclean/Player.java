@@ -10,8 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
-
-
+import io.github.bacclean.Player.PlayerState;
 
 
 public class Player extends Sprite {
@@ -62,7 +61,7 @@ public class Player extends Sprite {
     private final ShapeRenderer staminaBarRenderer;
     
     // Collision properties
-    public Rectangle movementBounds;
+    public Rectangle playerBounds;
     public Rectangle attackBounds; 
     public int movementBoundsWidth = 42;
     public int movementBoundsHeight = 42;
@@ -70,13 +69,13 @@ public class Player extends Sprite {
     public int attackBoundsHeight= 42;
 
     // Jump
-    public final float jumpVelocity = 300f; 
-    public final float gravity = 400f; // Gravity effect (how fast the player falls back down)
+    public final float jumpVelocity = 10f; 
+    public final float gravity = -98f; // Gravity effect (how fast the player falls back down)
     public float verticalVelocity = 0; // Current vertical speed
     
     // Enum to define player states
     public enum PlayerState {
-        IDLE, RUNNING, ATTACKING, JUMPING_UP, FALLING
+        IDLE, RUNNING, ATTACKING, JUMPING, FALLING
     }
 
 
@@ -113,7 +112,7 @@ public class Player extends Sprite {
         this.playerState = PlayerState.IDLE;
 
         // Initialize collision bounds
-        movementBounds = new Rectangle(getX() + (getWidth() - movementBoundsWidth) / 2, getY() + (getHeight() - movementBoundsHeight) / 2, movementBoundsWidth, movementBoundsHeight);
+        playerBounds = new Rectangle(getX() + (getWidth() - movementBoundsWidth) / 2, getY() + (getHeight() - movementBoundsHeight) / 2, movementBoundsWidth, movementBoundsHeight);
         attackBounds = new Rectangle(getX() + (getWidth() - attackBoundsWidth) / 2, getY() + (getHeight() - attackBoundsHeight) / 2, attackBoundsWidth, attackBoundsHeight);        
     }
 
@@ -190,7 +189,7 @@ public void playerMove(float delta) {
     
     // Helper method to update movement bounds
     private void updateMovementBounds() {
-        movementBounds.setPosition(getX() + (getWidth() - movementBoundsWidth) / 2, getY());
+        playerBounds.setPosition(getX() + (getWidth() - movementBoundsWidth) / 2, getY());
     }
     
 
@@ -210,13 +209,13 @@ public void playerMove(float delta) {
 
 
     public boolean isJumping() {
-        return playerState == PlayerState.JUMPING_UP || playerState == PlayerState.FALLING;
+        return playerState == PlayerState.JUMPING || playerState == PlayerState.FALLING;
     }
 
 
     public void sideMovement(float delta) {
         speed = 200f;
-        if ((Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && stamina > 5) && playerState != PlayerState.JUMPING_UP && playerState != PlayerState.FALLING) {
+        if ((Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && stamina > 5) && playerState != PlayerState.JUMPING && playerState != PlayerState.FALLING) {
             speed += 200f;
             decreaseStamina(0.3f);
         }
@@ -237,79 +236,43 @@ public void playerMove(float delta) {
             playerState = PlayerState.IDLE;
         }
         // JUMP
-        if (Gdx.input.isKeyPressed(Input.Keys.W) && playerState != PlayerState.JUMPING_UP && playerState != PlayerState.FALLING) {
-            playerState = PlayerState.JUMPING_UP;
-            verticalVelocity = jumpVelocity;
+        if (Gdx.input.isKeyPressed(Input.Keys.W) && playerState != PlayerState.JUMPING && playerState != PlayerState.FALLING) {
+            gravityLogic(delta);
         }
     }
 
 
-
-    public void gravityLogic(float delta) {
-        if (playerState != PlayerState.ATTACKING) { // Only apply gravity if not attacking
-            verticalVelocity -= gravity * delta; // Apply gravity
-            this.translateY(verticalVelocity * delta);
-    
-            // Check for landing on the ground (replace 'groundY' with your ground level)
-            if (getY() <= 64) {
-                setY(64); // Reset player's Y position to ground level
-                verticalVelocity = 0; // Reset vertical velocity
-                if (playerState == PlayerState.JUMPING_UP) {
-                    playerState = PlayerState.IDLE; // Set to idle or running if on ground
-                } else if (playerState == PlayerState.FALLING) {
-                    playerState = PlayerState.IDLE; // Adjust this if you want to allow for landing animations
-                }
-            } else {
-                // Update state based on vertical velocity
-                if (verticalVelocity > 0) {
-                    playerState = PlayerState.JUMPING_UP; // Ascending
-                } else if (verticalVelocity < 0) {
-                    playerState = PlayerState.FALLING; // Descending
-                }
-            }
-        }
+    public void gravityLogic(float delta) {        
+        verticalVelocity += gravity * delta; // Increase downward speed
+        setPosition(getX(), getY() + verticalVelocity * delta); // Update the player position
     }
     
-    
-    public void checkGroundCollision(java.util.List<com.badlogic.gdx.math.Rectangle> groundTileRectangles) {
-        Rectangle playerBounds = this.movementBounds; // Assuming movementBounds is defined in Player class
-        boolean isTouchingTile = false;
-
+    public boolean isFloating = true;
+    public void checkGroundCollision(java.util.List<com.badlogic.gdx.math.Rectangle> groundTileRectangles) {        
         for (Rectangle tile : groundTileRectangles) {
+            isFloating = false;
             if (playerBounds.overlaps(tile)) {
-                isTouchingTile = true;
-
-                // Handle landing on the tile
-                if (playerBounds.y + playerBounds.height > tile.getY() &&
-                    playerBounds.y < tile.getY() + tile.getHeight() &&
-                    verticalVelocity < 0) {
-
+                    if (playerBounds.y > tile.getY() && playerBounds.y <= tile.getY() + tile.getHeight() && verticalVelocity < 0) {
                     setPosition(getX(), tile.getY() + tile.getHeight());
                     verticalVelocity = 0;
-                    playerState = PlayerState.IDLE;
-                    System.out.println("Player landed on tile. Y Position: " + getY());
                     return;
                 }
-                // Check if the player is rising and hits the bottom of the tile
-                else if (playerBounds.y + playerBounds.height >= tile.getY() &&
-                         playerBounds.y + playerBounds.height <= tile.getY() + 5 && // Small threshold
-                         verticalVelocity > 0) {
-
+                // Hitting the bottom of the tile
+                else if (playerBounds.y + playerBounds.height >= tile.getY() && playerBounds.y + playerBounds.height <= tile.getY() + 10 && verticalVelocity > 0) {
                     setPosition(getX(), tile.getY() - playerBounds.height);
-                    verticalVelocity = -1; // Apply downward velocity to push the player down
+                    verticalVelocity = -1; // Apply a small downward force
                     playerState = PlayerState.FALLING;
                     System.out.println("Player hit the bottom of the tile. New Y Position: " + getY());
                     return;
                 }
             }
-        }
-        // If not touching any tile, apply gravity logic
-        if (!isTouchingTile) {
-            gravityLogic(Gdx.graphics.getDeltaTime());
-        }
-    }
-
+        }       
+            if (!isFloating && playerState != PlayerState.ATTACKING) {
+                gravityLogic(Gdx.graphics.getDeltaTime());
+            }
+    }    
     
+
 
     private Animation<TextureRegion> getCurrentAnimation() {
         switch (playerState) {
@@ -317,7 +280,7 @@ public void playerMove(float delta) {
                 return leftFlag ? leftAttackAnimation : attackAnimation;
             case RUNNING:
                 return leftFlag ? leftWalkAnimation : walkAnimation;
-            case JUMPING_UP:
+            case JUMPING:
                 return leftFlag ? leftJumpingUpAnimation : jumpingUpAnimation;
             case FALLING:
                 return leftFlag ? leftJumpingDownAnimation : jumpingDownAnimation;
