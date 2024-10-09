@@ -109,8 +109,10 @@ maps/map_1.tide
 maps/sets/background.png
 maps/sets/bush-large.png
 maps/sets/bush-small.png
+maps/sets/entrance.png
 maps/sets/graveyard.png
 maps/sets/lavandina.png
+maps/sets/Mine.png
 maps/sets/moon.png
 maps/sets/mountains.png
 maps/sets/objects.png
@@ -125,6 +127,7 @@ maps/sets/tree-1.png
 maps/sets/tree-2.png
 maps/sets/tree-3.png
 maps/sets/tree.png
+maps/sets/trees.png
 music.mp3
 sprites-player/player-attack1.png
 sprites-player/player-down.png
