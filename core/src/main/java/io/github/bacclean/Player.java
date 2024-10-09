@@ -255,16 +255,18 @@ public void playerMove(float delta) {
 
         if (verticalVelocity < 0 && playerState == PlayerState.JUMPING) {
             playerState = PlayerState.FALLING;
-        }
+        } 
         // Assuming getY() <= ground level is a condition for landing
-        if (getY() <= 64 && playerState != PlayerState.RUNNING) {
+        if (getY() < groundValue && playerState != PlayerState.RUNNING) {
             verticalVelocity = 0;
-            setPosition(getX(), 64);
+            setPosition(getX(), groundValue);
             playerState = PlayerState.IDLE;
-        }
+        } groundValue = 64;
+        Gdx.app.log("Ground level", ": " + groundValue);
+        Gdx.app.log("Vertical velocity", ": " + verticalVelocity);
     }
     
-    
+    public float groundValue;
     public boolean isFloating = true;
     public void checkGroundCollision(java.util.List<com.badlogic.gdx.math.Rectangle> groundTileRectangles) {        
         for (Rectangle tile : groundTileRectangles) {
@@ -273,6 +275,7 @@ public void playerMove(float delta) {
                     if (playerBounds.y > tile.getY() && playerBounds.y <= tile.getY() + tile.getHeight() && verticalVelocity < 0) {
                     setPosition(getX(), tile.getY() + tile.getHeight());
                     verticalVelocity = 0;
+                    groundValue = playerBounds.y;
                     return;
                 }
                 // Hitting the bottom of the tile
