@@ -69,7 +69,7 @@ public class Player extends Sprite {
     public int attackBoundsHeight= 42;
 
     // Jump
-    public final float jumpVelocity = 100f; 
+    public final float jumpVelocity = 150f; 
     public final float gravity = -98f; // Gravity effect (how fast the player falls back down)
     public float verticalVelocity = 0; // Current vertical speed
     
@@ -262,9 +262,8 @@ public void playerMove(float delta) {
             setPosition(getX(), 64);
             playerState = PlayerState.IDLE;
         }
-
-
     }
+    
     
     public boolean isFloating = true;
     public void checkGroundCollision(java.util.List<com.badlogic.gdx.math.Rectangle> groundTileRectangles) {        
