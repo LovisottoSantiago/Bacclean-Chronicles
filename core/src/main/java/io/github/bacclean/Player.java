@@ -63,7 +63,7 @@ public class Player extends Sprite {
     // Collision properties
     public Rectangle playerBounds;
     public Rectangle attackBounds; 
-    public int movementBoundsWidth = 42;
+    public int movementBoundsWidth = 22;
     public int movementBoundsHeight = 42;
     public int attackBoundsWidth = 60;
     public int attackBoundsHeight= 42;
@@ -72,6 +72,8 @@ public class Player extends Sprite {
     public final float jumpVelocity = 150f; 
     public final float gravity = -98f; // Gravity effect (how fast the player falls back down)
     public float verticalVelocity = 0; // Current vertical speed
+    public float groundValue;
+    public boolean isFloating = true;
     
     // Enum to define player states
     public enum PlayerState {
@@ -269,8 +271,6 @@ public void playerMove(float delta) {
     }
 
 
-    public float groundValue;
-    public boolean isFloating = true;
     public void checkGroundCollision(java.util.List<com.badlogic.gdx.math.Rectangle> groundTileRectangles) {        
         for (Rectangle tile : groundTileRectangles) {
             isFloating = false;
