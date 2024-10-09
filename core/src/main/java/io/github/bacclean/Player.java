@@ -219,31 +219,36 @@ public void playerMove(float delta) {
             speed += 200f;
             decreaseStamina(0.3f);
         }
+    
         // Handle horizontal movement
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            this.translateX(-speed * delta);
-            leftFlag = true;
-            if (playerState != PlayerState.RUNNING && !isJumping()) {
-                playerState = PlayerState.RUNNING;
+        if (playerState != PlayerState.FALLING) { 
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                this.translateX(-speed * delta);
+                leftFlag = true;
+                if (playerState != PlayerState.RUNNING && !isJumping()) {
+                    playerState = PlayerState.RUNNING;
+                }
+            } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                this.translateX(speed * delta);
+                leftFlag = false;
+                if (playerState != PlayerState.RUNNING && !isJumping()) {
+                    playerState = PlayerState.RUNNING;
+                }
+            } else if (!isJumping()) {
+                playerState = PlayerState.IDLE;
             }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            this.translateX(speed * delta);
-            leftFlag = false;
-            if (playerState != PlayerState.RUNNING && !isJumping()) {
-                playerState = PlayerState.RUNNING;
-            }
-        } else if (playerState != PlayerState.IDLE && !isJumping()) {
-            playerState = PlayerState.IDLE;
         }
+    
         // JUMP
         if (Gdx.input.isKeyPressed(Input.Keys.W) && (playerState == PlayerState.IDLE || playerState == PlayerState.RUNNING)) {
             playerState = PlayerState.JUMPING;
             jump();
-        } else if (playerState == PlayerState.JUMPING || playerState == PlayerState.FALLING) {
+        }
+    
+        if (playerState == PlayerState.JUMPING || playerState == PlayerState.FALLING) {
             gravityLogic(delta);
         }
     }
-
 
     public void jump() {
         verticalVelocity = jumpVelocity; // Apply initial jump velocity
@@ -253,19 +258,17 @@ public void playerMove(float delta) {
         verticalVelocity += gravity * delta; // Increase downward speed
         setPosition(getX(), getY() + verticalVelocity * delta); // Update the player position
 
-        if (verticalVelocity < 0 && playerState == PlayerState.JUMPING) {
-            playerState = PlayerState.FALLING;
-        } 
         // Assuming getY() <= ground level is a condition for landing
         if (getY() < groundValue && playerState != PlayerState.RUNNING) {
             verticalVelocity = 0;
             setPosition(getX(), groundValue);
             playerState = PlayerState.IDLE;
-        } groundValue = 64;
-        Gdx.app.log("Ground level", ": " + groundValue);
-        Gdx.app.log("Vertical velocity", ": " + verticalVelocity);
+            Gdx.app.log("Ground level", ": " + groundValue);
+        } groundValue = 64; //default
+
     }
-    
+
+
     public float groundValue;
     public boolean isFloating = true;
     public void checkGroundCollision(java.util.List<com.badlogic.gdx.math.Rectangle> groundTileRectangles) {        
