@@ -65,7 +65,7 @@ public class Player extends Sprite {
     public Rectangle attackBounds; 
     public int movementBoundsWidth = 22;
     public int movementBoundsHeight = 42;
-    public int attackBoundsWidth = 60;
+    public int attackBoundsWidth = 45;
     public int attackBoundsHeight= 42;
 
     // Jump
@@ -202,7 +202,7 @@ public void playerMove(float delta) {
             stateTime = 0; 
             decreaseStamina(staminaCost);
             // Set the attack bounds based on the player direction
-            attackBounds.setPosition(getX() + (getWidth() - attackBoundsWidth) / 2 + (leftFlag ? -10 : 10), getY());
+            attackBounds.setPosition(getX() + (getWidth() - attackBoundsWidth) / 2 + (leftFlag ? -12 : 12), getY());
             attackBounds.setSize(attackBoundsWidth, attackBoundsHeight); // Set the size of the attack bounds
         } else {
             Gdx.app.log("Stamina", "Not enough stamina to perform attacks.");
@@ -222,13 +222,17 @@ public void playerMove(float delta) {
             decreaseStamina(0.3f);
         }
     
-        // Handle horizontal movement
-        if (playerState != PlayerState.FALLING) { 
+            if (getY() < groundValue) {
+                playerState = PlayerState.IDLE;
+            }
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 this.translateX(-speed * delta);
                 leftFlag = true;
-                if (playerState != PlayerState.RUNNING && !isJumping()) {
+                if (!isJumping()) {
                     playerState = PlayerState.RUNNING;
+                }
+                else { //! Solución acá wacho!!!!
+                    playerState = PlayerState.FALLING;
                 }
             } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
                 this.translateX(speed * delta);
@@ -236,14 +240,11 @@ public void playerMove(float delta) {
                 if (playerState != PlayerState.RUNNING && !isJumping()) {
                     playerState = PlayerState.RUNNING;
                 }
-            } else if (!isJumping()) {
-                playerState = PlayerState.IDLE;
-            }
-        }
-    
+            } 
+        
         // JUMP
         if (Gdx.input.isKeyPressed(Input.Keys.W) && (playerState == PlayerState.IDLE || playerState == PlayerState.RUNNING)) {
-            playerState = PlayerState.JUMPING;
+            //playerState = PlayerState.JUMPING;
             jump();
         }
     
@@ -266,8 +267,13 @@ public void playerMove(float delta) {
             setPosition(getX(), groundValue);
             playerState = PlayerState.IDLE;
             Gdx.app.log("Ground level", ": " + groundValue);
+        } 
+        else if (getY() > groundValue){
+            if (verticalVelocity > 0){
+                playerState = PlayerState.JUMPING;
+            }
         } groundValue = 64; //default
-
+        
     }
 
 
