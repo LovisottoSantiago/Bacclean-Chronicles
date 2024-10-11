@@ -67,9 +67,9 @@ public class Player extends Sprite {
     public Rectangle playerBounds;
     public Rectangle attackBounds; 
     public int movementBoundsWidth = 22;
-    public int movementBoundsHeight = 42;
+    public int movementBoundsHeight = 45;
     public int attackBoundsWidth = 45;
-    public int attackBoundsHeight= 42;
+    public int attackBoundsHeight= 45;
 
     // Jump
     public final float jumpVelocity = 150f; 

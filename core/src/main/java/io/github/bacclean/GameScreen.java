@@ -22,6 +22,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
+
 public class GameScreen implements Screen {
     private SpriteBatch spriteBatch;
     private final ExtendViewport extendViewport;
@@ -42,7 +43,12 @@ public class GameScreen implements Screen {
     private ShapeRenderer groundBoundRender;
     public boolean showBounds;
 
+    // Cursor
     private Cursor customCursor;
+
+    // Lights
+    LightsManager lights;
+
 
     public GameScreen(Main game, OrthographicCamera camera, ExtendViewport extendViewport) {
         this.camera = camera;
@@ -71,8 +77,10 @@ public class GameScreen implements Screen {
             "sprites-player/charles_attack.png", 10, 1,
             "sprites-player/charles_jump.png", 3, 1,
             "sprites-player/charles_fall.png", 5, 1);
-    baccleanPlayer.setSize(128, 128);
-    baccleanPlayer.setPosition(2500, 150); 
+
+        baccleanPlayer.setSize(160, 160);
+        baccleanPlayer.setPosition(2500, 150); 
+        
 
         loadMap();
 
@@ -84,9 +92,11 @@ public class GameScreen implements Screen {
         // Change cursor
         Gdx.input.setCursorCatched(false);
         Pixmap cursorTexture = new Pixmap(Gdx.files.internal("ui/cursor.png"));
-        customCursor = Gdx.graphics.newCursor(cursorTexture, 0, 0); 
-        
+        customCursor = Gdx.graphics.newCursor(cursorTexture, 0, 0);         
         Gdx.graphics.setCursor(customCursor);
+
+        // Lights
+        lights = new LightsManager(camera);
     }
 
     private void loadMap() {
@@ -128,6 +138,9 @@ public class GameScreen implements Screen {
         handlePlayerCollision();
         updateCamera();
         drawScene();
+        lights.update(baccleanPlayer.playerBounds.x + (baccleanPlayer.playerBounds.width / 2), baccleanPlayer.getY());
+        lights.render(camera);
+        renderUI();
     }
 
     private void handleInput() {
@@ -168,13 +181,12 @@ public class GameScreen implements Screen {
                 baccleanPlayer.getWidth(), baccleanPlayer.getHeight());
         spriteBatch.end();
 
-        // Render stamina bar
-        baccleanPlayer.renderStaminaBar();
-
         if (showBounds) {
             renderPlayerBounds();
             renderTileGroundBounds();
         }
+
+        
     }
 
     private void renderPlayerBounds() {
@@ -214,6 +226,11 @@ public class GameScreen implements Screen {
         groundBoundRender.end();
     }
 
+    public void renderUI(){
+        baccleanPlayer.renderStaminaBar();
+    }
+
+
     @Override
     public void resize(int width, int height) {
         extendViewport.update(width, height, true);
@@ -237,5 +254,6 @@ public class GameScreen implements Screen {
         attackBoundRender.dispose();
         groundBoundRender.dispose();
         customCursor.dispose();
+        lights.dispose();
     }
 }
