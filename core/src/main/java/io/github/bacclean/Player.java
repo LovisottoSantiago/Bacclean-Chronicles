@@ -10,9 +10,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
+import io.github.bacclean.Player.PlayerState;
 
 
 
+
+@SuppressWarnings("unused")
 public class Player extends Sprite {
 
     // Textures for different player states
@@ -36,8 +39,8 @@ public class Player extends Sprite {
 
     // Animation frame durations
     private final float idleFrameDuration = 0.2f;
-    private final float walkFrameDuration = 0.08f;
-    private final float attackFrameDuration = 0.05f;
+    private final float walkFrameDuration = 0.1f;
+    private final float attackFrameDuration = 0.08f;
     private final float jumpingUpFrameDuration = 0.05f;
     private final float jumpingDownFrameDuration = 0.05f;
 
@@ -262,7 +265,7 @@ public void playerMove(float delta) {
     public void gravityLogic(float delta) {        
         verticalVelocity += gravity * delta; // Increase downward speed
         setPosition(getX(), getY() + verticalVelocity * delta); // Update the player position
-        Gdx.app.log("alert", "a: " + verticalVelocity);
+        //Gdx.app.log("alert", "a: " + verticalVelocity);
 
         // Assuming getY() <= ground level is a condition for landing
         if (getY() <= groundValue && playerState != PlayerState.RUNNING && !isFloating) {
@@ -300,6 +303,11 @@ public void playerMove(float delta) {
                 }
             } groundValue = 64;
         }       
+            int leftLimit = 1000;
+            if (playerBounds.x < leftLimit) {
+                setPosition(leftLimit, getY());
+                playerState = PlayerState.IDLE;
+            }
             if (!isFloating && playerState != PlayerState.ATTACKING) {
                 gravityLogic(Gdx.graphics.getDeltaTime());
             }

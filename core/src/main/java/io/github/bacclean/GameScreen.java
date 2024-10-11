@@ -54,7 +54,7 @@ public class GameScreen implements Screen {
     public void show() {
         spriteBatch = new SpriteBatch();
 
-        // Initialize Player
+        /*  //! OLD PLAYER
         baccleanPlayer = new Player(
                 "sprites-player/player-idle.png", 8, 1,
                 "sprites-player/player-run.png", 8, 1,
@@ -62,7 +62,17 @@ public class GameScreen implements Screen {
                 "sprites-player/player-up.png", 3, 1,
                 "sprites-player/player-down.png", 3, 1);
         baccleanPlayer.setSize(288, 128);
-        baccleanPlayer.setPosition(500, 150);
+        baccleanPlayer.setPosition(2500, 150); 
+        */
+
+        baccleanPlayer = new Player(
+            "sprites-player/charles_idle.png", 6, 1,
+            "sprites-player/charles_walk.png", 8, 1,
+            "sprites-player/charles_attack.png", 10, 1,
+            "sprites-player/charles_jump.png", 3, 1,
+            "sprites-player/charles_fall.png", 5, 1);
+    baccleanPlayer.setSize(128, 128);
+    baccleanPlayer.setPosition(2500, 150); 
 
         loadMap();
 

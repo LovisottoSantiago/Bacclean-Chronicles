@@ -138,6 +138,12 @@ maps/sets/tree-3.png
 maps/sets/tree.png
 maps/sets/trees.png
 music.mp3
+sprites-player/charles.aseprite
+sprites-player/charles_attack.png
+sprites-player/charles_fall.png
+sprites-player/charles_idle.png
+sprites-player/charles_jump.png
+sprites-player/charles_walk.png
 sprites-player/player-attack1.png
 sprites-player/player-down.png
 sprites-player/player-FullJump.png
