@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
+import io.github.bacclean.Player.PlayerState;
+
 
 
 public class Player extends Sprite {
@@ -221,29 +223,32 @@ public void playerMove(float delta) {
             decreaseStamina(0.3f);
         }
     
-            if (getY() < groundValue) {
-                playerState = PlayerState.IDLE;
+        if (getY() < groundValue) {
+            playerState = PlayerState.IDLE;
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            this.translateX(-speed * delta);
+            leftFlag = true;
+            if (!isJumping()) {
+                playerState = PlayerState.RUNNING;
+            }                
+        } 
+        else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            this.translateX(speed * delta);
+            leftFlag = false;
+            if (playerState != PlayerState.RUNNING && !isJumping()) {
+                playerState = PlayerState.RUNNING;
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                this.translateX(-speed * delta);
-                leftFlag = true;
-                if (!isJumping()) {
-                    playerState = PlayerState.RUNNING;
-                }
-                
-            } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                this.translateX(speed * delta);
-                leftFlag = false;
-                if (playerState != PlayerState.RUNNING && !isJumping()) {
-                    playerState = PlayerState.RUNNING;
-                }
-            } 
+        }
+        else if (!isJumping()) { //! bug solution
+            playerState = PlayerState.IDLE;
+        }
         
         // JUMP
         if (Gdx.input.isKeyPressed(Input.Keys.W) && (playerState == PlayerState.IDLE || playerState == PlayerState.RUNNING)) {
             playerState = PlayerState.JUMPING;
-            jump();
-            gravityLogic(delta);
+            jump();            
         }
     
         if (playerState == PlayerState.JUMPING || playerState == PlayerState.FALLING) {
@@ -258,19 +263,18 @@ public void playerMove(float delta) {
     public void gravityLogic(float delta) {        
         verticalVelocity += gravity * delta; // Increase downward speed
         setPosition(getX(), getY() + verticalVelocity * delta); // Update the player position
+        Gdx.app.log("alert", "a: " + verticalVelocity);
 
         // Assuming getY() <= ground level is a condition for landing
-        if (getY() < groundValue && playerState != PlayerState.RUNNING && !isFloating) {
+        if (getY() <= groundValue && playerState != PlayerState.RUNNING && !isFloating) {
             verticalVelocity = 0;
             setPosition(getX(), groundValue);
             playerState = PlayerState.IDLE;
-        } 
-        if (getY() == groundValue && !isFloating){
-            if (verticalVelocity > 0){
-                playerState = PlayerState.JUMPING;
-            }                      
-        } 
+        }          
         if (verticalVelocity < -10 && playerState == PlayerState.RUNNING){ //! bug solution
+            playerState = PlayerState.FALLING;
+        }
+        else if (verticalVelocity < 0 && playerState == PlayerState.JUMPING){ //! bug solution
             playerState = PlayerState.FALLING;
         }
         
@@ -301,7 +305,7 @@ public void playerMove(float delta) {
                 gravityLogic(Gdx.graphics.getDeltaTime());
             }
     }    
-    
+
 
 
     private Animation<TextureRegion> getCurrentAnimation() {
