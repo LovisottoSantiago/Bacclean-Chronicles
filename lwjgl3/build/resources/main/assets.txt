@@ -3,6 +3,15 @@ backgrounds/bg_1.png
 backgrounds/test_bg.png
 Death of a Ninja (intro).mp3
 drop.mp3
+fonts/DungeonFont.fnt
+fonts/DungeonFont.png
+fonts/DungeonFont.ttf
+fonts/m6x11plus.fnt
+fonts/m6x11plus.png
+fonts/PatuaOne.fnt
+fonts/PatuaOne.png
+fonts/TooMuchInk.fnt
+fonts/TooMuchInk.png
 gothic_assets/PNG/Environment/background.png
 gothic_assets/PNG/Environment/graveyard.png
 gothic_assets/PNG/Environment/mountains.png
@@ -138,6 +147,8 @@ sprites-player/player-up.png
 sprites-player/player_sprites.aseprite
 sprites-player/wind_hashashin.png
 ui/alagard_by_pix3m-d6awiwp.ttf
+ui/cursor.png
+ui/fibberish.ttf
 ui/font-list.fnt
 ui/font-subtitle.fnt
 ui/font-window.fnt

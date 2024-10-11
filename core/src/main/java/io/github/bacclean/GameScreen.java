@@ -8,7 +8,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -40,6 +42,8 @@ public class GameScreen implements Screen {
     private ShapeRenderer groundBoundRender;
     public boolean showBounds;
 
+    private Cursor customCursor;
+
     public GameScreen(Main game, OrthographicCamera camera, ExtendViewport extendViewport) {
         this.camera = camera;
         this.extendViewport = extendViewport;
@@ -58,7 +62,7 @@ public class GameScreen implements Screen {
                 "sprites-player/player-up.png", 3, 1,
                 "sprites-player/player-down.png", 3, 1);
         baccleanPlayer.setSize(288, 128);
-        baccleanPlayer.setPosition(0, 150);
+        baccleanPlayer.setPosition(500, 150);
 
         loadMap();
 
@@ -66,6 +70,13 @@ public class GameScreen implements Screen {
         movementBoundRender = new ShapeRenderer();
         attackBoundRender = new ShapeRenderer();
         groundBoundRender = new ShapeRenderer();
+
+        // Change cursor
+        Gdx.input.setCursorCatched(false);
+        Pixmap cursorTexture = new Pixmap(Gdx.files.internal("ui/cursor.png"));
+        customCursor = Gdx.graphics.newCursor(cursorTexture, 0, 0); 
+        
+        Gdx.graphics.setCursor(customCursor);
     }
 
     private void loadMap() {
@@ -215,5 +226,6 @@ public class GameScreen implements Screen {
         movementBoundRender.dispose();
         attackBoundRender.dispose();
         groundBoundRender.dispose();
+        customCursor.dispose();
     }
 }
