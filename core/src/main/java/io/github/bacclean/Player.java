@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
-import io.github.bacclean.Player.PlayerState;
 
 
 public class Player extends Sprite {
@@ -231,9 +230,7 @@ public void playerMove(float delta) {
                 if (!isJumping()) {
                     playerState = PlayerState.RUNNING;
                 }
-                else { //! Solución acá wacho!!!!
-                    playerState = PlayerState.FALLING;
-                }
+                
             } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
                 this.translateX(speed * delta);
                 leftFlag = false;
@@ -244,8 +241,9 @@ public void playerMove(float delta) {
         
         // JUMP
         if (Gdx.input.isKeyPressed(Input.Keys.W) && (playerState == PlayerState.IDLE || playerState == PlayerState.RUNNING)) {
-            //playerState = PlayerState.JUMPING;
+            playerState = PlayerState.JUMPING;
             jump();
+            gravityLogic(delta);
         }
     
         if (playerState == PlayerState.JUMPING || playerState == PlayerState.FALLING) {
@@ -262,17 +260,19 @@ public void playerMove(float delta) {
         setPosition(getX(), getY() + verticalVelocity * delta); // Update the player position
 
         // Assuming getY() <= ground level is a condition for landing
-        if (getY() < groundValue && playerState != PlayerState.RUNNING) {
+        if (getY() < groundValue && playerState != PlayerState.RUNNING && !isFloating) {
             verticalVelocity = 0;
             setPosition(getX(), groundValue);
             playerState = PlayerState.IDLE;
-            Gdx.app.log("Ground level", ": " + groundValue);
         } 
-        else if (getY() > groundValue){
+        if (getY() == groundValue && !isFloating){
             if (verticalVelocity > 0){
                 playerState = PlayerState.JUMPING;
-            }
-        } groundValue = 64; //default
+            }                      
+        } 
+        if (verticalVelocity < -10 && playerState == PlayerState.RUNNING){ //! bug solution
+            playerState = PlayerState.FALLING;
+        }
         
     }
 
@@ -283,8 +283,8 @@ public void playerMove(float delta) {
             if (playerBounds.overlaps(tile)) {
                     if (playerBounds.y > tile.getY() && playerBounds.y <= tile.getY() + tile.getHeight() && verticalVelocity < 0) {
                     setPosition(getX(), tile.getY() + tile.getHeight());
-                    verticalVelocity = 0;
                     groundValue = playerBounds.y;
+                    verticalVelocity = 0;
                     return;
                 }
                 // Hitting the bottom of the tile
@@ -295,7 +295,7 @@ public void playerMove(float delta) {
                     System.out.println("Player hit the bottom of the tile. New Y Position: " + getY());
                     return;
                 }
-            }
+            } groundValue = 64;
         }       
             if (!isFloating && playerState != PlayerState.ATTACKING) {
                 gravityLogic(Gdx.graphics.getDeltaTime());

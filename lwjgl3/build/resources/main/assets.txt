@@ -131,6 +131,7 @@ maps/sets/trees.png
 music.mp3
 sprites-player/player-attack1.png
 sprites-player/player-down.png
+sprites-player/player-FullJump.png
 sprites-player/player-idle.png
 sprites-player/player-run.png
 sprites-player/player-up.png
