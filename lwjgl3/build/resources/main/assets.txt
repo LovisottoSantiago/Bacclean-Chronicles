@@ -112,6 +112,8 @@ gothic_assets/PSD/sprites/skeleton.psd
 gothic_assets/public-license.txt
 hs_err_pid14200.log
 hs_err_pid1636.log
+intro/intro.mp4
+intro/intro.webm
 maps/map-1.tmx
 maps/map-test.tmx
 maps/map_1.tide
@@ -137,6 +139,12 @@ maps/sets/tree-2.png
 maps/sets/tree-3.png
 maps/sets/tree.png
 maps/sets/trees.png
+music/BeatIt_by8bituniverse.mp3
+music/ChopSuey_by8bituniverse.mp3
+music/ClintEastwood_by8bituniverse.mp3
+music/Paranoid_by8bituniverse.mp3
+music/TakeOnMe_by8bituniverse.mp3
+music/TriviumGunshot_by8bituniverse.mp3
 music.mp3
 sprites-player/charles.aseprite
 sprites-player/charles_attack.png

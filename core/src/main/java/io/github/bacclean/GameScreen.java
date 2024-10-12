@@ -47,7 +47,10 @@ public class GameScreen implements Screen {
     private Cursor customCursor;
 
     // Lights
-    LightsManager lights;
+    LightsController lights;
+
+    // Music
+    private MusicController musicController;
 
 
     public GameScreen(Main game, OrthographicCamera camera, ExtendViewport extendViewport) {
@@ -96,7 +99,11 @@ public class GameScreen implements Screen {
         Gdx.graphics.setCursor(customCursor);
 
         // Lights
-        lights = new LightsManager(camera);
+        lights = new LightsController(camera);
+
+        // Music
+        musicController = new MusicController();
+        musicController.playRandomMusic();
     }
 
     private void loadMap() {
@@ -255,5 +262,6 @@ public class GameScreen implements Screen {
         groundBoundRender.dispose();
         customCursor.dispose();
         lights.dispose();
+        musicController.dispose();
     }
 }
