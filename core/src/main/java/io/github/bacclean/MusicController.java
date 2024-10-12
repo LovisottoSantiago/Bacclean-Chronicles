@@ -11,12 +11,9 @@ public class MusicController {
 
     public MusicController(){
         musicFiles = new Array<>();
-        musicFiles.add("music/TakeOnMe_by8bituniverse.mp3");
-        musicFiles.add("music/ClintEastwood_by8bituniverse.mp3");
-        musicFiles.add("music/ChopSuey_by8bituniverse.mp3");
-        musicFiles.add("music/TriviumGunshot_by8bituniverse.mp3");
-        musicFiles.add("music/BeatIt_by8bituniverse.mp3");
-        musicFiles.add("music/Paranoid_by8bituniverse.mp3");
+        musicFiles.add("music/halloweenRKT.mp3");
+        musicFiles.add("music/miedo.mp3");
+
     }
 
     public void playRandomMusic(){
@@ -35,6 +32,7 @@ public class MusicController {
         });
 
         currentMusic.setLooping(false);
+        currentMusic.setVolume(0.6f);
         currentMusic.play();
     }
 

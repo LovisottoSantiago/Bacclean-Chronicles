@@ -2,6 +2,7 @@ package io.github.bacclean;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -78,6 +79,11 @@ public class Player extends Sprite {
     public float groundValue;
     public boolean isFloating = true;
     
+    // Attack sounds
+    SoundController attackSounds;
+    Sound attackSound;
+    
+    
     // Enum to define player states
     public enum PlayerState {
         IDLE, RUNNING, ATTACKING, JUMPING, FALLING
@@ -119,6 +125,9 @@ public class Player extends Sprite {
         // Initialize collision bounds
         playerBounds = new Rectangle(getX() + (getWidth() - movementBoundsWidth) / 2, getY() + (getHeight() - movementBoundsHeight) / 2, movementBoundsWidth, movementBoundsHeight);
         attackBounds = new Rectangle(getX() + (getWidth() - attackBoundsWidth) / 2, getY() + (getHeight() - attackBoundsHeight) / 2, attackBoundsWidth, attackBoundsHeight);        
+
+        // Attack sounds
+        attackSounds = new SoundController();
     }
 
 
@@ -166,7 +175,7 @@ public class Player extends Sprite {
     }
 
 
-public void playerMove(float delta) {
+    public void playerMove(float delta) {
     // Handle attack input
     if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !isJumping()) {
         performAttack();
@@ -207,6 +216,13 @@ public void playerMove(float delta) {
             // Set the attack bounds based on the player direction
             attackBounds.setPosition(getX() + (getWidth() - attackBoundsWidth) / 2 + (leftFlag ? -12 : 12), getY());
             attackBounds.setSize(attackBoundsWidth, attackBoundsHeight); // Set the size of the attack bounds
+            
+            attackSound = attackSounds.getAttackSound();
+            if (attackSound != null) {
+                attackSound.play();
+                attackSound.setVolume(2, 0.8f);
+            }
+
         } else {
             Gdx.app.log("Stamina", "Not enough stamina to perform attacks.");
         }
@@ -314,7 +330,6 @@ public void playerMove(float delta) {
     }    
 
 
-
     private Animation<TextureRegion> getCurrentAnimation() {
         switch (playerState) {
             case ATTACKING:
@@ -350,6 +365,7 @@ public void playerMove(float delta) {
         jumpingDownSheet.dispose();
         staminaBarRenderer.dispose();
         spriteBatch.dispose();
+        attackSound.dispose();
     }
     
 

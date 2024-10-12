@@ -1,8 +1,10 @@
 .gitkeep
+attack_sounds/1.mp3
+attack_sounds/2.mp3
+attack_sounds/3.mp3
+attack_sounds/4.mp3
 backgrounds/bg_1.png
 backgrounds/test_bg.png
-Death of a Ninja (intro).mp3
-drop.mp3
 fonts/DungeonFont.fnt
 fonts/DungeonFont.png
 fonts/DungeonFont.ttf
@@ -114,7 +116,11 @@ hs_err_pid14200.log
 hs_err_pid1636.log
 intro/background.png
 intro/intro.ogg
+intro/intro_lovi.ogg
 intro/logo.png
+main_menu/background.png
+main_menu/enter.mp3
+main_menu/music.mp3
 maps/map-1.tmx
 maps/map-test.tmx
 maps/map_1.tide
@@ -143,10 +149,11 @@ maps/sets/trees.png
 music/BeatIt_by8bituniverse.mp3
 music/ChopSuey_by8bituniverse.mp3
 music/ClintEastwood_by8bituniverse.mp3
+music/halloweenRKT.mp3
+music/miedo.mp3
 music/Paranoid_by8bituniverse.mp3
 music/TakeOnMe_by8bituniverse.mp3
 music/TriviumGunshot_by8bituniverse.mp3
-music.mp3
 sprites-player/charles.aseprite
 sprites-player/charles_attack.png
 sprites-player/charles_fall.png

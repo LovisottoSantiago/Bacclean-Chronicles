@@ -23,7 +23,7 @@ public class IntroScreen implements Screen {
     public IntroScreen(Main game) {
         this.game = game;
         logo = new Texture(Gdx.files.internal("intro/logo.png"));
-        logoSound = Gdx.audio.newSound(Gdx.files.internal("intro/intro.ogg"));
+        logoSound = Gdx.audio.newSound(Gdx.files.internal("intro/intro_lovi.ogg"));
         batch = new SpriteBatch();
     }
 
@@ -49,9 +49,9 @@ public class IntroScreen implements Screen {
             if (adjustedTime <= fadeInDuration) {
                 alpha = Math.min(adjustedTime / fadeInDuration, 1f);
 
-                // Reproducir sonido 0.1 segundos después de que comience a aparecer el logo
                 if (!soundPlayed && adjustedTime >= 0.1f) {
                     logoSound.play();
+                    logoSound.setVolume(0, 0.5f);
                     soundPlayed = true;
                 }
             } else {
@@ -71,6 +71,7 @@ public class IntroScreen implements Screen {
             if (adjustedTime >= fadeInDuration + fadeOutDuration) {
                 game.setScreen(new MenuScreen(game, game.getCamera(), game.getExtendViewport()));
             }
+            Gdx.input.setCursorCatched(true);
         }
     }
 
@@ -93,7 +94,7 @@ public class IntroScreen implements Screen {
     @Override
     public void dispose() {
         logo.dispose();
-        logoSound.dispose();  // Liberar el recurso de sonido
+        logoSound.dispose();  
         batch.dispose();
     }
 }
