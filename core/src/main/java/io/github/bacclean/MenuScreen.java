@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
+
 public class MenuScreen implements Screen {
     private final Main game;
     private SpriteBatch batch;
@@ -22,6 +23,7 @@ public class MenuScreen implements Screen {
 
     private final OrthographicCamera camera;
     private final ExtendViewport extendViewport;
+    
 
     public MenuScreen(Main game, OrthographicCamera camera, ExtendViewport extendViewport) {
         this.game = game;
@@ -44,7 +46,7 @@ public class MenuScreen implements Screen {
         try {
             menMusic = Gdx.audio.newMusic(Gdx.files.internal("Death of a Ninja (intro).mp3"));
             menMusic.setLooping(false);
-            menMusic.setVolume(0.01f); // Set volume to maximum (0.0f to 1.0f)
+            menMusic.setVolume(1.0f); // Set volume to maximum (0.0f to 1.0f)
             menMusic.play();            
         } catch (Exception e) {
             Gdx.app.log("Music Error", "Could not load music file: " + e.getMessage());
@@ -54,7 +56,7 @@ public class MenuScreen implements Screen {
     }
 
     private float elapsedTime = 0f; 
-private boolean showText = true; 
+    private boolean showText = true; 
 
     @Override
     public void render(float delta) {
@@ -68,6 +70,8 @@ private boolean showText = true;
             showText = !showText; 
             elapsedTime = 0f;
         }
+
+
         batch.begin();
         batch.draw(background, 0, 0, extendViewport.getWorldWidth(), extendViewport.getWorldHeight());
     

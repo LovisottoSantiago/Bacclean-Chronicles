@@ -22,7 +22,8 @@ public class Main extends Game {
         extendViewport.apply();
 
         // Initially show the menu
-        setScreen(new MenuScreen(this, camera, extendViewport));
+        setScreen(new IntroScreen(this));
+        //Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 
         // Set input processor to handle key events
         Gdx.input.setInputProcessor(new InputAdapter() {

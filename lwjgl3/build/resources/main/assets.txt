@@ -112,8 +112,9 @@ gothic_assets/PSD/sprites/skeleton.psd
 gothic_assets/public-license.txt
 hs_err_pid14200.log
 hs_err_pid1636.log
-intro/intro.mp4
-intro/intro.webm
+intro/background.png
+intro/intro.ogg
+intro/logo.png
 maps/map-1.tmx
 maps/map-test.tmx
 maps/map_1.tide
