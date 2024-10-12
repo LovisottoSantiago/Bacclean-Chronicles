@@ -12,7 +12,7 @@ public class MusicController {
     public MusicController(){
         musicFiles = new Array<>();
         musicFiles.add("music/halloweenRKT.mp3");
-        musicFiles.add("music/miedo.mp3");
+        //musicFiles.add("music/miedo.mp3");
 
     }
 
