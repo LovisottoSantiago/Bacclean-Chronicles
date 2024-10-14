@@ -11,8 +11,13 @@ public class MusicController {
 
     public MusicController(){
         musicFiles = new Array<>();
-        musicFiles.add("music/halloweenRKT.mp3");
-        //musicFiles.add("music/miedo.mp3");
+        musicFiles.add("music/1_DavidKBD.ogg");
+        musicFiles.add("music/2_DavidKBD.ogg");
+        musicFiles.add("music/3_DavidKBD.ogg");
+        musicFiles.add("music/4_DavidKBD.ogg");
+        musicFiles.add("music/5_DavidKBD.ogg");
+        musicFiles.add("music/6_DavidKBD.ogg");
+        musicFiles.add("music/7_DavidKBD.ogg");
 
     }
 

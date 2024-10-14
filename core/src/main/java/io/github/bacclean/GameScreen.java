@@ -53,6 +53,10 @@ public class GameScreen implements Screen {
     private MusicController musicController;
 
 
+    // Enemies
+    private Skeleton skeleton;
+
+
     public GameScreen(Main game, OrthographicCamera camera, ExtendViewport extendViewport) {
         this.camera = camera;
         this.extendViewport = extendViewport;
@@ -75,14 +79,18 @@ public class GameScreen implements Screen {
         */
 
         baccleanPlayer = new Player(
-            "sprites-player/charles_idle.png", 6, 1,
-            "sprites-player/charles_walk.png", 8, 1,
-            "sprites-player/charles_attack.png", 10, 1,
-            "sprites-player/charles_jump.png", 3, 1,
-            "sprites-player/charles_fall.png", 5, 1);
+            "sprites_player/charles_idle.png", 6, 1,
+            "sprites_player/charles_walk.png", 8, 1,
+            "sprites_player/charles_attack.png", 10, 1,
+            "sprites_player/charles_jump.png", 3, 1,
+            "sprites_player/charles_fall.png", 5, 1);
 
         baccleanPlayer.setSize(160, 160);
         baccleanPlayer.setPosition(2500, 150); 
+
+        skeleton = new Skeleton("enemies/skeleton/idle.png", 4, 1);
+        skeleton.setSize(73, 54);
+        skeleton.setPosition(2400, 64);
         
 
         loadMap();
@@ -183,9 +191,15 @@ public class GameScreen implements Screen {
         // Render the player
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
+
+        // Player
         TextureRegion currentFrame = baccleanPlayer.getCurrentFrame();
         spriteBatch.draw(currentFrame, baccleanPlayer.getX(), baccleanPlayer.getY(),
                 baccleanPlayer.getWidth(), baccleanPlayer.getHeight());
+        // Skeleton
+        TextureRegion skeletonFrame = skeleton.getCurrentFrame(); 
+                spriteBatch.draw(skeletonFrame, skeleton.getX(), skeleton.getY(),
+                        skeleton.getWidth(), skeleton.getHeight());                
         spriteBatch.end();
 
         if (showBounds) {
@@ -263,5 +277,6 @@ public class GameScreen implements Screen {
         customCursor.dispose();
         lights.dispose();
         musicController.dispose();
+        skeleton.dispose();
     }
 }
