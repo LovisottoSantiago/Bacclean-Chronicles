@@ -3,6 +3,11 @@
 ¡Las aventuras de Bacclean!
 =======
 # BaccleanChronicles
+- Credits:
+- Player = https://atari-boy.itch.io/oldherocharacter
+- Enemies = https://luizmelo.itch.io/
+- Tileset = https://ansimuz.itch.io/
+- Music = https://davidkbd.itch.io/
 
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
