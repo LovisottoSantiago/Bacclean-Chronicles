@@ -67,8 +67,8 @@ public class Player extends Sprite {
     // Collision properties
     public Rectangle playerBounds;
     public Rectangle attackBounds; 
-    public int movementBoundsWidth = 22;
-    public int movementBoundsHeight = 45;
+    public int playerBoundsWidth = 22;
+    public int playerBoundsHeight = 45;
     public int attackBoundsWidth = 45;
     public int attackBoundsHeight= 45;
 
@@ -123,7 +123,7 @@ public class Player extends Sprite {
         this.playerState = PlayerState.IDLE;
 
         // Initialize collision bounds
-        playerBounds = new Rectangle(getX() + (getWidth() - movementBoundsWidth) / 2, getY() + (getHeight() - movementBoundsHeight) / 2, movementBoundsWidth, movementBoundsHeight);
+        playerBounds = new Rectangle(getX() + (getWidth() - playerBoundsWidth) / 2, getY() + (getHeight() - playerBoundsHeight) / 2, playerBoundsWidth, playerBoundsHeight);
         attackBounds = new Rectangle(getX() + (getWidth() - attackBoundsWidth) / 2, getY() + (getHeight() - attackBoundsHeight) / 2, attackBoundsWidth, attackBoundsHeight);        
 
         // Attack sounds
@@ -203,7 +203,7 @@ public class Player extends Sprite {
     
     // Helper method to update movement bounds
     private void updateMovementBounds() {
-        playerBounds.setPosition(getX() + (getWidth() - movementBoundsWidth) / 2, getY());
+        playerBounds.setPosition(getX() + (getWidth() - playerBoundsWidth) / 2, getY());
     }
     
 

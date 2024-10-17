@@ -119,6 +119,8 @@ intro/background.png
 intro/intro.ogg
 intro/intro_lovi.ogg
 intro/logo.png
+lauty/lauty.aseprite
+lauty/lauty.png
 main_menu/background.png
 main_menu/enter.mp3
 main_menu/music.mp3

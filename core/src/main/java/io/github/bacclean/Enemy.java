@@ -6,25 +6,32 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 
-import io.github.bacclean.Skeleton.SkeletonState;
+import io.github.bacclean.Enemy.EnemyState;
 
 @SuppressWarnings("unused")
-public class Skeleton extends Sprite{
+public class Enemy extends Sprite{
     private float stateTime;
     private final SpriteBatch spriteBatch;
     private final Texture idleSheet;
     private final Animation<TextureRegion> idleAnimation;
     private final float idleFrameDuration = 0.2f;
 
-    public SkeletonState skeletonState;
-    public SkeletonState previousState = SkeletonState.IDLE;
+    // Collisions
+    public Rectangle enemyBounds;
+    public int enemyBoundsWidth = 22;
+    public int enemyBoundsHeight = 40;
 
-    public enum SkeletonState {
+
+    public EnemyState enemyState;
+    public EnemyState previousState = EnemyState.IDLE;
+
+    public enum EnemyState {
         IDLE, WALKING
     }
 
-    public Skeleton (
+    public Enemy (
         String idleSheetPath, int columnsIdleSheet, int rowsIdleSheet
     ) {
         this.idleSheet = new Texture(Gdx.files.internal(idleSheetPath));
@@ -33,15 +40,18 @@ public class Skeleton extends Sprite{
     
         this.spriteBatch = new SpriteBatch();
         this.stateTime = 0f;
-        this.skeletonState = SkeletonState.IDLE;
-    
+        this.enemyState = EnemyState.IDLE;    
+
+        enemyBounds = new Rectangle(getX() + (getWidth() - enemyBoundsWidth) / 2, getY() + (getHeight() - enemyBoundsHeight) / 2, enemyBoundsWidth, enemyBoundsHeight);
     }
 
-
+    public void updateEnemyBounds(){
+        enemyBounds.setPosition(getX() + (getWidth() - enemyBoundsWidth) / 2, getY());
+    }
 
     
     private Animation<TextureRegion> getCurrentAnimation() {
-        switch (skeletonState) {
+        switch (enemyState) {
             case WALKING:
                 return idleAnimation;
             default:
@@ -51,9 +61,9 @@ public class Skeleton extends Sprite{
 
     
     public TextureRegion getCurrentFrame() {
-        if (skeletonState != previousState) {
+        if (enemyState != previousState) {
             stateTime = 0;
-            previousState = skeletonState;
+            previousState = enemyState;
         }
     
         stateTime += Gdx.graphics.getDeltaTime();

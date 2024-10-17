@@ -38,9 +38,10 @@ public class GameScreen implements Screen {
     private final List<Rectangle> groundTileRectangles = new ArrayList<>();
 
     // ShapeRenderer for rendering bounds
-    private ShapeRenderer movementBoundRender;
+    private ShapeRenderer playerBoundRender;
     private ShapeRenderer attackBoundRender;
     private ShapeRenderer groundBoundRender;
+    private ShapeRenderer enemyBoundRender;
     public boolean showBounds;
 
     // Cursor
@@ -54,7 +55,7 @@ public class GameScreen implements Screen {
 
 
     // Enemies
-    private Skeleton skeleton;
+    private Enemy enemy;
 
 
     public GameScreen(Main game, OrthographicCamera camera, ExtendViewport extendViewport) {
@@ -67,17 +68,6 @@ public class GameScreen implements Screen {
     public void show() {
         spriteBatch = new SpriteBatch();
 
-        /*  //! OLD PLAYER
-        baccleanPlayer = new Player(
-                "sprites-player/player-idle.png", 8, 1,
-                "sprites-player/player-run.png", 8, 1,
-                "sprites-player/player-attack1.png", 8, 1,
-                "sprites-player/player-up.png", 3, 1,
-                "sprites-player/player-down.png", 3, 1);
-        baccleanPlayer.setSize(288, 128);
-        baccleanPlayer.setPosition(2500, 150); 
-        */
-
         baccleanPlayer = new Player(
             "sprites_player/charles_idle.png", 6, 1,
             "sprites_player/charles_walk.png", 8, 1,
@@ -88,17 +78,18 @@ public class GameScreen implements Screen {
         baccleanPlayer.setSize(160, 160);
         baccleanPlayer.setPosition(2500, 150); 
 
-        skeleton = new Skeleton("enemies/skeleton/idle.png", 4, 1);
-        skeleton.setSize(73, 54);
-        skeleton.setPosition(2400, 64);
+        enemy = new Enemy("enemies/skeleton/idle.png", 4, 1);
+        enemy.setSize(73, 54);
+        enemy.setPosition(2400, 64);
         
 
         loadMap();
 
         // Initialize ShapeRenderers
-        movementBoundRender = new ShapeRenderer();
+        playerBoundRender = new ShapeRenderer();
         attackBoundRender = new ShapeRenderer();
         groundBoundRender = new ShapeRenderer();
+        enemyBoundRender = new ShapeRenderer();
 
         // Change cursor
         Gdx.input.setCursorCatched(false);
@@ -196,15 +187,18 @@ public class GameScreen implements Screen {
         TextureRegion currentFrame = baccleanPlayer.getCurrentFrame();
         spriteBatch.draw(currentFrame, baccleanPlayer.getX(), baccleanPlayer.getY(),
                 baccleanPlayer.getWidth(), baccleanPlayer.getHeight());
-        // Skeleton
-        TextureRegion skeletonFrame = skeleton.getCurrentFrame(); 
-                spriteBatch.draw(skeletonFrame, skeleton.getX(), skeleton.getY(),
-                        skeleton.getWidth(), skeleton.getHeight());                
+        
+        // Enemy
+        TextureRegion enemyFrame = enemy.getCurrentFrame(); 
+        spriteBatch.draw(enemyFrame, enemy.getX(), enemy.getY(),
+                enemy.getWidth(), enemy.getHeight());              
+        enemy.updateEnemyBounds();  
         spriteBatch.end();
 
         if (showBounds) {
             renderPlayerBounds();
             renderTileGroundBounds();
+            renderEnemyBounds();
         }
 
         
@@ -212,15 +206,15 @@ public class GameScreen implements Screen {
 
     private void renderPlayerBounds() {
         // Movement bounds
-        movementBoundRender.setProjectionMatrix(camera.combined);
-        movementBoundRender.begin(ShapeRenderer.ShapeType.Line);
-        movementBoundRender.setColor(Color.RED);
-        movementBoundRender.rect(
+        playerBoundRender.setProjectionMatrix(camera.combined);
+        playerBoundRender.begin(ShapeRenderer.ShapeType.Line);
+        playerBoundRender.setColor(Color.RED);
+        playerBoundRender.rect(
                 baccleanPlayer.playerBounds.x,
                 baccleanPlayer.playerBounds.y,
                 baccleanPlayer.playerBounds.width,
                 baccleanPlayer.playerBounds.height);
-        movementBoundRender.end();
+        playerBoundRender.end();
 
         // Attack bounds
         attackBoundRender.setProjectionMatrix(camera.combined);
@@ -247,6 +241,20 @@ public class GameScreen implements Screen {
         groundBoundRender.end();
     }
 
+    private void renderEnemyBounds() {
+        // Movement bounds
+        enemyBoundRender.setProjectionMatrix(camera.combined);
+        enemyBoundRender.begin(ShapeRenderer.ShapeType.Line);
+        enemyBoundRender.setColor(Color.RED);
+        enemyBoundRender.rect(
+                enemy.enemyBounds.x,
+                enemy.enemyBounds.y,
+                enemy.enemyBounds.width,
+                enemy.enemyBounds.height);
+        enemyBoundRender.end();
+    }
+
+
     public void renderUI(){
         baccleanPlayer.renderStaminaBar();
     }
@@ -271,12 +279,12 @@ public class GameScreen implements Screen {
         spriteBatch.dispose();
         baccleanPlayer.dispose();
         map.dispose();
-        movementBoundRender.dispose();
+        playerBoundRender.dispose();
         attackBoundRender.dispose();
         groundBoundRender.dispose();
         customCursor.dispose();
         lights.dispose();
         musicController.dispose();
-        skeleton.dispose();
+        enemy.dispose();
     }
 }
