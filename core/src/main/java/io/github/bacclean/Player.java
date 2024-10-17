@@ -69,7 +69,7 @@ public class Player extends Sprite {
     public Rectangle attackBounds; 
     public int playerBoundsWidth = 22;
     public int playerBoundsHeight = 45;
-    public int attackBoundsWidth = 45;
+    public int attackBoundsWidth = 90;
     public int attackBoundsHeight= 45;
 
     // Jump
@@ -80,8 +80,10 @@ public class Player extends Sprite {
     public boolean isFloating = true;
     
     // Attack sounds
-    SoundController attackSounds;
+    SoundController playerSounds;
+    SoundController enemySounds;
     Sound attackSound;
+    Sound enemyHurtSound;
     
     
     // Enum to define player states
@@ -127,7 +129,8 @@ public class Player extends Sprite {
         attackBounds = new Rectangle(getX() + (getWidth() - attackBoundsWidth) / 2, getY() + (getHeight() - attackBoundsHeight) / 2, attackBoundsWidth, attackBoundsHeight);        
 
         // Attack sounds
-        attackSounds = new SoundController();
+        playerSounds = new SoundController();
+        enemySounds = new SoundController();
     }
 
 
@@ -207,17 +210,17 @@ public class Player extends Sprite {
     }
     
 
-    // Attack movement and logic
+    // Attack movement and logic (no dmg)
     public void performAttack() {
         if (stamina > staminaCost) {
             playerState = PlayerState.ATTACKING;
             stateTime = 0; 
             decreaseStamina(staminaCost);
             // Set the attack bounds based on the player direction
-            attackBounds.setPosition(getX() + (getWidth() - attackBoundsWidth) / 2 + (leftFlag ? -12 : 12), getY());
+            attackBounds.setPosition(getX() + (getWidth() - attackBoundsWidth) / 2 + (leftFlag ? -35 : 35), getY());
             attackBounds.setSize(attackBoundsWidth, attackBoundsHeight); // Set the size of the attack bounds
             
-            attackSound = attackSounds.getAttackSound();
+            attackSound = playerSounds.getAttackSound();
             if (attackSound != null) {
                 attackSound.play();
                 attackSound.setVolume(2, 0.8f);
@@ -225,6 +228,24 @@ public class Player extends Sprite {
 
         } else {
             Gdx.app.log("Stamina", "Not enough stamina to perform attacks.");
+        }
+    }
+
+    private boolean enemyDamaged = false; // Flag to track if the enemy is already damaged
+    public void damageEnemy(Rectangle enemyBound) {
+        if (attackBounds.overlaps(enemyBound) && !enemyDamaged) {
+            Gdx.app.log("Attack alert: ", "enemy has been damaged by player.");
+            enemyHurtSound = enemySounds.getEnemyHurtSound();
+            if (enemyHurtSound != null) {
+                long soundId = enemyHurtSound.play();
+                enemyHurtSound.setVolume(soundId, 0.8f); 
+            }
+            enemyDamaged = true; // Mark as damaged
+        }
+
+        // Reset the flag if there's no overlap, allowing damage again in the future
+        if (!attackBounds.overlaps(enemyBound)) {
+            enemyDamaged = false;
         }
     }
 
@@ -356,6 +377,8 @@ public class Player extends Sprite {
         return getCurrentAnimation().getKeyFrame(stateTime, true);
     }
         
+
+
     
     public void dispose() {
         idleSheet.dispose();

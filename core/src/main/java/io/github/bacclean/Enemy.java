@@ -21,7 +21,7 @@ public class Enemy extends Sprite{
     // Collisions
     public Rectangle enemyBounds;
     public int enemyBoundsWidth = 22;
-    public int enemyBoundsHeight = 40;
+    public int enemyBoundsHeight = 54;
 
 
     public EnemyState enemyState;
@@ -43,6 +43,7 @@ public class Enemy extends Sprite{
         this.enemyState = EnemyState.IDLE;    
 
         enemyBounds = new Rectangle(getX() + (getWidth() - enemyBoundsWidth) / 2, getY() + (getHeight() - enemyBoundsHeight) / 2, enemyBoundsWidth, enemyBoundsHeight);
+
     }
 
     public void updateEnemyBounds(){
@@ -69,6 +70,9 @@ public class Enemy extends Sprite{
         stateTime += Gdx.graphics.getDeltaTime();
         return getCurrentAnimation().getKeyFrame(stateTime, true);
     }
+
+
+
         
     
     public void dispose() {

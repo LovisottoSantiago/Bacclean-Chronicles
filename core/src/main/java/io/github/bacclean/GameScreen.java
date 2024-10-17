@@ -161,6 +161,7 @@ public class GameScreen implements Screen {
 
     private void handlePlayerCollision() {
         baccleanPlayer.checkGroundCollision(groundTileRectangles);
+        baccleanPlayer.damageEnemy(enemy.enemyBounds);
     }
     
 
@@ -208,7 +209,7 @@ public class GameScreen implements Screen {
         // Movement bounds
         playerBoundRender.setProjectionMatrix(camera.combined);
         playerBoundRender.begin(ShapeRenderer.ShapeType.Line);
-        playerBoundRender.setColor(Color.RED);
+        playerBoundRender.setColor(Color.WHITE);
         playerBoundRender.rect(
                 baccleanPlayer.playerBounds.x,
                 baccleanPlayer.playerBounds.y,
@@ -219,7 +220,7 @@ public class GameScreen implements Screen {
         // Attack bounds
         attackBoundRender.setProjectionMatrix(camera.combined);
         attackBoundRender.begin(ShapeRenderer.ShapeType.Line);
-        attackBoundRender.setColor(Color.BLUE);
+        attackBoundRender.setColor(Color.YELLOW);
         attackBoundRender.rect(
                 baccleanPlayer.attackBounds.x,
                 baccleanPlayer.attackBounds.y,
@@ -258,6 +259,8 @@ public class GameScreen implements Screen {
     public void renderUI(){
         baccleanPlayer.renderStaminaBar();
     }
+
+
 
 
     @Override

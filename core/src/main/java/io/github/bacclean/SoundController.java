@@ -9,10 +9,12 @@ import com.badlogic.gdx.audio.Sound;
 
 public class SoundController {
     private final List<Sound> attackSounds;
+    private final List<Sound> enemySounds;
     private final Random random;
 
     public SoundController() {
         attackSounds = new ArrayList<>();
+        enemySounds = new ArrayList<>();
         random = new Random();
         loadSounds();
     }
@@ -22,6 +24,10 @@ public class SoundController {
         attackSounds.add(Gdx.audio.newSound(Gdx.files.internal("attack_sounds/2.mp3")));
         attackSounds.add(Gdx.audio.newSound(Gdx.files.internal("attack_sounds/3.mp3")));
         attackSounds.add(Gdx.audio.newSound(Gdx.files.internal("attack_sounds/4.mp3")));
+        enemySounds.add(Gdx.audio.newSound(Gdx.files.internal("enemies/skeleton/sounds/hurt_1.mp3")));
+        enemySounds.add(Gdx.audio.newSound(Gdx.files.internal("enemies/skeleton/sounds/hurt_2.mp3")));
+        enemySounds.add(Gdx.audio.newSound(Gdx.files.internal("enemies/skeleton/sounds/hurt_3.mp3")));
+        enemySounds.add(Gdx.audio.newSound(Gdx.files.internal("enemies/skeleton/sounds/hurt_4.mp3")));
     }
 
     public Sound getAttackSound() {
@@ -32,8 +38,19 @@ public class SoundController {
         return attackSounds.get(index);
     }
 
+    public Sound getEnemyHurtSound() {
+        if (enemySounds.isEmpty()) {
+            return null;
+        }
+        int index = random.nextInt(enemySounds.size());
+        return enemySounds.get(index);
+    }
+
     public void dispose() {
         for (Sound sound : attackSounds) {
+            sound.dispose();
+        }
+        for (Sound sound : enemySounds) {
             sound.dispose();
         }
     }
