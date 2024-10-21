@@ -258,6 +258,7 @@ public class GameScreen implements Screen {
 
     public void renderUI(){
         baccleanPlayer.renderStaminaBar();
+        baccleanPlayer.renderLifeBar();
     }
 
 

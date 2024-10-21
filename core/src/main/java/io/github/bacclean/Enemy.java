@@ -14,10 +14,12 @@ import io.github.bacclean.Enemy.EnemyState;
 public class Enemy extends Sprite{
     private float stateTime;
     private final SpriteBatch spriteBatch;
-    
+    private final GuiController gui;
+
     private boolean hitDisplacementApplied = false;
     private boolean isDamaged = false;
-    private float enemyLife = 100;
+    private float enemyLife;
+    private final float maxEnemyLife = 100;
 
     private final Texture idleSheet;
     private final Texture hitSheet;
@@ -52,7 +54,9 @@ public class Enemy extends Sprite{
         hitAnimation = AnimationController.createAnimation(hitSheetPath, columnsHitSheet, rowsHitSheet, hitFrameDuration, false);
     
         this.spriteBatch = new SpriteBatch();
+        this.gui = new GuiController();
         this.stateTime = 0f;
+        enemyLife = maxEnemyLife;
         Enemy.enemyState = EnemyState.IDLE;    
 
         enemyBounds = new Rectangle(getX() + (getWidth() - enemyBoundsWidth) / 2, getY() + (getHeight() - enemyBoundsHeight) / 2, enemyBoundsWidth, enemyBoundsHeight);
@@ -75,8 +79,6 @@ public class Enemy extends Sprite{
             }
         }
     }
-
-
 
 
     public TextureRegion getCurrentFrame(float playerX, float playerPower) {

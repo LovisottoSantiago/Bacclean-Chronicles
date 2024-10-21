@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
 import io.github.bacclean.Enemy.EnemyState;
@@ -19,6 +18,7 @@ import io.github.bacclean.Player.PlayerState;
 
 @SuppressWarnings("unused")
 public class Player extends Sprite {
+    private final GuiController gui;
 
     // Textures for different player states
     private final Texture idleSheet;
@@ -55,15 +55,24 @@ public class Player extends Sprite {
     public PlayerState previousState = PlayerState.IDLE;
     public float speed;
 
+    // Render bar
+    float maxBarWidth = 80; 
+    float barHeight = 3; 
+    float borderThickness = 1;
+    float barX = 640 - (maxBarWidth / 2);
+    
     // Stamina properties
-    private float stamina = 100;
+    private float stamina;
+    private final float maxStamina = 100;
     private float staminaRegenTime = 0f;
     private final float regenInterval = 1f;
     private final float regenAmount = 10f;
     private final float staminaCost = 20;
 
-    // Shape renderer for stamina bar
-    private final ShapeRenderer staminaBarRenderer;
+    // Life properties
+    private float life;
+    private final float maxLife = 100;    
+
     
     // Collision properties
     public Rectangle playerBounds;
@@ -72,6 +81,7 @@ public class Player extends Sprite {
     public int playerBoundsHeight = 45;
     public int attackBoundsWidth = 90;
     public int attackBoundsHeight= 45;
+
 
     // Jump
     public final float jumpVelocity = 150f; 
@@ -123,7 +133,8 @@ public class Player extends Sprite {
         leftJumpingDownAnimation = AnimationController.createAnimation(jumpingDownSheetPath, columnsjumpingDownSheet, rowsjumpingDownSheet, jumpingDownFrameDuration, true);
 
         // Initialize shape renderer and sprite batch
-        staminaBarRenderer = new ShapeRenderer();
+        gui = new GuiController();
+        stamina = maxStamina;
         this.spriteBatch = new SpriteBatch();
         this.stateTime = 0f;
         this.playerState = PlayerState.IDLE;
@@ -140,24 +151,13 @@ public class Player extends Sprite {
 
     //? Stamina methods
     public void renderStaminaBar() {
-        // Set up bar dimensions
-        float maxBarWidth = 100; // Maximum width of the stamina bar
-        float barHeight = 6; // Height of the stamina bar
-        float barX = 640 - (maxBarWidth / 2);
         float barY = this.getHeight() + 10;
-    
-        // Calculate the current width of the stamina bar based on the player's stamina
-        float currentBarWidth = (stamina / 100) * maxBarWidth;
-    
-        // Begin drawing the shapes
-        staminaBarRenderer.begin(ShapeRenderer.ShapeType.Filled);        
-        // Draw the background of the stamina bar (empty portion)
-        staminaBarRenderer.setColor(0.522f, 0.502f, 0.259f, 1); // #858042 for the empty bar
-        staminaBarRenderer.rect(barX, barY, maxBarWidth, barHeight);        
-        // Draw the current stamina (filled portion)
-        staminaBarRenderer.setColor(0.890f, 0.851f, 0.302f, 1); // #e3d94d for the filled bar
-        staminaBarRenderer.rect(barX, barY, currentBarWidth, barHeight);    
-        staminaBarRenderer.end();
+        gui.renderBar(barX, barY, stamina, maxStamina, maxBarWidth, barHeight, "yellow", "darkYellow", "gray");
+    }
+
+    public void renderLifeBar() {
+        float barY = this.getHeight() + 20;
+        gui.renderBar(barX, barY, life, maxLife, maxBarWidth, barHeight, "red", "darkRed", "gray");
     }
 
     public void logStamina(float value){
@@ -393,9 +393,9 @@ public class Player extends Sprite {
         attackSheet.dispose();
         jumpingUpSheet.dispose();
         jumpingDownSheet.dispose();
-        staminaBarRenderer.dispose();
         spriteBatch.dispose();
         attackSound.dispose();
+        gui.dispose();
     }
     
 
