@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
+import io.github.bacclean.Enemy.EnemyState;
 import io.github.bacclean.Player.PlayerState;
 
 
@@ -85,6 +86,8 @@ public class Player extends Sprite {
     Sound attackSound;
     Sound enemyHurtSound;
     
+    // Enemy
+    public boolean enemyDamaged = false; // Flag to track if the enemy is already damaged
     
     // Enum to define player states
     public enum PlayerState {
@@ -231,15 +234,16 @@ public class Player extends Sprite {
         }
     }
 
-    private boolean enemyDamaged = false; // Flag to track if the enemy is already damaged
+
     public void damageEnemy(Rectangle enemyBound) {
         if (attackBounds.overlaps(enemyBound) && !enemyDamaged) {
             Gdx.app.log("Attack alert: ", "enemy has been damaged by player.");
             enemyHurtSound = enemySounds.getEnemyHurtSound();
             if (enemyHurtSound != null) {
                 long soundId = enemyHurtSound.play();
-                enemyHurtSound.setVolume(soundId, 0.8f); 
+                enemyHurtSound.setVolume(soundId, 0.8f);                 
             }
+            Enemy.enemyState = EnemyState.HIT;
             enemyDamaged = true; // Mark as damaged
         }
 
