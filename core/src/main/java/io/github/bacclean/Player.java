@@ -80,11 +80,12 @@ public class Player extends Sprite {
     public float groundValue;
     public boolean isFloating = true;
     
-    // Attack sounds
+    // Attack 
     SoundController playerSounds;
     SoundController enemySounds;
     Sound attackSound;
     Sound enemyHurtSound;
+    public float playerPower = 20;
     
     // Enemy
     public boolean enemyDamaged = false; // Flag to track if the enemy is already damaged
@@ -142,8 +143,8 @@ public class Player extends Sprite {
         // Set up bar dimensions
         float maxBarWidth = 100; // Maximum width of the stamina bar
         float barHeight = 6; // Height of the stamina bar
-        float barX = 20;
-        float barY = 520; // Position the bar slightly above the player's head
+        float barX = 640 - (maxBarWidth / 2);
+        float barY = this.getHeight() + 10;
     
         // Calculate the current width of the stamina bar based on the player's stamina
         float currentBarWidth = (stamina / 100) * maxBarWidth;
@@ -243,8 +244,10 @@ public class Player extends Sprite {
                 long soundId = enemyHurtSound.play();
                 enemyHurtSound.setVolume(soundId, 0.8f);                 
             }
+
             Enemy.enemyState = EnemyState.HIT;
             enemyDamaged = true; // Mark as damaged
+
         }
 
         // Reset the flag if there's no overlap, allowing damage again in the future

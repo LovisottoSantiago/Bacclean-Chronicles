@@ -190,7 +190,7 @@ public class GameScreen implements Screen {
                 baccleanPlayer.getWidth(), baccleanPlayer.getHeight());
         
         // Enemy
-        TextureRegion enemyFrame = enemy.getCurrentFrame(); 
+        TextureRegion enemyFrame = enemy.getCurrentFrame(baccleanPlayer.getX(), baccleanPlayer.playerPower); 
         spriteBatch.draw(enemyFrame, enemy.getX(), enemy.getY(),
                 enemy.getWidth(), enemy.getHeight());              
         enemy.updateEnemyBounds();  

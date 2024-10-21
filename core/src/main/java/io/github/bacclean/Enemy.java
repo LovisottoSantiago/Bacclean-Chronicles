@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 
 import io.github.bacclean.Enemy.EnemyState;
 
@@ -15,7 +14,10 @@ import io.github.bacclean.Enemy.EnemyState;
 public class Enemy extends Sprite{
     private float stateTime;
     private final SpriteBatch spriteBatch;
-    private final Vector2 position;
+    
+    private boolean hitDisplacementApplied = false;
+    private boolean isDamaged = false;
+    private float enemyLife = 100;
 
     private final Texture idleSheet;
     private final Texture hitSheet;
@@ -52,7 +54,6 @@ public class Enemy extends Sprite{
         this.spriteBatch = new SpriteBatch();
         this.stateTime = 0f;
         Enemy.enemyState = EnemyState.IDLE;    
-        this.position = new Vector2(0,0);
 
         enemyBounds = new Rectangle(getX() + (getWidth() - enemyBoundsWidth) / 2, getY() + (getHeight() - enemyBoundsHeight) / 2, enemyBoundsWidth, enemyBoundsHeight);
 
@@ -62,7 +63,48 @@ public class Enemy extends Sprite{
         enemyBounds.setPosition(getX() + (getWidth() - enemyBoundsWidth) / 2, getY());
     }
 
+    public void reduceLife(float amount) {
+        if (!isDamaged) {
+            enemyLife -= amount;
+            if (enemyLife == 0) {
+                //enemyState = EnemyState.DEAD;
+                this.setPosition(this.getX(), -100000);
+            } else {
+                enemyState = EnemyState.HIT;
+                isDamaged = true;
+            }
+        }
+    }
+
+
+
+
+    public TextureRegion getCurrentFrame(float playerX, float playerPower) {
+        if (enemyState != previousState) {
+            stateTime = 0;
+            previousState = enemyState;
+
+            if (enemyState == EnemyState.HIT && !hitDisplacementApplied) {
+                float displacement = (getX() < playerX) ? -5 : 5;
+                setPosition(getX() - displacement, getY());
+                this.reduceLife(playerPower);
+                Gdx.app.log("Enemy life: ", "life is" + enemyLife);
+                hitDisplacementApplied = true;
+            }
+        }
     
+        stateTime += Gdx.graphics.getDeltaTime();
+    
+        if (enemyState == EnemyState.HIT && hitAnimation.isAnimationFinished(stateTime)) {
+            enemyState = EnemyState.IDLE;  
+            hitDisplacementApplied = false;
+            isDamaged = false;
+        }
+    
+        return getCurrentAnimation().getKeyFrame(stateTime, true);
+    }
+    
+
     private Animation<TextureRegion> getCurrentAnimation() {
         switch (enemyState) {
             case WALKING:
@@ -74,30 +116,13 @@ public class Enemy extends Sprite{
         }
     }
 
-    
-    public TextureRegion getCurrentFrame() {
-        if (enemyState != previousState) {
-            stateTime = 0;
-            previousState = enemyState;
-        }
-    
-        stateTime += Gdx.graphics.getDeltaTime();
-
-        if (enemyState == EnemyState.HIT && hitAnimation.isAnimationFinished(stateTime)){
-            position.x -= 15 * (Gdx.graphics.getDeltaTime() / hitAnimation.getAnimationDuration());
-            enemyState = EnemyState.IDLE;
-        }
-
-        return getCurrentAnimation().getKeyFrame(stateTime, true);
-    }
-
-
 
         
     
     public void dispose() {
         idleSheet.dispose();
         spriteBatch.dispose();
+        hitSheet.dispose();
     }
     
 
