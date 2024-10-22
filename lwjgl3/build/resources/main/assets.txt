@@ -5,6 +5,7 @@ attack_sounds/3.mp3
 attack_sounds/4.mp3
 backgrounds/bg_1.png
 backgrounds/test_bg.png
+enemies/skeleton/death.png
 enemies/skeleton/hit.png
 enemies/skeleton/idle.png
 enemies/skeleton/sounds/hurt.ogg

@@ -23,12 +23,15 @@ public class Enemy extends Sprite{
 
     private final Texture idleSheet;
     private final Texture hitSheet;
+    private final Texture deathSheet;
 
     private final Animation<TextureRegion> idleAnimation;
     private final Animation<TextureRegion> hitAnimation;
+    private final Animation<TextureRegion> deathAnimation;
 
     private final float idleFrameDuration = 0.2f;
     private final float hitFrameDuration = 0.08f;
+    private final float deathFrameDuration = 0.2f;
 
     // Collisions
     public Rectangle enemyBounds;
@@ -40,18 +43,21 @@ public class Enemy extends Sprite{
     public EnemyState previousState = EnemyState.IDLE;
 
     public static enum EnemyState {
-        IDLE, HIT, WALKING
+        IDLE, HIT, WALKING, DEATH
     }
 
     public Enemy (
         String idleSheetPath, int columnsIdleSheet, int rowsIdleSheet,
-        String hitSheetPath, int columnsHitSheet, int rowsHitSheet
+        String hitSheetPath, int columnsHitSheet, int rowsHitSheet,
+        String deathSheetPath, int columnsDeathSheet, int rowsDeathSheet
     ) {
         this.idleSheet = new Texture(Gdx.files.internal(idleSheetPath));
         this.hitSheet = new Texture(Gdx.files.internal(hitSheetPath));
+        this.deathSheet = new Texture(Gdx.files.internal(deathSheetPath));
 
         idleAnimation = AnimationController.createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, false);
         hitAnimation = AnimationController.createAnimation(hitSheetPath, columnsHitSheet, rowsHitSheet, hitFrameDuration, false);
+        deathAnimation = AnimationController.createAnimation(deathSheetPath, columnsDeathSheet, rowsDeathSheet, deathFrameDuration, false);
     
         this.spriteBatch = new SpriteBatch();
         this.gui = new GuiController();
@@ -68,33 +74,35 @@ public class Enemy extends Sprite{
     }
 
     public void reduceLife(float amount) {
-        if (!isDamaged) {
+        if (enemyState != EnemyState.DEATH) {
             enemyLife -= amount;
             if (enemyLife == 0) {
-                //enemyState = EnemyState.DEAD;
-                this.setPosition(this.getX(), -100000);
-            } else {
+                enemyState = EnemyState.DEATH; 
+                stateTime = 0; 
+            } 
+            else {
                 enemyState = EnemyState.HIT;
                 isDamaged = true;
             }
         }
     }
-
-
+        
+    
     public TextureRegion getCurrentFrame(float playerX, float playerPower) {
         if (enemyState != previousState) {
             stateTime = 0;
             previousState = enemyState;
-
+    
+            // Handle HIT state specific logic
             if (enemyState == EnemyState.HIT && !hitDisplacementApplied) {
-                float displacement = (getX() < playerX) ? -5 : 5;
+                float displacement = (getX() < playerX) ? 8 : -8;
                 setPosition(getX() - displacement, getY());
                 this.reduceLife(playerPower);
-                Gdx.app.log("Enemy life: ", "life is" + enemyLife);
+                Gdx.app.log("Enemy life: ", "life is " + enemyLife);
                 hitDisplacementApplied = true;
             }
         }
-    
+
         stateTime += Gdx.graphics.getDeltaTime();
     
         if (enemyState == EnemyState.HIT && hitAnimation.isAnimationFinished(stateTime)) {
@@ -102,9 +110,17 @@ public class Enemy extends Sprite{
             hitDisplacementApplied = false;
             isDamaged = false;
         }
+
+        if (enemyState == EnemyState.DEATH) {
+            if (deathAnimation.isAnimationFinished(stateTime)) {
+                setPosition(-1000, -1000);               
+            }
+        }
     
         return getCurrentAnimation().getKeyFrame(stateTime, true);
     }
+    
+    
     
 
     private Animation<TextureRegion> getCurrentAnimation() {
@@ -113,6 +129,8 @@ public class Enemy extends Sprite{
                 return idleAnimation;
             case HIT:
                 return hitAnimation;
+            case DEATH:
+                return deathAnimation;
             default:
                 return idleAnimation;
         }
@@ -125,6 +143,7 @@ public class Enemy extends Sprite{
         idleSheet.dispose();
         spriteBatch.dispose();
         hitSheet.dispose();
+        deathSheet.dispose();
     }
     
 
