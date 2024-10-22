@@ -78,7 +78,7 @@ public class GameScreen implements Screen {
         baccleanPlayer.setSize(160, 160);
         baccleanPlayer.setPosition(2500, 150); 
 
-        enemy = new Enemy("enemies/skeleton/idle.png", 4, 1, "enemies/skeleton/hit.png", 4, 1, "enemies/skeleton/death.png", 4, 1);
+        enemy = new Enemy("enemies/skeleton/idle.png", 4, 1, "enemies/skeleton/hit-blood.png", 4, 1, "enemies/skeleton/death.png", 4, 1);
         enemy.setSize(73, 54);
         enemy.setPosition(2400, 64);
         
@@ -190,7 +190,7 @@ public class GameScreen implements Screen {
                 baccleanPlayer.getWidth(), baccleanPlayer.getHeight());
         
         // Enemy
-        TextureRegion enemyFrame = enemy.getCurrentFrame(baccleanPlayer.getX(), baccleanPlayer.playerPower); 
+        TextureRegion enemyFrame = enemy.getCurrentFrame(baccleanPlayer.attackBounds.getX(), baccleanPlayer.playerPower); 
         spriteBatch.draw(enemyFrame, enemy.getX(), enemy.getY(),
                 enemy.getWidth(), enemy.getHeight());              
         enemy.updateEnemyBounds();  

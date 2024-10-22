@@ -113,7 +113,10 @@ public class Enemy extends Sprite{
 
         if (enemyState == EnemyState.DEATH) {
             if (deathAnimation.isAnimationFinished(stateTime)) {
-                setPosition(-1000, -1000);               
+                setPosition(-1000, -1000);              
+                idleSheet.dispose();
+                hitSheet.dispose();
+                deathSheet.dispose(); 
             }
         }
     
