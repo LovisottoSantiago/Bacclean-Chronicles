@@ -14,6 +14,9 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -56,6 +59,10 @@ public class GameScreen implements Screen {
 
     // Enemies
     private Enemy enemy;
+
+
+    
+
 
 
     public GameScreen(Main game, OrthographicCamera camera, ExtendViewport extendViewport) {
@@ -114,7 +121,34 @@ public class GameScreen implements Screen {
 
         groundtileLayer = (TiledMapTileLayer) map.getLayers().get("ground");
         loadGroundTileRectangles(); // Load rectangles for collision detection
+
+
+        MapLayer objectLayer = map.getLayers().get("object_layer_name");
+
+            if (objectLayer != null) {
+                for (MapObject object : objectLayer.getObjects()) {
+                    if (object instanceof TextureMapObject) {
+                        TextureMapObject textureObject = (TextureMapObject) object;
+                        String texturePath = textureObject.getTextureRegion().getTexture().toString(); // Adjust as needed
+                        float x = textureObject.getX();
+                        float y = textureObject.getY();
+
+                        // Create your item here
+                        Item item = new Item(texturePath, x, y);
+                        // Store the item in a list to render later
+                        items.add(item);
+                    }
+                }
+            } else {
+                Gdx.app.error("GameScreen", "Object layer not found!");
+            }
     }
+    private final List<Item> items = new ArrayList<>();
+
+
+
+
+
 
     private void loadGroundTileRectangles() {
         if (groundtileLayer != null) {
@@ -162,7 +196,10 @@ public class GameScreen implements Screen {
     private void handlePlayerCollision() {
         baccleanPlayer.checkGroundCollision(groundTileRectangles);
         baccleanPlayer.damageEnemy(enemy.enemyBounds);
+
+
     }
+
     
 
     private void updateCamera() {
@@ -194,12 +231,18 @@ public class GameScreen implements Screen {
         spriteBatch.draw(enemyFrame, enemy.getX(), enemy.getY(),
                 enemy.getWidth(), enemy.getHeight());              
         enemy.updateEnemyBounds();  
+        
+        // Render items
+        for (Item item : items) {
+            item.draw(spriteBatch); // Draw each item
+        }
         spriteBatch.end();
 
         if (showBounds) {
             renderPlayerBounds();
             renderTileGroundBounds();
             renderEnemyBounds();
+
         }
 
         
@@ -290,5 +333,6 @@ public class GameScreen implements Screen {
         lights.dispose();
         musicController.dispose();
         enemy.dispose();
+
     }
 }

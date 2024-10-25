@@ -71,7 +71,7 @@ public class Player extends Sprite {
 
     // Life properties
     private float life;
-    private final float maxLife = 100;    
+    private float maxLife = 100;    
 
     
     // Collision properties
@@ -179,6 +179,10 @@ public class Player extends Sprite {
             staminaRegenTime = 0; // Reset the timer
             //logStamina(stamina);
         }
+    }
+
+    public void increaseLife(int life){
+        maxLife += life;
     }
 
 

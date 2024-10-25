@@ -1,0 +1,27 @@
+package io.github.bacclean;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+
+public class Item {
+    private final Texture texture;
+    private final Vector2 position;
+
+    public Item(String texturePath, float x, float y) {
+        this.texture = new Texture(texturePath); // Load the texture
+        this.position = new Vector2(x, y); // Set the position
+    }
+
+    public void draw(SpriteBatch spriteBatch) {
+        spriteBatch.draw(texture, position.x, position.y); // Draw the texture at the item's position
+    }
+
+    public Vector2 getPosition() {
+        return position; // Get the position if needed
+    }
+
+    public void dispose() {
+        texture.dispose(); // Dispose of the texture when no longer needed
+    }
+}
