@@ -1,4 +1,4 @@
-package io.github.bacclean;
+package io.github.bacclean.Screens;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +24,13 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+
+import io.github.bacclean.Controllers.LightsController;
+import io.github.bacclean.Controllers.MusicController;
+import io.github.bacclean.Entities.Enemy;
+import io.github.bacclean.Entities.Item;
+import io.github.bacclean.Entities.Player;
+import io.github.bacclean.Main;
 
 
 public class GameScreen implements Screen {
@@ -60,7 +67,8 @@ public class GameScreen implements Screen {
     // Enemies
     private Enemy enemy;
 
-
+    // Items
+    private final List<Item> items = new ArrayList<>();
     
 
 
@@ -143,8 +151,6 @@ public class GameScreen implements Screen {
                 Gdx.app.error("GameScreen", "Object layer not found!");
             }
     }
-    private final List<Item> items = new ArrayList<>();
-
 
 
 

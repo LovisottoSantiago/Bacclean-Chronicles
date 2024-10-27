@@ -1,4 +1,4 @@
-package io.github.bacclean;
+package io.github.bacclean.Entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -10,8 +10,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
-import io.github.bacclean.Enemy.EnemyState;
-import io.github.bacclean.Player.PlayerState;
+import io.github.bacclean.Controllers.AnimationController;
+import io.github.bacclean.Controllers.GuiController;
+import io.github.bacclean.Controllers.SoundController;
+import io.github.bacclean.Entities.Enemy.EnemyState;
+import io.github.bacclean.Entities.Player.PlayerState;
 
 
 

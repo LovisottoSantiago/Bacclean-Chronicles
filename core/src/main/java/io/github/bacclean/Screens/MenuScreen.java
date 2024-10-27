@@ -1,4 +1,4 @@
-package io.github.bacclean;
+package io.github.bacclean.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -13,6 +13,8 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils; // Import Interpolation for fade effect
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+
+import io.github.bacclean.Main;
 
 public class MenuScreen implements Screen {
     private final Main game;

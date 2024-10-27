@@ -1,4 +1,4 @@
-package io.github.bacclean;
+package io.github.bacclean.Controllers;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;

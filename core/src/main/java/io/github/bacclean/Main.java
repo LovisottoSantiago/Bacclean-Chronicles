@@ -7,6 +7,8 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
+import io.github.bacclean.Screens.IntroScreen;
+
 public class Main extends Game {
     private OrthographicCamera camera;
     private ExtendViewport extendViewport;
