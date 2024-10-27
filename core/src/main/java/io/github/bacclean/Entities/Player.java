@@ -74,7 +74,7 @@ public class Player extends Sprite {
 
     // Life properties
     private float life;
-    private float maxLife = 100;    
+    public float maxLife = 100;    
 
     
     // Collision properties

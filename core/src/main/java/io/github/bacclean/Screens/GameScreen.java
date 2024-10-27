@@ -28,7 +28,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import io.github.bacclean.Controllers.LightsController;
 import io.github.bacclean.Controllers.MusicController;
 import io.github.bacclean.Entities.Enemy;
-import io.github.bacclean.Entities.Item;
+import io.github.bacclean.Entities.Fernet;
 import io.github.bacclean.Entities.Player;
 import io.github.bacclean.Main;
 
@@ -52,6 +52,7 @@ public class GameScreen implements Screen {
     private ShapeRenderer attackBoundRender;
     private ShapeRenderer groundBoundRender;
     private ShapeRenderer enemyBoundRender;
+    private ShapeRenderer fernetBoundRender;
     public boolean showBounds;
 
     // Cursor
@@ -63,15 +64,12 @@ public class GameScreen implements Screen {
     // Music
     private MusicController musicController;
 
-
     // Enemies
     private Enemy enemy;
 
     // Items
-    private final List<Item> items = new ArrayList<>();
+    private final List<Fernet> items = new ArrayList<>();
     
-
-
 
     public GameScreen(Main game, OrthographicCamera camera, ExtendViewport extendViewport) {
         this.camera = camera;
@@ -96,7 +94,6 @@ public class GameScreen implements Screen {
         enemy = new Enemy("enemies/skeleton/idle.png", 4, 1, "enemies/skeleton/hit-blood.png", 4, 1, "enemies/skeleton/death.png", 4, 1);
         enemy.setSize(73, 54);
         enemy.setPosition(2400, 64);
-        
 
         loadMap();
 
@@ -105,6 +102,7 @@ public class GameScreen implements Screen {
         attackBoundRender = new ShapeRenderer();
         groundBoundRender = new ShapeRenderer();
         enemyBoundRender = new ShapeRenderer();
+        fernetBoundRender = new ShapeRenderer();
 
         // Change cursor
         Gdx.input.setCursorCatched(false);
@@ -131,8 +129,8 @@ public class GameScreen implements Screen {
         loadGroundTileRectangles(); // Load rectangles for collision detection
 
 
-        MapLayer objectLayer = map.getLayers().get("object_layer_name");
-
+        //! get objects
+        MapLayer objectLayer = map.getLayers().get("fernet_layer");
             if (objectLayer != null) {
                 for (MapObject object : objectLayer.getObjects()) {
                     if (object instanceof TextureMapObject) {
@@ -140,10 +138,7 @@ public class GameScreen implements Screen {
                         String texturePath = textureObject.getTextureRegion().getTexture().toString(); // Adjust as needed
                         float x = textureObject.getX();
                         float y = textureObject.getY();
-
-                        // Create your item here
-                        Item item = new Item(texturePath, x, y);
-                        // Store the item in a list to render later
+                        Fernet item = new Fernet(texturePath, x, y);
                         items.add(item);
                     }
                 }
@@ -151,8 +146,6 @@ public class GameScreen implements Screen {
                 Gdx.app.error("GameScreen", "Object layer not found!");
             }
     }
-
-
 
 
 
@@ -203,6 +196,17 @@ public class GameScreen implements Screen {
         baccleanPlayer.checkGroundCollision(groundTileRectangles);
         baccleanPlayer.damageEnemy(enemy.enemyBounds);
 
+        for (int i = 0; i < items.size(); i++) {
+            Fernet item = items.get(i);
+            
+            if (baccleanPlayer.playerBounds.overlaps(item.getBounds())) {
+                item.itemLifeEffect(baccleanPlayer); 
+                Gdx.app.log("NICE", "life increased, current life: " + baccleanPlayer.maxLife);
+                item.dispose();
+                items.remove(i); 
+                i--;
+            }
+        }
 
     }
 
@@ -239,7 +243,7 @@ public class GameScreen implements Screen {
         enemy.updateEnemyBounds();  
         
         // Render items
-        for (Item item : items) {
+        for (Fernet item : items) {
             item.draw(spriteBatch); // Draw each item
         }
         spriteBatch.end();
@@ -248,7 +252,7 @@ public class GameScreen implements Screen {
             renderPlayerBounds();
             renderTileGroundBounds();
             renderEnemyBounds();
-
+            renderFernetBounds();
         }
 
         
@@ -304,6 +308,18 @@ public class GameScreen implements Screen {
         enemyBoundRender.end();
     }
 
+    private void renderFernetBounds(){
+        fernetBoundRender.setProjectionMatrix(camera.combined);
+        fernetBoundRender.begin(ShapeRenderer.ShapeType.Line);
+        fernetBoundRender.setColor(Color.GOLD);
+        for (Fernet item : items) {
+            Rectangle bounds = item.getBounds();
+            fernetBoundRender.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+        }
+    
+        fernetBoundRender.end();
+
+    }
 
     public void renderUI(){
         baccleanPlayer.renderStaminaBar();

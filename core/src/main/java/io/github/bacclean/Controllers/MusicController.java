@@ -37,7 +37,7 @@ public class MusicController {
         });
 
         currentMusic.setLooping(false);
-        currentMusic.setVolume(0.6f);
+        currentMusic.setVolume(0.3f);
         currentMusic.play();
     }
 
