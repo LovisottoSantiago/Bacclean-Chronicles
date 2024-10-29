@@ -34,6 +34,7 @@ public class Fernet {
 
     public void itemLifeEffect(Player player){ // Fernet
         player.increaseLife(20);
+        
     }
 
 }

@@ -147,6 +147,7 @@ maps/sets/bebidas/ferne.png
 maps/sets/bebidas/gaseosa-cola-de-marca.png
 maps/sets/bebidas/gaseosa-cola.png
 maps/sets/bebidas/gaseosa-uva.png
+maps/sets/bebidas/lavandina.png
 maps/sets/bebidas/mate-01.png
 maps/sets/bebidas/mate-02.png
 maps/sets/bebidas/pinguino.png
@@ -207,6 +208,7 @@ sprites_player/charles.aseprite
 sprites_player/charles_attack.png
 sprites_player/charles_fall.png
 sprites_player/charles_idle.png
+sprites_player/charles_item.png
 sprites_player/charles_jump.png
 sprites_player/charles_walk.png
 sprites_player/player-attack1.png

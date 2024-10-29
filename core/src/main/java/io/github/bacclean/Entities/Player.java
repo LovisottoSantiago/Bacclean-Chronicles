@@ -29,7 +29,8 @@ public class Player extends Sprite {
     private final Texture attackSheet;
     private final Texture jumpingUpSheet;
     private final Texture jumpingDownSheet;
-
+    private final Texture getItemSheet;
+    
     // Animations for the player
     private final Animation<TextureRegion> idleAnimation;
     private final Animation<TextureRegion> leftIdleAnimation;
@@ -41,6 +42,8 @@ public class Player extends Sprite {
     private final Animation<TextureRegion> leftJumpingUpAnimation;
     private final Animation<TextureRegion> jumpingDownAnimation;
     private final Animation<TextureRegion> leftJumpingDownAnimation;
+    private final Animation<TextureRegion> getItemAnimation;
+    private final Animation<TextureRegion> leftGetItemAnimation;
 
     // Animation frame durations
     private final float idleFrameDuration = 0.2f;
@@ -48,10 +51,11 @@ public class Player extends Sprite {
     private final float attackFrameDuration = 0.08f;
     private final float jumpingUpFrameDuration = 0.05f;
     private final float jumpingDownFrameDuration = 0.05f;
+    private final float getItemFrameDuration = 0.1f;
 
 
     // State properties
-    private float stateTime;
+    public float stateTime;
     private final SpriteBatch spriteBatch;
     private boolean leftFlag;
     public PlayerState playerState;
@@ -103,9 +107,10 @@ public class Player extends Sprite {
     // Enemy
     public boolean enemyDamaged = false; // Flag to track if the enemy is already damaged
     
+
     // Enum to define player states
     public enum PlayerState {
-        IDLE, RUNNING, ATTACKING, JUMPING, FALLING
+        IDLE, RUNNING, ATTACKING, JUMPING, FALLING, GET_ITEM
     }
 
 
@@ -114,7 +119,8 @@ public class Player extends Sprite {
                     String walkSheetPath, int columnsWalkSheet, int rowsWalkSheet, 
                     String attackSheetPath, int columnsAttackSheet, int rowsAttackSheet,
                     String jumpingUpSheetPath, int columnsjumpingUpSheet, int rowsjumpingUpSheet,
-                    String jumpingDownSheetPath, int columnsjumpingDownSheet, int rowsjumpingDownSheet
+                    String jumpingDownSheetPath, int columnsjumpingDownSheet, int rowsjumpingDownSheet,
+                    String getItemSheetPath, int columnsGetItemSheet, int rowsGetItemSheet
     ) {
         // Load textures
         this.idleSheet = new Texture(Gdx.files.internal(idleSheetPath));
@@ -122,6 +128,7 @@ public class Player extends Sprite {
         this.attackSheet = new Texture(Gdx.files.internal(attackSheetPath));
         this.jumpingUpSheet = new Texture(Gdx.files.internal(jumpingUpSheetPath));
         this.jumpingDownSheet = new Texture(Gdx.files.internal(jumpingDownSheetPath));
+        this.getItemSheet = new Texture(Gdx.files.internal(getItemSheetPath));
 
         // Initialize animations
         idleAnimation = AnimationController.createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, false);
@@ -134,6 +141,9 @@ public class Player extends Sprite {
         leftJumpingUpAnimation = AnimationController.createAnimation(jumpingUpSheetPath, columnsjumpingUpSheet, rowsjumpingUpSheet, jumpingUpFrameDuration, true);
         jumpingDownAnimation = AnimationController.createAnimation(jumpingDownSheetPath, columnsjumpingDownSheet, rowsjumpingDownSheet, jumpingDownFrameDuration, false);
         leftJumpingDownAnimation = AnimationController.createAnimation(jumpingDownSheetPath, columnsjumpingDownSheet, rowsjumpingDownSheet, jumpingDownFrameDuration, true);
+        getItemAnimation = AnimationController.createAnimation(getItemSheetPath, columnsGetItemSheet, rowsGetItemSheet, jumpingDownFrameDuration, false);
+        leftGetItemAnimation = AnimationController.createAnimation(getItemSheetPath, columnsGetItemSheet, rowsGetItemSheet, getItemFrameDuration, true);
+        
 
         // Initialize shape renderer and sprite batch
         gui = new GuiController();
@@ -365,6 +375,9 @@ public class Player extends Sprite {
     }    
 
 
+
+    
+
     private Animation<TextureRegion> getCurrentAnimation() {
         switch (playerState) {
             case ATTACKING:
@@ -375,6 +388,8 @@ public class Player extends Sprite {
                 return leftFlag ? leftJumpingUpAnimation : jumpingUpAnimation;
             case FALLING:
                 return leftFlag ? leftJumpingDownAnimation : jumpingDownAnimation;
+            case GET_ITEM:
+                return leftFlag ? getItemAnimation : leftGetItemAnimation;
             default:
                 return leftFlag ? leftIdleAnimation : idleAnimation;
         }
@@ -388,6 +403,11 @@ public class Player extends Sprite {
         }
     
         stateTime += Gdx.graphics.getDeltaTime();
+
+        if (playerState == PlayerState.GET_ITEM && getCurrentAnimation().isAnimationFinished(stateTime)) {
+            playerState = PlayerState.IDLE; 
+        }
+
         return getCurrentAnimation().getKeyFrame(stateTime, true);
     }
         
