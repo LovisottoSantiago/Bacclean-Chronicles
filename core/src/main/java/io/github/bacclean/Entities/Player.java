@@ -24,43 +24,43 @@ public class Player extends Sprite {
     private final GuiController gui;
 
     // Textures for different player states
-    private final Texture idleSheet;
-    private final Texture walkSheet;
     private final Texture attackSheet;
-    private final Texture jumpingUpSheet;
-    private final Texture jumpingDownSheet;
     private final Texture getItemSheet;
+    private final Texture idleSheet;
+    private final Texture jumpingDownSheet;
+    private final Texture jumpingUpSheet;
+    private final Texture walkSheet;
     
     // Animations for the player
-    private final Animation<TextureRegion> idleAnimation;
-    private final Animation<TextureRegion> leftIdleAnimation;
-    private final Animation<TextureRegion> walkAnimation;
-    private final Animation<TextureRegion> leftWalkAnimation;
     private final Animation<TextureRegion> attackAnimation;
-    private final Animation<TextureRegion> leftAttackAnimation;
-    private final Animation<TextureRegion> jumpingUpAnimation;
-    private final Animation<TextureRegion> leftJumpingUpAnimation;
-    private final Animation<TextureRegion> jumpingDownAnimation;
-    private final Animation<TextureRegion> leftJumpingDownAnimation;
     private final Animation<TextureRegion> getItemAnimation;
+    private final Animation<TextureRegion> idleAnimation;
+    private final Animation<TextureRegion> jumpingDownAnimation;
+    private final Animation<TextureRegion> jumpingUpAnimation;
+    private final Animation<TextureRegion> leftAttackAnimation;
     private final Animation<TextureRegion> leftGetItemAnimation;
+    private final Animation<TextureRegion> leftIdleAnimation;
+    private final Animation<TextureRegion> leftJumpingDownAnimation;
+    private final Animation<TextureRegion> leftJumpingUpAnimation;
+    private final Animation<TextureRegion> leftWalkAnimation;
+    private final Animation<TextureRegion> walkAnimation;
 
     // Animation frame durations
-    private final float idleFrameDuration = 0.2f;
-    private final float walkFrameDuration = 0.1f;
     private final float attackFrameDuration = 0.08f;
-    private final float jumpingUpFrameDuration = 0.05f;
-    private final float jumpingDownFrameDuration = 0.05f;
     private final float getItemFrameDuration = 0.1f;
+    private final float idleFrameDuration = 0.2f;
+    private final float jumpingDownFrameDuration = 0.05f;
+    private final float jumpingUpFrameDuration = 0.05f;
+    private final float walkFrameDuration = 0.1f;
 
 
     // State properties
-    public float stateTime;
-    private final SpriteBatch spriteBatch;
     private boolean leftFlag;
+    private final SpriteBatch spriteBatch;
+    public float speed;
+    public float stateTime;
     public PlayerState playerState;
     public PlayerState previousState = PlayerState.IDLE;
-    public float speed;
 
     // Render bar
     float maxBarWidth = 80; 
@@ -82,12 +82,12 @@ public class Player extends Sprite {
 
     
     // Collision properties
-    public Rectangle playerBounds;
-    public Rectangle attackBounds; 
-    public int playerBoundsWidth = 22;
-    public int playerBoundsHeight = 45;
-    public int attackBoundsWidth = 90;
     public int attackBoundsHeight= 45;
+    public int attackBoundsWidth = 90;
+    public int playerBoundsHeight = 45;
+    public int playerBoundsWidth = 22;
+    public Rectangle attackBounds; 
+    public Rectangle playerBounds;
 
 
     // Jump
