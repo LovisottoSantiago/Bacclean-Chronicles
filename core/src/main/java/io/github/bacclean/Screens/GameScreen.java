@@ -86,8 +86,7 @@ public class GameScreen implements Screen {
             "sprites_player/charles_walk.png", 8, 1,
             "sprites_player/charles_attack.png", 10, 1,
             "sprites_player/charles_jump.png", 3, 1,
-            "sprites_player/charles_fall.png", 5, 1,
-            "sprites_player/charles_item.png", 10, 1);
+            "sprites_player/charles_fall.png", 5, 1);
 
         baccleanPlayer.setSize(160, 160);
         baccleanPlayer.setPosition(2500, 150); 
@@ -203,16 +202,12 @@ public class GameScreen implements Screen {
             if (baccleanPlayer.playerBounds.overlaps(item.getBounds())) {
                 item.itemLifeEffect(baccleanPlayer); 
                 Gdx.app.log("NICE", "life increased, current life: " + baccleanPlayer.maxLife);
-                baccleanPlayer.playerState = Player.PlayerState.GET_ITEM;
-
                 item.dispose();
                 items.remove(i); 
                 i--;
             }
         }
-
     }
-
     
 
     private void updateCamera() {
