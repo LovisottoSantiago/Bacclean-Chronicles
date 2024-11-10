@@ -13,7 +13,7 @@ import com.badlogic.gdx.math.Rectangle;
 import io.github.bacclean.Controllers.AnimationController;
 import io.github.bacclean.Controllers.GuiController;
 import io.github.bacclean.Controllers.SoundController;
-import io.github.bacclean.Entities.Enemy.EnemyState;
+import io.github.bacclean.Entities.Skeleton.EnemyState;
 import io.github.bacclean.Entities.Player.PlayerState;
 
 
@@ -252,7 +252,7 @@ public class Player extends Sprite {
                 enemyHurtSound.setVolume(soundId, 0.8f);                 
             }
 
-            Enemy.enemyState = EnemyState.HIT;
+            Skeleton.enemyState = EnemyState.HIT;
             enemyDamaged = true; // Mark as damaged
 
         }

@@ -10,10 +10,10 @@ import com.badlogic.gdx.math.Rectangle;
 
 import io.github.bacclean.Controllers.AnimationController;
 import io.github.bacclean.Controllers.GuiController;
-import io.github.bacclean.Entities.Enemy.EnemyState;
+import io.github.bacclean.Entities.Skeleton.EnemyState;
 
 @SuppressWarnings("unused")
-public class Enemy extends Sprite{
+public class Skeleton extends Sprite{
     private float stateTime;
     private final SpriteBatch spriteBatch;
     private final GuiController gui;
@@ -48,7 +48,7 @@ public class Enemy extends Sprite{
         IDLE, HIT, WALKING, DEATH
     }
 
-    public Enemy (
+    public Skeleton (
         String idleSheetPath, int columnsIdleSheet, int rowsIdleSheet,
         String hitSheetPath, int columnsHitSheet, int rowsHitSheet,
         String deathSheetPath, int columnsDeathSheet, int rowsDeathSheet
@@ -65,7 +65,7 @@ public class Enemy extends Sprite{
         this.gui = new GuiController();
         this.stateTime = 0f;
         enemyLife = maxEnemyLife;
-        Enemy.enemyState = EnemyState.IDLE;    
+        Skeleton.enemyState = EnemyState.IDLE;    
 
         enemyBounds = new Rectangle(getX() + (getWidth() - enemyBoundsWidth) / 2, getY() + (getHeight() - enemyBoundsHeight) / 2, enemyBoundsWidth, enemyBoundsHeight);
 
@@ -124,8 +124,7 @@ public class Enemy extends Sprite{
     
         return getCurrentAnimation().getKeyFrame(stateTime, true);
     }
-    
-    
+
     
 
     private Animation<TextureRegion> getCurrentAnimation() {
@@ -140,8 +139,6 @@ public class Enemy extends Sprite{
                 return idleAnimation;
         }
     }
-
-
         
     
     public void dispose() {
