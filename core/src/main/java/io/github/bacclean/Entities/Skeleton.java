@@ -40,6 +40,14 @@ public class Skeleton extends Sprite{
     public int enemyBoundsWidth = 22;
     public int enemyBoundsHeight = 54;
 
+    
+    // Gravity fields
+    public final float jumpVelocity = 150f; 
+    public final float gravity = -98f;  
+    public float verticalVelocity = 0; 
+    public float groundValue;
+    public boolean isFloating = true;
+
 
     public static EnemyState enemyState;
     public EnemyState previousState = EnemyState.IDLE;
@@ -74,6 +82,36 @@ public class Skeleton extends Sprite{
     public void updateEnemyBounds(){
         enemyBounds.setPosition(getX() + (getWidth() - enemyBoundsWidth) / 2, getY());
     }
+
+
+    public void applyGravity(float deltaTime) {
+        if (isFloating) {
+            verticalVelocity += gravity * deltaTime;
+            setPosition(getX(), getY() + verticalVelocity * deltaTime);
+        }
+    }
+
+    public void checkGroundCollision(java.util.List<com.badlogic.gdx.math.Rectangle> groundTileRectangles) {        
+        isFloating = true; 
+        for (Rectangle tile : groundTileRectangles) {
+            if (enemyBounds.overlaps(tile)) {
+                // Check if landing on the top of the tile
+                if (enemyBounds.y > tile.getY() && enemyBounds.y <= tile.getY() + tile.getHeight() && verticalVelocity < 0) {
+                    setPosition(getX(), tile.getY() + tile.getHeight());
+                    groundValue = tile.getY() + tile.getHeight();
+                    verticalVelocity = 0;
+                    isFloating = false;
+                    return;
+                }
+            } 
+        }
+        int leftLimit = 1000;
+        if (enemyBounds.x < leftLimit) {
+            setPosition(leftLimit, getY());
+            enemyState = EnemyState.IDLE;
+        }
+    }
+
 
     public void reduceLife(float amount) {
         if (enemyState != EnemyState.DEATH) {
@@ -140,6 +178,12 @@ public class Skeleton extends Sprite{
         }
     }
         
+
+    public void update(float deltaTime, java.util.List<com.badlogic.gdx.math.Rectangle> groundTileRectangles) {
+        applyGravity(deltaTime); // Apply gravity each frame
+        checkGroundCollision(groundTileRectangles); // Check for ground collision
+        updateEnemyBounds(); // Update collision bounds
+    }
     
     public void dispose() {
         idleSheet.dispose();

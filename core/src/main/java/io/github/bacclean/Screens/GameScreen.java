@@ -30,9 +30,9 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import io.github.bacclean.Controllers.LightsController;
 import io.github.bacclean.Controllers.MusicController;
 import io.github.bacclean.Controllers.SoundController;
-import io.github.bacclean.Entities.Skeleton;
 import io.github.bacclean.Entities.Fernet;
 import io.github.bacclean.Entities.Player;
+import io.github.bacclean.Entities.Skeleton;
 import io.github.bacclean.Main;
 
 
@@ -226,7 +226,7 @@ public class GameScreen implements Screen {
                     getItemSound = soundController.getItemSound();
                 if (getItemSound != null) {
                     getItemSound.play();
-                    getItemSound.setVolume(2, 1f);
+                    getItemSound.setVolume(6, 1.0f);
                 }
                 item.dispose();
                 items.remove(i); 
@@ -265,6 +265,7 @@ public class GameScreen implements Screen {
         spriteBatch.draw(enemyFrame, skeleton.getX(), skeleton.getY(),
                 skeleton.getWidth(), skeleton.getHeight());              
         skeleton.updateEnemyBounds();  
+        skeleton.update(Gdx.graphics.getDeltaTime(), groundTileRectangles);
         
         // Render items
         for (Fernet item : items) {
