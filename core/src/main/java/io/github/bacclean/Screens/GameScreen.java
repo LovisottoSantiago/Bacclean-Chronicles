@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -28,6 +29,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 import io.github.bacclean.Controllers.LightsController;
 import io.github.bacclean.Controllers.MusicController;
+import io.github.bacclean.Controllers.SoundController;
 import io.github.bacclean.Entities.Skeleton;
 import io.github.bacclean.Entities.Fernet;
 import io.github.bacclean.Entities.Player;
@@ -70,153 +72,162 @@ public class GameScreen implements Screen {
 
     // Items
     private final List<Fernet> items = new ArrayList<>();
-    
 
-    public GameScreen(Main game, OrthographicCamera camera, ExtendViewport extendViewport) {
-        this.camera = camera;
-        this.extendViewport = extendViewport;
-        this.camera.zoom = 0.65f;
-    }
-
-    @Override
-    public void show() {
-        spriteBatch = new SpriteBatch();
-
-        baccleanPlayer = new Player(
-            "sprites_player/charles_idle.png", 6, 1,
-            "sprites_player/charles_walk.png", 8, 1,
-            "sprites_player/charles_attack.png", 10, 1,
-            "sprites_player/charles_jump.png", 3, 1,
-            "sprites_player/charles_fall.png", 5, 1);
-
-        baccleanPlayer.setSize(160, 160);
-        baccleanPlayer.setPosition(2500, 150); 
-
-
-        loadMap();
-
-        // Initialize ShapeRenderers
-        playerBoundRender = new ShapeRenderer();
-        attackBoundRender = new ShapeRenderer();
-        groundBoundRender = new ShapeRenderer();
-        enemyBoundRender = new ShapeRenderer();
-        fernetBoundRender = new ShapeRenderer();
-
-        // Change cursor
-        Gdx.input.setCursorCatched(false);
-        Pixmap cursorTexture = new Pixmap(Gdx.files.internal("ui/cursor.png"));
-        customCursor = Gdx.graphics.newCursor(cursorTexture, 0, 0);         
-        Gdx.graphics.setCursor(customCursor);
-
-        // Lights
-        lights = new LightsController(camera);
-
-        // Music
-        musicController = new MusicController();
-        musicController.playRandomMusic();
-    }
-
-    private void loadMap() {
-        TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());
-        map = mapLoader.load("maps/map-1.tmx");
-
-        mapRenderer = new OrthogonalTiledMapRenderer(map, spriteBatch);
-        mapRenderer.setView(camera);
-
-        groundtileLayer = (TiledMapTileLayer) map.getLayers().get("ground");
-        loadGroundTileRectangles(); // Load rectangles for collision detection
-
-        // get enemies
-        MapLayer spawn = map.getLayers().get("spawn_layer");
-        MapObjects objects = spawn.getObjects();
-        for (MapObject object : objects) {
-            if ("Skeleton".equals(object.getName()) || 
-                "Enemy".equals(object.getProperties().get("type", String.class))) {
-                
-                // Get the spawn position
-                float x = (Float) object.getProperties().get("x");
-                float y = (Float) object.getProperties().get("y");
-
-                skeleton = new Skeleton("enemies/skeleton/idle.png", 4, 1, "enemies/skeleton/hit-blood.png", 4, 1, "enemies/skeleton/death.png", 4, 1);
-                skeleton.setSize(73, 54);
-                skeleton.setPosition(x, y);
-            }
-        }
-
-        // get objects
-        MapLayer objectLayer = map.getLayers().get("items_layer");
-            if (objectLayer != null) {
-                for (MapObject object : objectLayer.getObjects()) {
-                    if (object instanceof TextureMapObject) {
-                        TextureMapObject textureObject = (TextureMapObject) object;
-                        String texturePath = textureObject.getTextureRegion().getTexture().toString(); // Adjust as needed
-                        float x = textureObject.getX();
-                        float y = textureObject.getY();
-                        Fernet item = new Fernet(texturePath, x, y);
-                        items.add(item);
-                    }
-                }
-            } else {
-                Gdx.app.error("GameScreen", "Object layer not found!");
-            }
-
-    }
-
-
-
-    private void loadGroundTileRectangles() {
-        if (groundtileLayer != null) {
-            for (int tileY = 0; tileY < groundtileLayer.getHeight(); tileY++) {
-                for (int tileX = 0; tileX < groundtileLayer.getWidth(); tileX++) {
-                    // Get the tile at the current position
-                    TiledMapTileLayer.Cell currentCell = groundtileLayer.getCell(tileX, tileY);
-
-                    if (currentCell != null) {
-                        // Calculate the position and size of the tile
-                        float tileWidth = groundtileLayer.getTileWidth();
-                        float tileHeight = groundtileLayer.getTileHeight();
-                        float positionX = tileX * tileWidth;
-                        float positionY = tileY * tileHeight;
-
-                        // Add the rectangle to the list for collision detection
-                        groundTileRectangles.add(new Rectangle(positionX, positionY, tileWidth, tileHeight));
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
-    public void render(float delta) {        
-        handleInput();
-        handlePlayerCollision();
-        updateCamera();
-        drawScene();
-        lights.update(baccleanPlayer.playerBounds.x + (baccleanPlayer.playerBounds.width / 2), baccleanPlayer.getY());
-        lights.render(camera);
-        renderUI();
-    }
-
-    private void handleInput() {
-        float delta = Gdx.graphics.getDeltaTime();
-        baccleanPlayer.playerMove(delta);
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
-            showBounds = !showBounds; // Toggle the boolean flag
-        }
-    }
+    // Sound controller
+    private final SoundController soundController = new SoundController();
+    private Sound getItemSound;
         
-
-    private void handlePlayerCollision() {
-        baccleanPlayer.checkGroundCollision(groundTileRectangles);
-        baccleanPlayer.damageEnemy(skeleton.enemyBounds);
-
-        for (int i = 0; i < items.size(); i++) {
-            Fernet item = items.get(i);
+    
+        public GameScreen(Main game, OrthographicCamera camera, ExtendViewport extendViewport) {
+            this.camera = camera;
+            this.extendViewport = extendViewport;
+            this.camera.zoom = 0.65f;
+        }
+    
+        @Override
+        public void show() {
+            spriteBatch = new SpriteBatch();
+    
+            baccleanPlayer = new Player(
+                "sprites_player/charles_idle.png", 6, 1,
+                "sprites_player/charles_walk.png", 8, 1,
+                "sprites_player/charles_attack.png", 10, 1,
+                "sprites_player/charles_jump.png", 3, 1,
+                "sprites_player/charles_fall.png", 5, 1);
+    
+            baccleanPlayer.setSize(160, 160);
+            baccleanPlayer.setPosition(2500, 150); 
+    
+    
+            loadMap();
+    
+            // Initialize ShapeRenderers
+            playerBoundRender = new ShapeRenderer();
+            attackBoundRender = new ShapeRenderer();
+            groundBoundRender = new ShapeRenderer();
+            enemyBoundRender = new ShapeRenderer();
+            fernetBoundRender = new ShapeRenderer();
+    
+            // Change cursor
+            Gdx.input.setCursorCatched(false);
+            Pixmap cursorTexture = new Pixmap(Gdx.files.internal("ui/cursor.png"));
+            customCursor = Gdx.graphics.newCursor(cursorTexture, 0, 0);         
+            Gdx.graphics.setCursor(customCursor);
+    
+            // Lights
+            lights = new LightsController(camera);
+    
+            // Music
+            musicController = new MusicController();
+            musicController.playRandomMusic();
+        }
+    
+        private void loadMap() {
+            TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());
+            map = mapLoader.load("maps/map-1.tmx");
+    
+            mapRenderer = new OrthogonalTiledMapRenderer(map, spriteBatch);
+            mapRenderer.setView(camera);
+    
+            groundtileLayer = (TiledMapTileLayer) map.getLayers().get("ground");
+            loadGroundTileRectangles(); // Load rectangles for collision detection
+    
+            // get enemies
+            MapLayer spawn = map.getLayers().get("spawn_layer");
+            MapObjects objects = spawn.getObjects();
+            for (MapObject object : objects) {
+                if ("Skeleton".equals(object.getName()) || 
+                    "Enemy".equals(object.getProperties().get("type", String.class))) {
+                    
+                    // Get the spawn position
+                    float x = (Float) object.getProperties().get("x");
+                    float y = (Float) object.getProperties().get("y");
+    
+                    skeleton = new Skeleton("enemies/skeleton/idle.png", 4, 1, "enemies/skeleton/hit-blood.png", 4, 1, "enemies/skeleton/death.png", 4, 1);
+                    skeleton.setSize(73, 54);
+                    skeleton.setPosition(x, y);
+                }
+            }
+    
+            // get objects
+            MapLayer objectLayer = map.getLayers().get("items_layer");
+                if (objectLayer != null) {
+                    for (MapObject object : objectLayer.getObjects()) {
+                        if (object instanceof TextureMapObject) {
+                            TextureMapObject textureObject = (TextureMapObject) object;
+                            String texturePath = textureObject.getTextureRegion().getTexture().toString(); // Adjust as needed
+                            float x = textureObject.getX();
+                            float y = textureObject.getY();
+                            Fernet item = new Fernet(texturePath, x, y);
+                            items.add(item);
+                        }
+                    }
+                } else {
+                    Gdx.app.error("GameScreen", "Object layer not found!");
+                }
+    
+        }
+    
+    
+    
+        private void loadGroundTileRectangles() {
+            if (groundtileLayer != null) {
+                for (int tileY = 0; tileY < groundtileLayer.getHeight(); tileY++) {
+                    for (int tileX = 0; tileX < groundtileLayer.getWidth(); tileX++) {
+                        // Get the tile at the current position
+                        TiledMapTileLayer.Cell currentCell = groundtileLayer.getCell(tileX, tileY);
+    
+                        if (currentCell != null) {
+                            // Calculate the position and size of the tile
+                            float tileWidth = groundtileLayer.getTileWidth();
+                            float tileHeight = groundtileLayer.getTileHeight();
+                            float positionX = tileX * tileWidth;
+                            float positionY = tileY * tileHeight;
+    
+                            // Add the rectangle to the list for collision detection
+                            groundTileRectangles.add(new Rectangle(positionX, positionY, tileWidth, tileHeight));
+                        }
+                    }
+                }
+            }
+        }
+    
+        @Override
+        public void render(float delta) {        
+            handleInput();
+            handlePlayerCollision();
+            updateCamera();
+            drawScene();
+            lights.update(baccleanPlayer.playerBounds.x + (baccleanPlayer.playerBounds.width / 2), baccleanPlayer.getY());
+            lights.render(camera);
+            renderUI();
+        }
+    
+        private void handleInput() {
+            float delta = Gdx.graphics.getDeltaTime();
+            baccleanPlayer.playerMove(delta);
+    
+            if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+                showBounds = !showBounds; // Toggle the boolean flag
+            }
+        }
             
-            if (baccleanPlayer.playerBounds.overlaps(item.getBounds())) {
-                item.itemLifeEffect(baccleanPlayer); 
-                Gdx.app.log("NICE", "life increased, current life: " + baccleanPlayer.maxLife);
+    
+        private void handlePlayerCollision() {
+            baccleanPlayer.checkGroundCollision(groundTileRectangles);
+            baccleanPlayer.damageEnemy(skeleton.enemyBounds);
+    
+            for (int i = 0; i < items.size(); i++) {
+                Fernet item = items.get(i);
+                
+                if (baccleanPlayer.playerBounds.overlaps(item.getBounds())) {
+                    item.itemLifeEffect(baccleanPlayer); 
+                    Gdx.app.log("NICE", "life increased, current life: " + baccleanPlayer.maxLife);
+                    getItemSound = soundController.getItemSound();
+                if (getItemSound != null) {
+                    getItemSound.play();
+                    getItemSound.setVolume(2, 1f);
+                }
                 item.dispose();
                 items.remove(i); 
                 i--;
@@ -368,6 +379,6 @@ public class GameScreen implements Screen {
         lights.dispose();
         musicController.dispose();
         skeleton.dispose();
-
+        soundController.dispose();
     }
 }

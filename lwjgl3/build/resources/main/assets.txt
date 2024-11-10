@@ -24,6 +24,9 @@ fonts/PatuaOne.fnt
 fonts/PatuaOne.png
 fonts/TooMuchInk.fnt
 fonts/TooMuchInk.png
+getItemsSounds/audio1.mp3
+getItemsSounds/audio2.mp3
+getItemsSounds/audio3.mp3
 gothic_assets/PNG/Environment/background.png
 gothic_assets/PNG/Environment/graveyard.png
 gothic_assets/PNG/Environment/mountains.png

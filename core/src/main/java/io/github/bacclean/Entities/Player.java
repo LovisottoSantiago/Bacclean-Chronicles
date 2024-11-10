@@ -234,7 +234,7 @@ public class Player extends Sprite {
             attackSound = playerSounds.getAttackSound();
             if (attackSound != null) {
                 attackSound.play();
-                attackSound.setVolume(2, 0.8f);
+                attackSound.setVolume(2, 1f);
             }
 
         } else {

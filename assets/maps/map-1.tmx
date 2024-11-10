@@ -238,11 +238,11 @@
 </data>
  </layer>
  <objectgroup id="9" name="items_layer">
-  <object id="15" name="Fernet" type="Fernet" gid="769" x="3158.5" y="736.125" width="16" height="25"/>
-  <object id="16" name="Fernet" type="Fernet" gid="769" x="3286.5" y="653.125" width="16" height="25"/>
+  <object id="15" name="Fernet" type="Item" gid="769" x="3158.5" y="736.125" width="16" height="25"/>
+  <object id="16" name="Fernet" type="Item" gid="769" x="3286.5" y="653.125" width="16" height="25"/>
  </objectgroup>
  <objectgroup id="10" name="spawn_layer">
-  <object id="17" name="Skeleton" type="Enemy" x="3639" y="719"/>
+  <object id="17" name="Skeleton" type="Enemy" x="3639.25" y="726.75"/>
  </objectgroup>
  <layer id="5" name="just_grass" width="430" height="50">
   <data encoding="csv">
