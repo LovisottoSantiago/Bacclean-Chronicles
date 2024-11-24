@@ -68,7 +68,7 @@ public class GameScreen implements Screen {
     private MusicController musicController;
 
     // Enemies
-    private Skeleton skeleton;
+    private final List<Skeleton> skeletons = new ArrayList<>();
 
     // Items
     private final List<Fernet> items = new ArrayList<>();
@@ -136,16 +136,14 @@ public class GameScreen implements Screen {
             MapLayer spawn = map.getLayers().get("spawn_layer");
             MapObjects objects = spawn.getObjects();
             for (MapObject object : objects) {
-                if ("Skeleton".equals(object.getName()) || 
-                    "Enemy".equals(object.getProperties().get("type", String.class))) {
-                    
-                    // Get the spawn position
+                if ("Skeleton".equals(object.getName()) || "Enemy".equals(object.getProperties().get("type", String.class))) {
                     float x = (Float) object.getProperties().get("x");
                     float y = (Float) object.getProperties().get("y");
-    
-                    skeleton = new Skeleton("enemies/skeleton/idle.png", 4, 1, "enemies/skeleton/hit-blood.png", 4, 1, "enemies/skeleton/death.png", 4, 1);
+        
+                    Skeleton skeleton = new Skeleton("enemies/skeleton/idle.png", 4, 1, "enemies/skeleton/hit-blood.png", 4, 1, "enemies/skeleton/death.png", 4, 1);
                     skeleton.setSize(73, 54);
                     skeleton.setPosition(x, y);
+                    skeletons.add(skeleton);
                 }
             }
     
@@ -215,25 +213,35 @@ public class GameScreen implements Screen {
     
         private void handlePlayerCollision() {
             baccleanPlayer.checkGroundCollision(groundTileRectangles);
-            baccleanPlayer.damageEnemy(skeleton.enemyBounds);
-    
+        
+            for (int i = 0; i < skeletons.size(); i++) {
+                Skeleton skeleton = skeletons.get(i); 
+                if (baccleanPlayer.attackBounds.overlaps(skeleton.enemyBounds)) {
+
+                        baccleanPlayer.damageEnemy(skeleton.enemyBounds);
+                }
+            }
+        
             for (int i = 0; i < items.size(); i++) {
                 Fernet item = items.get(i);
-                
+        
                 if (baccleanPlayer.playerBounds.overlaps(item.getBounds())) {
-                    item.itemLifeEffect(baccleanPlayer); 
+                    item.itemLifeEffect(baccleanPlayer);
                     Gdx.app.log("NICE", "life increased, current life: " + baccleanPlayer.maxLife);
+        
                     getItemSound = soundController.getItemSound();
-                if (getItemSound != null) {
-                    getItemSound.play();
-                    getItemSound.setVolume(6, 1.0f);
+                    if (getItemSound != null) {
+                        long soundId = getItemSound.play();
+                        getItemSound.setVolume(soundId, 1.0f); 
+                    }
+
+                    item.dispose();
+                    items.remove(i);
+                    i--;
                 }
-                item.dispose();
-                items.remove(i); 
-                i--;
             }
         }
-    }
+        
     
 
     private void updateCamera() {
@@ -261,12 +269,14 @@ public class GameScreen implements Screen {
                 baccleanPlayer.getWidth(), baccleanPlayer.getHeight());
         
         // Enemy
-        TextureRegion enemyFrame = skeleton.getCurrentFrame(baccleanPlayer.attackBounds.getX(), baccleanPlayer.playerPower); 
-        spriteBatch.draw(enemyFrame, skeleton.getX(), skeleton.getY(),
-                skeleton.getWidth(), skeleton.getHeight());              
-        skeleton.updateEnemyBounds();  
-        skeleton.update(Gdx.graphics.getDeltaTime(), groundTileRectangles);
-        
+        for (Skeleton skeleton : skeletons) {
+            TextureRegion enemyFrame = skeleton.getCurrentFrame(baccleanPlayer.attackBounds.getX(), baccleanPlayer.playerPower);
+            spriteBatch.draw(enemyFrame, skeleton.getX(), skeleton.getY(),
+                    skeleton.getWidth(), skeleton.getHeight());
+            skeleton.updateEnemyBounds();
+            skeleton.update(Gdx.graphics.getDeltaTime(), groundTileRectangles);
+        }
+
         // Render items
         for (Fernet item : items) {
             item.draw(spriteBatch); // Draw each item
@@ -321,15 +331,19 @@ public class GameScreen implements Screen {
     }
 
     private void renderEnemyBounds() {
-        // Movement bounds
         enemyBoundRender.setProjectionMatrix(camera.combined);
         enemyBoundRender.begin(ShapeRenderer.ShapeType.Line);
         enemyBoundRender.setColor(Color.RED);
-        enemyBoundRender.rect(
+    
+        // Render each skeleton’s bounds
+        for (Skeleton skeleton : skeletons) {
+            enemyBoundRender.rect(
                 skeleton.enemyBounds.x,
                 skeleton.enemyBounds.y,
                 skeleton.enemyBounds.width,
                 skeleton.enemyBounds.height);
+        }
+    
         enemyBoundRender.end();
     }
 
@@ -379,7 +393,9 @@ public class GameScreen implements Screen {
         customCursor.dispose();
         lights.dispose();
         musicController.dispose();
-        skeleton.dispose();
+        for (Skeleton skeleton : skeletons) {
+            skeleton.dispose();
+        }
         soundController.dispose();
     }
 }
