@@ -125,8 +125,6 @@ gothic_assets/PSD/sprites/hero/hero-run.psd
 gothic_assets/PSD/sprites/skeleton-rise.psd
 gothic_assets/PSD/sprites/skeleton.psd
 gothic_assets/public-license.txt
-hs_err_pid14200.log
-hs_err_pid1636.log
 intro/background.png
 intro/intro.ogg
 intro/intro_lovi.ogg

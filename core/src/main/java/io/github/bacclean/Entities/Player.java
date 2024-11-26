@@ -13,8 +13,8 @@ import com.badlogic.gdx.math.Rectangle;
 import io.github.bacclean.Controllers.AnimationController;
 import io.github.bacclean.Controllers.GuiController;
 import io.github.bacclean.Controllers.SoundController;
-import io.github.bacclean.Entities.Skeleton.EnemyState;
 import io.github.bacclean.Entities.Player.PlayerState;
+import io.github.bacclean.Entities.Skeleton.EnemyState;
 
 
 
