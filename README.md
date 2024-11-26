@@ -1,5 +1,3 @@
-# Bacclean-Chronicles
-¡Las aventuras de Bacclean!
 =======
 # BaccleanChronicles
 - Credits:
@@ -9,6 +7,13 @@
 - Music = https://davidkbd.itch.io/
 
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+
+![image](https://github.com/user-attachments/assets/44970730-45b5-47a2-858c-a9aedf7b9892)
+![image](https://github.com/user-attachments/assets/b90115d7-5606-42d3-82be-81e688f39ade)
+
+
+
+
 
 This project was generated with a template including simple application launchers and a main class extending `Game` that sets the first screen.
 
