@@ -1,4 +1,3 @@
-=======
 # BaccleanChronicles
 - Credits:
 - Player = https://atari-boy.itch.io/oldherocharacter
