@@ -10,10 +10,10 @@ import com.badlogic.gdx.math.Rectangle;
 
 import io.github.bacclean.Controllers.AnimationController;
 import io.github.bacclean.Controllers.GuiController;
-import io.github.bacclean.Entities.Skeleton.EnemyState;
+import io.github.bacclean.Entities.NormalEnemy.EnemyState;
 
 @SuppressWarnings("unused")
-public class Skeleton extends Sprite{
+public class NormalEnemy extends Sprite{
     private float stateTime;
     private final SpriteBatch spriteBatch;
     private final GuiController gui;
@@ -56,7 +56,7 @@ public class Skeleton extends Sprite{
         IDLE, HIT, WALKING, DEATH
     }
 
-    public Skeleton (
+    public NormalEnemy (
         String idleSheetPath, int columnsIdleSheet, int rowsIdleSheet,
         String hitSheetPath, int columnsHitSheet, int rowsHitSheet,
         String deathSheetPath, int columnsDeathSheet, int rowsDeathSheet
@@ -73,7 +73,7 @@ public class Skeleton extends Sprite{
         this.gui = new GuiController();
         this.stateTime = 0f;
         enemyLife = maxEnemyLife;
-        Skeleton.enemyState = EnemyState.IDLE;    
+        NormalEnemy.enemyState = EnemyState.IDLE;    
 
         enemyBounds = new Rectangle(getX() + (getWidth() - enemyBoundsWidth) / 2, getY() + (getHeight() - enemyBoundsHeight) / 2, enemyBoundsWidth, enemyBoundsHeight);
 

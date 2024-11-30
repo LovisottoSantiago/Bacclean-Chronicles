@@ -32,7 +32,7 @@ import io.github.bacclean.Controllers.MusicController;
 import io.github.bacclean.Controllers.SoundController;
 import io.github.bacclean.Entities.Fernet;
 import io.github.bacclean.Entities.Player;
-import io.github.bacclean.Entities.Skeleton;
+import io.github.bacclean.Entities.NormalEnemy;
 import io.github.bacclean.Main;
 
 
@@ -68,7 +68,7 @@ public class GameScreen implements Screen {
     private MusicController musicController;
 
     // Enemies
-    private final List<Skeleton> skeletons = new ArrayList<>();
+    private final List<NormalEnemy> skeletons = new ArrayList<>();
 
     // Items
     private final List<Fernet> items = new ArrayList<>();
@@ -140,7 +140,7 @@ public class GameScreen implements Screen {
                     float x = (Float) object.getProperties().get("x");
                     float y = (Float) object.getProperties().get("y");
         
-                    Skeleton skeleton = new Skeleton("enemies/skeleton/idle.png", 4, 1, "enemies/skeleton/hit-blood.png", 4, 1, "enemies/skeleton/death.png", 4, 1);
+                    NormalEnemy skeleton = new NormalEnemy("enemies/skeleton/idle.png", 4, 1, "enemies/skeleton/hit-blood.png", 4, 1, "enemies/skeleton/death.png", 4, 1);
                     skeleton.setSize(73, 54);
                     skeleton.setPosition(x, y);
                     skeletons.add(skeleton);
@@ -215,7 +215,7 @@ public class GameScreen implements Screen {
             baccleanPlayer.checkGroundCollision(groundTileRectangles);
         
             for (int i = 0; i < skeletons.size(); i++) {
-                Skeleton skeleton = skeletons.get(i); 
+                NormalEnemy skeleton = skeletons.get(i); 
                 if (baccleanPlayer.attackBounds.overlaps(skeleton.enemyBounds)) {
 
                         baccleanPlayer.damageEnemy(skeleton.enemyBounds);
@@ -269,7 +269,7 @@ public class GameScreen implements Screen {
                 baccleanPlayer.getWidth(), baccleanPlayer.getHeight());
         
         // Enemy
-        for (Skeleton skeleton : skeletons) {
+        for (NormalEnemy skeleton : skeletons) {
             TextureRegion enemyFrame = skeleton.getCurrentFrame(baccleanPlayer.attackBounds.getX(), baccleanPlayer.playerPower);
             spriteBatch.draw(enemyFrame, skeleton.getX(), skeleton.getY(),
                     skeleton.getWidth(), skeleton.getHeight());
@@ -336,7 +336,7 @@ public class GameScreen implements Screen {
         enemyBoundRender.setColor(Color.RED);
     
         // Render each skeleton’s bounds
-        for (Skeleton skeleton : skeletons) {
+        for (NormalEnemy skeleton : skeletons) {
             enemyBoundRender.rect(
                 skeleton.enemyBounds.x,
                 skeleton.enemyBounds.y,
@@ -393,7 +393,7 @@ public class GameScreen implements Screen {
         customCursor.dispose();
         lights.dispose();
         musicController.dispose();
-        for (Skeleton skeleton : skeletons) {
+        for (NormalEnemy skeleton : skeletons) {
             skeleton.dispose();
         }
         soundController.dispose();

@@ -14,7 +14,7 @@ import io.github.bacclean.Controllers.AnimationController;
 import io.github.bacclean.Controllers.GuiController;
 import io.github.bacclean.Controllers.SoundController;
 import io.github.bacclean.Entities.Player.PlayerState;
-import io.github.bacclean.Entities.Skeleton.EnemyState;
+import io.github.bacclean.Entities.NormalEnemy.EnemyState;
 
 
 
@@ -252,7 +252,7 @@ public class Player extends Sprite {
                 enemyHurtSound.setVolume(soundId, 0.8f);                 
             }
 
-            Skeleton.enemyState = EnemyState.HIT;
+            NormalEnemy.enemyState = EnemyState.HIT;
             enemyDamaged = true; // Mark as damaged
 
         }
