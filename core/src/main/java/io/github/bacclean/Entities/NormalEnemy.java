@@ -30,8 +30,11 @@ public class NormalEnemy extends Sprite{
     private final Texture deathSheet;
 
     private final Animation<TextureRegion> idleAnimation;
+    private final Animation<TextureRegion> leftIdleAnimation;
     private final Animation<TextureRegion> hitAnimation;
+    private final Animation<TextureRegion> leftHitAnimation;
     private final Animation<TextureRegion> deathAnimation;
+    private final Animation<TextureRegion> leftDeathAnimation;
 
     private final float idleFrameDuration = 0.2f;
     private final float hitFrameDuration = 0.08f;
@@ -51,6 +54,8 @@ public class NormalEnemy extends Sprite{
     public boolean isFloating = true;
 
 
+    public boolean leftFlag;
+
     public EnemyState enemyState;
     public EnemyState previousState = EnemyState.IDLE;
 
@@ -68,8 +73,11 @@ public class NormalEnemy extends Sprite{
         this.deathSheet = new Texture(Gdx.files.internal(deathSheetPath));
 
         idleAnimation = AnimationController.createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, false);
+        leftIdleAnimation = AnimationController.createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, true);
         hitAnimation = AnimationController.createAnimation(hitSheetPath, columnsHitSheet, rowsHitSheet, hitFrameDuration, false);
+        leftHitAnimation = AnimationController.createAnimation(hitSheetPath, columnsHitSheet, rowsHitSheet, hitFrameDuration, true);
         deathAnimation = AnimationController.createAnimation(deathSheetPath, columnsDeathSheet, rowsDeathSheet, deathFrameDuration, false);
+        leftDeathAnimation = AnimationController.createAnimation(deathSheetPath, columnsDeathSheet, rowsDeathSheet, deathFrameDuration, true);
     
         this.spriteBatch = new SpriteBatch();
         this.gui = new GuiController();
@@ -170,13 +178,13 @@ public class NormalEnemy extends Sprite{
     private Animation<TextureRegion> getCurrentAnimation() {
         switch (enemyState) {
             case WALKING:
-                return idleAnimation;
+                return leftFlag ? leftIdleAnimation : idleAnimation;
             case HIT:
-                return hitAnimation;
+                return leftFlag ? leftHitAnimation : hitAnimation;
             case DEATH:
-                return deathAnimation;
+                return leftFlag ? leftDeathAnimation : deathAnimation;
             default:
-                return idleAnimation;
+                return leftFlag ? leftIdleAnimation : idleAnimation;
         }
     }
         
