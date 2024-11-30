@@ -213,12 +213,11 @@ public class GameScreen implements Screen {
     
         private void handlePlayerCollision() {
             baccleanPlayer.checkGroundCollision(groundTileRectangles);
-        
-            for (int i = 0; i < skeletons.size(); i++) {
-                NormalEnemy skeleton = skeletons.get(i); 
-                if (baccleanPlayer.attackBounds.overlaps(skeleton.enemyBounds)) {
 
-                        baccleanPlayer.damageEnemy(skeleton.enemyBounds);
+            //! attack logic
+            for (NormalEnemy skeleton : skeletons) {
+                if (baccleanPlayer.attackBounds.overlaps(skeleton.enemyBounds)) {
+                    baccleanPlayer.damageEnemy(skeleton); 
                 }
             }
         

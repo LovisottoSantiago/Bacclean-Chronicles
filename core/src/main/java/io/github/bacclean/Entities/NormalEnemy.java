@@ -49,10 +49,10 @@ public class NormalEnemy extends Sprite{
     public boolean isFloating = true;
 
 
-    public static EnemyState enemyState;
+    public EnemyState enemyState;
     public EnemyState previousState = EnemyState.IDLE;
 
-    public static enum EnemyState {
+    public enum EnemyState {
         IDLE, HIT, WALKING, DEATH
     }
 
@@ -73,7 +73,7 @@ public class NormalEnemy extends Sprite{
         this.gui = new GuiController();
         this.stateTime = 0f;
         enemyLife = maxEnemyLife;
-        NormalEnemy.enemyState = EnemyState.IDLE;    
+        this.enemyState = EnemyState.IDLE;    
 
         enemyBounds = new Rectangle(getX() + (getWidth() - enemyBoundsWidth) / 2, getY() + (getHeight() - enemyBoundsHeight) / 2, enemyBoundsWidth, enemyBoundsHeight);
 

@@ -243,26 +243,25 @@ public class Player extends Sprite {
     }
 
 
-    public void damageEnemy(Rectangle enemyBound) {
-        if (attackBounds.overlaps(enemyBound) && !enemyDamaged) {
+    public void damageEnemy(NormalEnemy enemy) {
+        if (attackBounds.overlaps(enemy.enemyBounds) && !enemyDamaged) {
             Gdx.app.log("Attack alert: ", "enemy has been damaged by player.");
             enemyHurtSound = enemySounds.getEnemyHurtSound();
             if (enemyHurtSound != null) {
                 long soundId = enemyHurtSound.play();
                 enemyHurtSound.setVolume(soundId, 0.8f);                 
             }
-
-            NormalEnemy.enemyState = EnemyState.HIT;
-            enemyDamaged = true; // Mark as damaged
-
+    
+            enemy.enemyState = EnemyState.HIT; 
+            enemy.reduceLife(playerPower);  
+            enemyDamaged = true;         
         }
-
-        // Reset the flag if there's no overlap, allowing damage again in the future
-        if (!attackBounds.overlaps(enemyBound)) {
+    
+        if (!attackBounds.overlaps(enemy.enemyBounds)) {
             enemyDamaged = false;
         }
     }
-
+    
 
     public boolean isJumping() {
         return playerState == PlayerState.JUMPING || playerState == PlayerState.FALLING;
