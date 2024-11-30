@@ -100,8 +100,6 @@ public class Player extends Sprite {
     Sound enemyHurtSound;
     public float playerPower = 20;
     
-    // Enemy
-    public boolean enemyDamaged = false; // Flag to track if the enemy is already damaged
     
 
     // Enum to define player states
@@ -244,23 +242,25 @@ public class Player extends Sprite {
 
 
     public void damageEnemy(NormalEnemy enemy) {
-        if (attackBounds.overlaps(enemy.enemyBounds) && !enemyDamaged) {
+        if (attackBounds.overlaps(enemy.enemyBounds) && !enemy.isDamaged && enemy.damageCooldown <= 0) {
             Gdx.app.log("Attack alert: ", "enemy has been damaged by player.");
+    
+            // Play the hurt sound
             enemyHurtSound = enemySounds.getEnemyHurtSound();
             if (enemyHurtSound != null) {
                 long soundId = enemyHurtSound.play();
                 enemyHurtSound.setVolume(soundId, 0.8f);                 
             }
     
-            enemy.enemyState = EnemyState.HIT; 
-            enemy.reduceLife(playerPower);  
-            enemyDamaged = true;         
-        }
+            enemy.enemyState = EnemyState.HIT;
+            enemy.reduceLife(playerPower);
     
-        if (!attackBounds.overlaps(enemy.enemyBounds)) {
-            enemyDamaged = false;
+            enemy.isDamaged = true;
+            enemy.damageCooldown = 1f; 
         }
     }
+    
+    
     
 
     public boolean isJumping() {

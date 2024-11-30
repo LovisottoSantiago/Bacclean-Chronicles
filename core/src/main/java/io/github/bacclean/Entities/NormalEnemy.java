@@ -1,5 +1,6 @@
 package io.github.bacclean.Entities;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -19,7 +20,8 @@ public class NormalEnemy extends Sprite{
     private final GuiController gui;
 
     private boolean hitDisplacementApplied = false;
-    private boolean isDamaged = false;
+    public boolean isDamaged = false;
+    public float damageCooldown = 0f;
     private float enemyLife;
     private final float maxEnemyLife = 100;
 
@@ -114,18 +116,18 @@ public class NormalEnemy extends Sprite{
 
 
     public void reduceLife(float amount) {
-        if (enemyState != EnemyState.DEATH) {
+        if (enemyState != EnemyState.DEATH) { 
             enemyLife -= amount;
-            if (enemyLife == 0) {
-                enemyState = EnemyState.DEATH; 
+    
+            if (enemyLife <= 0) {
+                enemyState = EnemyState.DEATH;
                 stateTime = 0; 
-            } 
-            else {
+            } else {
                 enemyState = EnemyState.HIT;
-                isDamaged = true;
             }
         }
     }
+    
         
     
     public TextureRegion getCurrentFrame(float playerX, float playerPower) {
@@ -180,6 +182,10 @@ public class NormalEnemy extends Sprite{
         
 
     public void update(float deltaTime, java.util.List<com.badlogic.gdx.math.Rectangle> groundTileRectangles) {
+        if (damageCooldown > 0) {
+            damageCooldown -= deltaTime; // Decrease the cooldown time
+        }
+        
         applyGravity(deltaTime); // Apply gravity each frame
         checkGroundCollision(groundTileRectangles); // Check for ground collision
         updateEnemyBounds(); // Update collision bounds
