@@ -31,8 +31,8 @@ import io.github.bacclean.Controllers.LightsController;
 import io.github.bacclean.Controllers.MusicController;
 import io.github.bacclean.Controllers.SoundController;
 import io.github.bacclean.Entities.Fernet;
-import io.github.bacclean.Entities.Player;
 import io.github.bacclean.Entities.NormalEnemy;
+import io.github.bacclean.Entities.Player;
 import io.github.bacclean.Main;
 
 
@@ -55,6 +55,7 @@ public class GameScreen implements Screen {
     private ShapeRenderer attackBoundRender;
     private ShapeRenderer groundBoundRender;
     private ShapeRenderer enemyBoundRender;
+    private ShapeRenderer enemyVisionRender;
     private ShapeRenderer fernetBoundRender;
     public boolean showBounds;
 
@@ -106,6 +107,7 @@ public class GameScreen implements Screen {
             attackBoundRender = new ShapeRenderer();
             groundBoundRender = new ShapeRenderer();
             enemyBoundRender = new ShapeRenderer();
+            enemyVisionRender = new ShapeRenderer();
             fernetBoundRender = new ShapeRenderer();
     
             // Change cursor
@@ -122,6 +124,9 @@ public class GameScreen implements Screen {
             musicController.playRandomMusic();
         }
     
+
+
+        //* PLAYER METHODS */
         private void loadMap() {
             TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());
             map = mapLoader.load("maps/map-1.tmx");
@@ -166,8 +171,7 @@ public class GameScreen implements Screen {
     
         }
     
-    
-    
+        
         private void loadGroundTileRectangles() {
             if (groundtileLayer != null) {
                 for (int tileY = 0; tileY < groundtileLayer.getHeight(); tileY++) {
@@ -214,13 +218,23 @@ public class GameScreen implements Screen {
         private void handlePlayerCollision() {
             baccleanPlayer.checkGroundCollision(groundTileRectangles);
 
+            enemyColission();
+        
+            itemCollision();
+        }
+        
+        
+        private void enemyColission(){
             //! attack logic
             for (NormalEnemy skeleton : skeletons) {
                 if (baccleanPlayer.attackBounds.overlaps(skeleton.enemyBounds)) {
                     baccleanPlayer.damageEnemy(skeleton); 
                 }
             }
-        
+        }
+
+
+        private void itemCollision(){
             for (int i = 0; i < items.size(); i++) {
                 Fernet item = items.get(i);
         
@@ -240,161 +254,181 @@ public class GameScreen implements Screen {
                 }
             }
         }
+
+
+        private void updateCamera() {
+            camera.position.set(
+                    baccleanPlayer.getX() + baccleanPlayer.getWidth() / 2,
+                    baccleanPlayer.getY() + 176,
+                    0);
+            camera.update();
+        }
+
+
+        private void drawScene() {
+            Color backgroundColor = new Color(0, 0, 34 / 255f, 1);
+            ScreenUtils.clear(backgroundColor);
+
+            // Render the map
+            mapRenderer.setView(camera);
+            mapRenderer.render();
+            // Render the player
+            spriteBatch.setProjectionMatrix(camera.combined);
+            spriteBatch.begin();
+
+            // Player
+            TextureRegion currentFrame = baccleanPlayer.getCurrentFrame();
+            spriteBatch.draw(currentFrame, baccleanPlayer.getX(), baccleanPlayer.getY(),
+                    baccleanPlayer.getWidth(), baccleanPlayer.getHeight());
+            
+            // Enemy
+            for (NormalEnemy skeleton : skeletons) {
+                TextureRegion enemyFrame = skeleton.getCurrentFrame(baccleanPlayer.attackBounds.getX(), baccleanPlayer.playerPower);
+                spriteBatch.draw(enemyFrame, skeleton.getX(), skeleton.getY(),
+                        skeleton.getWidth(), skeleton.getHeight());
+                skeleton.updateEnemyBounds();
+                skeleton.update(Gdx.graphics.getDeltaTime(), groundTileRectangles);
+            }
+
+            // Render items
+            for (Fernet item : items) {
+                item.draw(spriteBatch); // Draw each item
+            }
+            spriteBatch.end();
+
+            if (showBounds) {
+                renderPlayerBounds();
+                renderTileGroundBounds();
+                renderEnemyBounds();
+                renderFernetBounds();
+            }
+
+            
+        }
+
+
+        private void renderPlayerBounds() {
+            // Movement bounds
+            playerBoundRender.setProjectionMatrix(camera.combined);
+            playerBoundRender.begin(ShapeRenderer.ShapeType.Line);
+            playerBoundRender.setColor(Color.WHITE);
+            playerBoundRender.rect(
+                    baccleanPlayer.playerBounds.x,
+                    baccleanPlayer.playerBounds.y,
+                    baccleanPlayer.playerBounds.width,
+                    baccleanPlayer.playerBounds.height);
+            playerBoundRender.end();
+
+            // Attack bounds
+            attackBoundRender.setProjectionMatrix(camera.combined);
+            attackBoundRender.begin(ShapeRenderer.ShapeType.Line);
+            attackBoundRender.setColor(Color.YELLOW);
+            attackBoundRender.rect(
+                    baccleanPlayer.attackBounds.x,
+                    baccleanPlayer.attackBounds.y,
+                    baccleanPlayer.attackBounds.width,
+                    baccleanPlayer.attackBounds.height);
+            attackBoundRender.end();
+        }
+
+
+        private void renderTileGroundBounds() {
+            groundBoundRender.setProjectionMatrix(camera.combined);
+            groundBoundRender.begin(ShapeRenderer.ShapeType.Line);
+            groundBoundRender.setColor(Color.VIOLET); // Color for tile bounds
+
+            // Draw the rectangle for each tile
+            for (Rectangle tile : groundTileRectangles) {
+                groundBoundRender.rect(tile.x, tile.y, tile.width, tile.height);
+            }
+
+            groundBoundRender.end();
+        }
+
+
+        private void renderEnemyBounds() {
+            enemyBoundRender.setProjectionMatrix(camera.combined);
+            enemyBoundRender.begin(ShapeRenderer.ShapeType.Line);
+            enemyBoundRender.setColor(Color.RED);
         
-    
-
-    private void updateCamera() {
-        camera.position.set(
-                baccleanPlayer.getX() + baccleanPlayer.getWidth() / 2,
-                baccleanPlayer.getY() + 176,
-                0);
-        camera.update();
-    }
-
-    private void drawScene() {
-        Color backgroundColor = new Color(0, 0, 34 / 255f, 1);
-        ScreenUtils.clear(backgroundColor);
-
-        // Render the map
-        mapRenderer.setView(camera);
-        mapRenderer.render();
-        // Render the player
-        spriteBatch.setProjectionMatrix(camera.combined);
-        spriteBatch.begin();
-
-        // Player
-        TextureRegion currentFrame = baccleanPlayer.getCurrentFrame();
-        spriteBatch.draw(currentFrame, baccleanPlayer.getX(), baccleanPlayer.getY(),
-                baccleanPlayer.getWidth(), baccleanPlayer.getHeight());
+            enemyVisionRender.setProjectionMatrix(camera.combined);
+            enemyVisionRender.begin(ShapeRenderer.ShapeType.Line);
+            enemyVisionRender.setColor(Color.GOLDENROD);
+            // Render each skeleton’s bounds
+            for (NormalEnemy skeleton : skeletons) {
+                enemyBoundRender.rect(
+                    skeleton.enemyBounds.x,
+                    skeleton.enemyBounds.y,
+                    skeleton.enemyBounds.width,
+                    skeleton.enemyBounds.height);
+                
+                    enemyVisionRender.rect(
+                    skeleton.enemyVision.x,
+                    skeleton.enemyVision.y,
+                    skeleton.enemyVision.width,
+                    skeleton.enemyVision.height);
+            }
         
-        // Enemy
-        for (NormalEnemy skeleton : skeletons) {
-            TextureRegion enemyFrame = skeleton.getCurrentFrame(baccleanPlayer.attackBounds.getX(), baccleanPlayer.playerPower);
-            spriteBatch.draw(enemyFrame, skeleton.getX(), skeleton.getY(),
-                    skeleton.getWidth(), skeleton.getHeight());
-            skeleton.updateEnemyBounds();
-            skeleton.update(Gdx.graphics.getDeltaTime(), groundTileRectangles);
+            enemyBoundRender.end();
+            enemyVisionRender.end();
         }
 
-        // Render items
-        for (Fernet item : items) {
-            item.draw(spriteBatch); // Draw each item
-        }
-        spriteBatch.end();
 
-        if (showBounds) {
-            renderPlayerBounds();
-            renderTileGroundBounds();
-            renderEnemyBounds();
-            renderFernetBounds();
-        }
-
+        private void renderFernetBounds(){
+            fernetBoundRender.setProjectionMatrix(camera.combined);
+            fernetBoundRender.begin(ShapeRenderer.ShapeType.Line);
+            fernetBoundRender.setColor(Color.GOLD);
+            for (Fernet item : items) {
+                Rectangle bounds = item.getBounds();
+                fernetBoundRender.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+            }
         
-    }
+            fernetBoundRender.end();
 
-    private void renderPlayerBounds() {
-        // Movement bounds
-        playerBoundRender.setProjectionMatrix(camera.combined);
-        playerBoundRender.begin(ShapeRenderer.ShapeType.Line);
-        playerBoundRender.setColor(Color.WHITE);
-        playerBoundRender.rect(
-                baccleanPlayer.playerBounds.x,
-                baccleanPlayer.playerBounds.y,
-                baccleanPlayer.playerBounds.width,
-                baccleanPlayer.playerBounds.height);
-        playerBoundRender.end();
-
-        // Attack bounds
-        attackBoundRender.setProjectionMatrix(camera.combined);
-        attackBoundRender.begin(ShapeRenderer.ShapeType.Line);
-        attackBoundRender.setColor(Color.YELLOW);
-        attackBoundRender.rect(
-                baccleanPlayer.attackBounds.x,
-                baccleanPlayer.attackBounds.y,
-                baccleanPlayer.attackBounds.width,
-                baccleanPlayer.attackBounds.height);
-        attackBoundRender.end();
-    }
-
-    private void renderTileGroundBounds() {
-        groundBoundRender.setProjectionMatrix(camera.combined);
-        groundBoundRender.begin(ShapeRenderer.ShapeType.Line);
-        groundBoundRender.setColor(Color.VIOLET); // Color for tile bounds
-
-        // Draw the rectangle for each tile
-        for (Rectangle tile : groundTileRectangles) {
-            groundBoundRender.rect(tile.x, tile.y, tile.width, tile.height);
         }
 
-        groundBoundRender.end();
-    }
 
-    private void renderEnemyBounds() {
-        enemyBoundRender.setProjectionMatrix(camera.combined);
-        enemyBoundRender.begin(ShapeRenderer.ShapeType.Line);
-        enemyBoundRender.setColor(Color.RED);
-    
-        // Render each skeleton’s bounds
-        for (NormalEnemy skeleton : skeletons) {
-            enemyBoundRender.rect(
-                skeleton.enemyBounds.x,
-                skeleton.enemyBounds.y,
-                skeleton.enemyBounds.width,
-                skeleton.enemyBounds.height);
+        public void renderUI(){
+            baccleanPlayer.renderStaminaBar();
+            baccleanPlayer.renderLifeBar();
+        }
+
+
+        @Override
+        public void resize(int width, int height) {
+            extendViewport.update(width, height, true);
+        }
+
+
+        @Override
+        public void pause() {}
+
+
+        @Override
+        public void resume() {}
+
+
+        @Override
+        public void hide() {}
+
+
+        @Override
+        public void dispose() {
+            spriteBatch.dispose();
+            baccleanPlayer.dispose();
+            map.dispose();
+            playerBoundRender.dispose();
+            attackBoundRender.dispose();
+            groundBoundRender.dispose();
+            customCursor.dispose();
+            lights.dispose();
+            musicController.dispose();
+            for (NormalEnemy skeleton : skeletons) {
+                skeleton.dispose();
+            }
+            soundController.dispose();
         }
     
-        enemyBoundRender.end();
-    }
-
-    private void renderFernetBounds(){
-        fernetBoundRender.setProjectionMatrix(camera.combined);
-        fernetBoundRender.begin(ShapeRenderer.ShapeType.Line);
-        fernetBoundRender.setColor(Color.GOLD);
-        for (Fernet item : items) {
-            Rectangle bounds = item.getBounds();
-            fernetBoundRender.rect(bounds.x, bounds.y, bounds.width, bounds.height);
-        }
     
-        fernetBoundRender.end();
-
+    
     }
-
-    public void renderUI(){
-        baccleanPlayer.renderStaminaBar();
-        baccleanPlayer.renderLifeBar();
-    }
-
-
-
-
-    @Override
-    public void resize(int width, int height) {
-        extendViewport.update(width, height, true);
-    }
-
-    @Override
-    public void pause() {}
-
-    @Override
-    public void resume() {}
-
-    @Override
-    public void hide() {}
-
-    @Override
-    public void dispose() {
-        spriteBatch.dispose();
-        baccleanPlayer.dispose();
-        map.dispose();
-        playerBoundRender.dispose();
-        attackBoundRender.dispose();
-        groundBoundRender.dispose();
-        customCursor.dispose();
-        lights.dispose();
-        musicController.dispose();
-        for (NormalEnemy skeleton : skeletons) {
-            skeleton.dispose();
-        }
-        soundController.dispose();
-    }
-}

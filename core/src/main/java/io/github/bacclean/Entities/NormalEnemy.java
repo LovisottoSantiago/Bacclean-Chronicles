@@ -44,6 +44,9 @@ public class NormalEnemy extends Sprite{
     public Rectangle enemyBounds;
     public int enemyBoundsWidth = 22;
     public int enemyBoundsHeight = 54;
+    public Rectangle enemyVision;
+    public int enemyVisionWidth = 50;
+    public int enemyVisionHeight = enemyBoundsHeight;
 
     
     // Gravity fields
@@ -86,11 +89,13 @@ public class NormalEnemy extends Sprite{
         this.enemyState = EnemyState.IDLE;    
 
         enemyBounds = new Rectangle(getX() + (getWidth() - enemyBoundsWidth) / 2, getY() + (getHeight() - enemyBoundsHeight) / 2, enemyBoundsWidth, enemyBoundsHeight);
-
+        enemyVision = new Rectangle(getX() + (getWidth() - enemyVisionWidth) / 2, getY() + (getHeight() - enemyVisionHeight) / 2, enemyVisionWidth, enemyVisionHeight);
     }
+
 
     public void updateEnemyBounds(){
         enemyBounds.setPosition(getX() + (getWidth() - enemyBoundsWidth) / 2, getY());
+        enemyVision.setPosition(getX() + (getWidth() - enemyVisionWidth) / 2, getY());
     }
 
 
@@ -100,6 +105,7 @@ public class NormalEnemy extends Sprite{
             setPosition(getX(), getY() + verticalVelocity * deltaTime);
         }
     }
+
 
     public void checkGroundCollision(java.util.List<com.badlogic.gdx.math.Rectangle> groundTileRectangles) {        
         isFloating = true; 
@@ -136,8 +142,7 @@ public class NormalEnemy extends Sprite{
         }
     }
     
-        
-    
+            
     public TextureRegion getCurrentFrame(float playerX, float playerPower) {
         if (enemyState != previousState) {
             stateTime = 0;
@@ -172,7 +177,6 @@ public class NormalEnemy extends Sprite{
     
         return getCurrentAnimation().getKeyFrame(stateTime, true);
     }
-
     
 
     private Animation<TextureRegion> getCurrentAnimation() {
@@ -199,6 +203,7 @@ public class NormalEnemy extends Sprite{
         updateEnemyBounds(); // Update collision bounds
     }
     
+
     public void dispose() {
         idleSheet.dispose();
         spriteBatch.dispose();
