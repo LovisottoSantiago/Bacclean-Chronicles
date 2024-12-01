@@ -358,7 +358,7 @@ public class Player extends Sprite {
                     playerState = PlayerState.FALLING;
                 }
                 else if ((playerBounds.x - playerBoundsWidth) < (tile.getX() - tile.width) && tile.getY() > playerBounds.getY()) { // left collision
-                    setPosition((playerBounds.getX() - (80)), playerBounds.getY());
+                    setPosition((playerBounds.getX() - (playerBoundsWidth * 3 + tile.width)), playerBounds.getY());
                     verticalVelocity = -1;
                     playerState = PlayerState.FALLING;
                 }
