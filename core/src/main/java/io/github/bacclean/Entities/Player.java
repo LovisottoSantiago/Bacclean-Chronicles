@@ -13,8 +13,8 @@ import com.badlogic.gdx.math.Rectangle;
 import io.github.bacclean.Controllers.AnimationController;
 import io.github.bacclean.Controllers.GuiController;
 import io.github.bacclean.Controllers.SoundController;
-import io.github.bacclean.Entities.Player.PlayerState;
 import io.github.bacclean.Entities.NormalEnemy.EnemyState;
+import io.github.bacclean.Entities.Player.PlayerState;
 
 
 
@@ -337,10 +337,11 @@ public class Player extends Sprite {
         for (Rectangle tile : groundTileRectangles) {
             isFloating = false;
             if (playerBounds.overlaps(tile)) {
+                // check if player is landing on top of tile
                     if (playerBounds.y > tile.getY() && playerBounds.y <= tile.getY() + tile.getHeight() && verticalVelocity < 0) {
                     setPosition(getX(), tile.getY() + tile.getHeight());
                     groundValue = playerBounds.y;
-                    verticalVelocity = 0;
+                    verticalVelocity = 0;                                                        
                     return;
                 }
                 // Hitting the bottom of the tile
@@ -350,6 +351,16 @@ public class Player extends Sprite {
                     playerState = PlayerState.FALLING;
                     System.out.println("Player hit the bottom of the tile. New Y Position: " + getY());
                     return;
+                }                       
+                else if (playerBounds.x > tile.getX() && tile.getY() > playerBounds.getY()) { // right collision
+                    setPosition(tile.getX() - tile.width - playerBoundsWidth, playerBounds.getY());
+                    verticalVelocity = -1;
+                    playerState = PlayerState.FALLING;
+                }
+                else if ((playerBounds.x - playerBoundsWidth) < (tile.getX() - tile.width) && tile.getY() > playerBounds.getY()) { // left collision
+                    setPosition((playerBounds.getX() - (80)), playerBounds.getY());
+                    verticalVelocity = -1;
+                    playerState = PlayerState.FALLING;
                 }
             } groundValue = 64;
         }       
