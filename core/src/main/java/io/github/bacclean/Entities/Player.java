@@ -99,6 +99,9 @@ public class Player extends Sprite {
     Sound attackSound;
     Sound enemyHurtSound;
     public float playerPower = 20;
+    private final float attackCooldown = 0.9f;
+    private float attackTimer = 0f;     
+
     
     
 
@@ -190,8 +193,13 @@ public class Player extends Sprite {
 
     public void playerMove(float delta) {
     // Handle attack input
-    if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !isJumping()) {
+    if (attackTimer < attackCooldown) {
+        attackTimer += delta;
+    }
+
+    if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && attackTimer >= attackCooldown && !isJumping()) {
         performAttack();
+        attackTimer = 0f; 
     }
 
     // Handle state transitions
