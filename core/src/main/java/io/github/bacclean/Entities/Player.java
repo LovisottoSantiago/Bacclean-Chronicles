@@ -256,7 +256,7 @@ public class Player extends Sprite {
             enemy.reduceLife(playerPower);
     
             enemy.isDamaged = true;
-            enemy.damageCooldown = 1f; 
+            enemy.damageCooldown = 0.95f; 
         }
     }
     
@@ -359,7 +359,7 @@ public class Player extends Sprite {
                 }
                 else if ((playerBounds.x - playerBoundsWidth) < (tile.getX() - tile.width) && tile.getY() > playerBounds.getY()) { // left collision
                     setPosition((playerBounds.getX() - (playerBoundsWidth * 3 + tile.width)), playerBounds.getY());
-                    verticalVelocity = -1;
+                    verticalVelocity = -1; //! use -80 if - (playerBoundsWidth * 3 + tile.width) FAILS
                     playerState = PlayerState.FALLING;
                 }
             } groundValue = 64;

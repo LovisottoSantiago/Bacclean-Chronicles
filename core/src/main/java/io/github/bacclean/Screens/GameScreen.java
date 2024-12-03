@@ -145,7 +145,7 @@ public class GameScreen implements Screen {
                     float x = (Float) object.getProperties().get("x");
                     float y = (Float) object.getProperties().get("y");
         
-                    NormalEnemy skeleton = new NormalEnemy("enemies/skeleton/idle.png", 4, 1, "enemies/skeleton/hit-blood.png", 4, 1, "enemies/skeleton/death.png", 4, 1);
+                    NormalEnemy skeleton = new NormalEnemy("enemies/skeleton/idle.png", 4, 1,"enemies/skeleton/walk.png", 4, 1,"enemies/skeleton/hit-blood.png", 4, 1, "enemies/skeleton/death.png", 8, 1);
                     skeleton.setSize(73, 54);
                     skeleton.setPosition(x, y);
                     skeletons.add(skeleton);
@@ -208,6 +208,7 @@ public class GameScreen implements Screen {
         private void handleInput() {
             float delta = Gdx.graphics.getDeltaTime();
             baccleanPlayer.playerMove(delta);
+
     
             if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
                 showBounds = !showBounds; // Toggle the boolean flag
@@ -231,6 +232,9 @@ public class GameScreen implements Screen {
                     baccleanPlayer.damageEnemy(skeleton); 
                 }
             }
+
+            //movement
+
         }
 
 

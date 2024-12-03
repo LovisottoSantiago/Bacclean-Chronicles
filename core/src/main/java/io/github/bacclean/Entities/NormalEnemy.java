@@ -2,6 +2,7 @@ package io.github.bacclean.Entities;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -26,17 +27,21 @@ public class NormalEnemy extends Sprite{
     private final float maxEnemyLife = 100;
 
     private final Texture idleSheet;
+    private final Texture walkSheet;
     private final Texture hitSheet;
     private final Texture deathSheet;
 
     private final Animation<TextureRegion> idleAnimation;
     private final Animation<TextureRegion> leftIdleAnimation;
+    private final Animation<TextureRegion> walkAnimation;
+    private final Animation<TextureRegion> leftWalkAnimation;
     private final Animation<TextureRegion> hitAnimation;
     private final Animation<TextureRegion> leftHitAnimation;
     private final Animation<TextureRegion> deathAnimation;
     private final Animation<TextureRegion> leftDeathAnimation;
 
     private final float idleFrameDuration = 0.2f;
+    private final float walkFrameDuration = 0.08f;
     private final float hitFrameDuration = 0.08f;
     private final float deathFrameDuration = 0.2f;
 
@@ -45,7 +50,7 @@ public class NormalEnemy extends Sprite{
     public int enemyBoundsWidth = 22;
     public int enemyBoundsHeight = 54;
     public Rectangle enemyVision;
-    public int enemyVisionWidth = 50;
+    public int enemyVisionWidth = 300;
     public int enemyVisionHeight = enemyBoundsHeight;
 
     
@@ -55,6 +60,7 @@ public class NormalEnemy extends Sprite{
     public float verticalVelocity = 0; 
     public float groundValue;
     public boolean isFloating = true;
+    public float speed;
 
 
     public boolean leftFlag;
@@ -68,15 +74,19 @@ public class NormalEnemy extends Sprite{
 
     public NormalEnemy (
         String idleSheetPath, int columnsIdleSheet, int rowsIdleSheet,
+        String walkSheetPath, int columnsWalkSheet, int rowsWalkSheet,
         String hitSheetPath, int columnsHitSheet, int rowsHitSheet,
         String deathSheetPath, int columnsDeathSheet, int rowsDeathSheet
     ) {
         this.idleSheet = new Texture(Gdx.files.internal(idleSheetPath));
+        this.walkSheet = new Texture(Gdx.files.internal(walkSheetPath));
         this.hitSheet = new Texture(Gdx.files.internal(hitSheetPath));
         this.deathSheet = new Texture(Gdx.files.internal(deathSheetPath));
 
         idleAnimation = AnimationController.createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, false);
         leftIdleAnimation = AnimationController.createAnimation(idleSheetPath, columnsIdleSheet, rowsIdleSheet, idleFrameDuration, true);
+        walkAnimation = AnimationController.createAnimation(walkSheetPath, columnsWalkSheet, rowsWalkSheet, walkFrameDuration, false);
+        leftWalkAnimation = AnimationController.createAnimation(walkSheetPath, columnsWalkSheet, rowsWalkSheet, walkFrameDuration, true);
         hitAnimation = AnimationController.createAnimation(hitSheetPath, columnsHitSheet, rowsHitSheet, hitFrameDuration, false);
         leftHitAnimation = AnimationController.createAnimation(hitSheetPath, columnsHitSheet, rowsHitSheet, hitFrameDuration, true);
         deathAnimation = AnimationController.createAnimation(deathSheetPath, columnsDeathSheet, rowsDeathSheet, deathFrameDuration, false);
@@ -142,6 +152,20 @@ public class NormalEnemy extends Sprite{
         }
     }
     
+
+    public void rightMovement(float delta) {
+        speed = 50f;
+        this.translateX(speed * delta);
+            leftFlag = false;
+            enemyState = EnemyState.WALKING;
+    }
+
+    public void leftMovement(float delta) {
+        speed = 50f;
+        this.translateX(-speed * delta);
+            leftFlag = true;
+            enemyState = EnemyState.WALKING;
+    }
             
     public TextureRegion getCurrentFrame(float playerX, float playerPower) {
         if (enemyState != previousState) {
@@ -182,7 +206,7 @@ public class NormalEnemy extends Sprite{
     private Animation<TextureRegion> getCurrentAnimation() {
         switch (enemyState) {
             case WALKING:
-                return leftFlag ? leftIdleAnimation : idleAnimation;
+                return leftFlag ? leftWalkAnimation : walkAnimation;
             case HIT:
                 return leftFlag ? leftHitAnimation : hitAnimation;
             case DEATH:
@@ -197,6 +221,17 @@ public class NormalEnemy extends Sprite{
         if (damageCooldown > 0) {
             damageCooldown -= deltaTime; // Decrease the cooldown time
         }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.O)) {
+            rightMovement(deltaTime);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.I)) {
+            leftMovement(deltaTime);
+        } else {
+            if (enemyState == EnemyState.WALKING) {
+                enemyState = EnemyState.IDLE; 
+            }
+        }
+
         
         applyGravity(deltaTime); // Apply gravity each frame
         checkGroundCollision(groundTileRectangles); // Check for ground collision
