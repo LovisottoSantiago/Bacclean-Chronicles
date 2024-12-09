@@ -99,7 +99,7 @@ public class Player extends Sprite {
     Sound attackSound;
     Sound enemyHurtSound;
     public float playerPower = 20;
-    private final float attackCooldown = 0.9f;
+    private final float attackCooldown = 1f;
     private float attackTimer = 0f;     
 
     
