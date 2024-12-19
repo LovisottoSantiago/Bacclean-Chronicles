@@ -29,7 +29,7 @@ public class Player extends Sprite {
     private final Texture jumpingDownSheet;
     private final Texture jumpingUpSheet;
     private final Texture walkSheet;
-    
+
     // Animations for the player
     private final Animation<TextureRegion> attackAnimation;
     private final Animation<TextureRegion> idleAnimation;
@@ -44,7 +44,7 @@ public class Player extends Sprite {
 
     // Animation frame durations
     private final float attackFrameDuration = 0.08f;
-    private final float idleFrameDuration = 0.2f;
+    private final float idleFrameDuration = 0.2f;LovisottoSantiago
     private final float jumpingDownFrameDuration = 0.05f;
     private final float jumpingUpFrameDuration = 0.05f;
     private final float walkFrameDuration = 0.1f;
@@ -59,11 +59,11 @@ public class Player extends Sprite {
     public PlayerState previousState = PlayerState.IDLE;
 
     // Render bar
-    float maxBarWidth = 80; 
-    float barHeight = 3; 
+    float maxBarWidth = 80;
+    float barHeight = 3;
     float borderThickness = 1;
     float barX = 640 - (maxBarWidth / 2);
-    
+
     // Stamina properties
     private float stamina;
     private final float maxStamina = 100;
@@ -74,36 +74,36 @@ public class Player extends Sprite {
 
     // Life properties
     private float life;
-    public float maxLife = 100;    
+    public float maxLife = 100;
 
-    
+
     // Collision properties
     public int attackBoundsHeight= 45;
     public int attackBoundsWidth = 90;
     public int playerBoundsHeight = 45;
     public int playerBoundsWidth = 22;
-    public Rectangle attackBounds; 
+    public Rectangle attackBounds;
     public Rectangle playerBounds;
 
 
     // Jump
-    public final float jumpVelocity = 150f; 
+    public final float jumpVelocity = 150f;
     public final float gravity = -98f; // Gravity effect (how fast the player falls back down)
     public float verticalVelocity = 0; // Current vertical speed
     public float groundValue;
     public boolean isFloating = true;
-    
-    // Attack 
+
+    // Attack
     SoundController playerSounds;
     SoundController enemySounds;
     Sound attackSound;
     Sound enemyHurtSound;
     public float playerPower = 20;
     private final float attackCooldown = 1f;
-    private float attackTimer = 0f;     
+    private float attackTimer = 0f;
 
-    
-    
+
+
 
     // Enum to define player states
     public enum PlayerState {
@@ -112,8 +112,8 @@ public class Player extends Sprite {
 
 
     public Player(
-                    String idleSheetPath, int columnsIdleSheet, int rowsIdleSheet, 
-                    String walkSheetPath, int columnsWalkSheet, int rowsWalkSheet, 
+                    String idleSheetPath, int columnsIdleSheet, int rowsIdleSheet,
+                    String walkSheetPath, int columnsWalkSheet, int rowsWalkSheet,
                     String attackSheetPath, int columnsAttackSheet, int rowsAttackSheet,
                     String jumpingUpSheetPath, int columnsjumpingUpSheet, int rowsjumpingUpSheet,
                     String jumpingDownSheetPath, int columnsjumpingDownSheet, int rowsjumpingDownSheet
@@ -146,7 +146,7 @@ public class Player extends Sprite {
 
         // Initialize collision bounds
         playerBounds = new Rectangle(getX() + (getWidth() - playerBoundsWidth) / 2, getY() + (getHeight() - playerBoundsHeight) / 2, playerBoundsWidth, playerBoundsHeight);
-        attackBounds = new Rectangle(getX() + (getWidth() - attackBoundsWidth) / 2, getY() + (getHeight() - attackBoundsHeight) / 2, attackBoundsWidth, attackBoundsHeight);        
+        attackBounds = new Rectangle(getX() + (getWidth() - attackBoundsWidth) / 2, getY() + (getHeight() - attackBoundsHeight) / 2, attackBoundsWidth, attackBoundsHeight);
 
         // Attack sounds
         playerSounds = new SoundController();
@@ -176,7 +176,7 @@ public class Player extends Sprite {
     }
 
     public void regenerateStamina(float delta) {
-        staminaRegenTime += delta; // Increment the time by the delta time        
+        staminaRegenTime += delta; // Increment the time by the delta time
         // Only regenerate if enough time has passed (e.g., 1 second)
         if (staminaRegenTime >= regenInterval) {
             stamina += regenAmount; // Regenerate stamina
@@ -199,7 +199,7 @@ public class Player extends Sprite {
 
     if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && attackTimer >= attackCooldown && !isJumping()) {
         performAttack();
-        attackTimer = 0f; 
+        attackTimer = 0f;
     }
 
     // Handle state transitions
@@ -211,32 +211,32 @@ public class Player extends Sprite {
             stateTime = 0; // Reset stateTime only after finishing the attack
         }
     } else {
-        regenerateStamina(delta); // Time-based regeneration            
+        regenerateStamina(delta); // Time-based regeneration
         sideMovement(delta);
         updateMovementBounds();
         attackBounds.setSize(0, 0); // Ensure attack bounds are not visible when not attacking
         gravityLogic(delta);
     }
-    
+
 }
 
-    
+
     // Helper method to update movement bounds
     private void updateMovementBounds() {
         playerBounds.setPosition(getX() + (getWidth() - playerBoundsWidth) / 2, getY());
     }
-    
+
 
     // Attack movement and logic (no dmg)
     public void performAttack() {
         if (stamina > staminaCost) {
             playerState = PlayerState.ATTACKING;
-            stateTime = 0; 
+            stateTime = 0;
             decreaseStamina(staminaCost);
             // Set the attack bounds based on the player direction
             attackBounds.setPosition(getX() + (getWidth() - attackBoundsWidth) / 2 + (leftFlag ? -35 : 35), getY());
             attackBounds.setSize(attackBoundsWidth, attackBoundsHeight); // Set the size of the attack bounds
-            
+
             attackSound = playerSounds.getAttackSound();
             if (attackSound != null) {
                 attackSound.play();
@@ -252,24 +252,24 @@ public class Player extends Sprite {
     public void damageEnemy(NormalEnemy enemy) {
         if (attackBounds.overlaps(enemy.enemyBounds) && !enemy.isDamaged && enemy.damageCooldown <= 0) {
             Gdx.app.log("Attack alert: ", "enemy has been damaged by player.");
-    
+
             // Play the hurt sound
             enemyHurtSound = enemySounds.getEnemyHurtSound();
             if (enemyHurtSound != null) {
                 long soundId = enemyHurtSound.play();
-                enemyHurtSound.setVolume(soundId, 0.8f);                 
+                enemyHurtSound.setVolume(soundId, 0.8f);
             }
-    
+
             enemy.enemyState = EnemyState.HIT;
             enemy.reduceLife(playerPower);
-    
+
             enemy.isDamaged = true;
-            enemy.damageCooldown = 0.95f; 
+            enemy.damageCooldown = 0.95f;
         }
     }
-    
-    
-    
+
+
+
 
     public boolean isJumping() {
         return playerState == PlayerState.JUMPING || playerState == PlayerState.FALLING;
@@ -282,7 +282,7 @@ public class Player extends Sprite {
             speed += 200f;
             decreaseStamina(0.3f);
         }
-    
+
         if (getY() < groundValue) {
             playerState = PlayerState.IDLE;
         }
@@ -292,8 +292,8 @@ public class Player extends Sprite {
             leftFlag = true;
             if (!isJumping()) {
                 playerState = PlayerState.RUNNING;
-            }                
-        } 
+            }
+        }
         else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             this.translateX(speed * delta);
             leftFlag = false;
@@ -304,13 +304,13 @@ public class Player extends Sprite {
         else if (!isJumping()) { //! bug solution
             playerState = PlayerState.IDLE;
         }
-        
+
         // JUMP
         if (Gdx.input.isKeyPressed(Input.Keys.W) && (playerState == PlayerState.IDLE || playerState == PlayerState.RUNNING)) {
             playerState = PlayerState.JUMPING;
-            jump();            
+            jump();
         }
-    
+
         if (playerState == PlayerState.JUMPING || playerState == PlayerState.FALLING) {
             gravityLogic(delta);
         }
@@ -320,7 +320,7 @@ public class Player extends Sprite {
         verticalVelocity = jumpVelocity; // Apply initial jump velocity
     }
 
-    public void gravityLogic(float delta) {        
+    public void gravityLogic(float delta) {
         verticalVelocity += gravity * delta; // Increase downward speed
         setPosition(getX(), getY() + verticalVelocity * delta); // Update the player position
         //Gdx.app.log("alert", "a: " + verticalVelocity);
@@ -330,18 +330,18 @@ public class Player extends Sprite {
             verticalVelocity = 0;
             setPosition(getX(), groundValue);
             playerState = PlayerState.IDLE;
-        }          
+        }
         if (verticalVelocity < -10 && playerState == PlayerState.RUNNING){ //! bug solution
             playerState = PlayerState.FALLING;
         }
         else if (verticalVelocity < 0 && playerState == PlayerState.JUMPING){ //! bug solution
             playerState = PlayerState.FALLING;
         }
-        
+
     }
 
 
-    public void checkGroundCollision(java.util.List<com.badlogic.gdx.math.Rectangle> groundTileRectangles) {        
+    public void checkGroundCollision(java.util.List<com.badlogic.gdx.math.Rectangle> groundTileRectangles) {
         for (Rectangle tile : groundTileRectangles) {
             isFloating = false;
             if (playerBounds.overlaps(tile)) {
@@ -349,7 +349,7 @@ public class Player extends Sprite {
                     if (playerBounds.y > tile.getY() && playerBounds.y <= tile.getY() + tile.getHeight() && verticalVelocity < 0) {
                     setPosition(getX(), tile.getY() + tile.getHeight());
                     groundValue = playerBounds.y;
-                    verticalVelocity = 0;                                                        
+                    verticalVelocity = 0;
                     return;
                 }
                 // Hitting the bottom of the tile
@@ -359,7 +359,7 @@ public class Player extends Sprite {
                     playerState = PlayerState.FALLING;
                     System.out.println("Player hit the bottom of the tile. New Y Position: " + getY());
                     return;
-                }                       
+                }
                 else if (playerBounds.x > tile.getX() && tile.getY() > playerBounds.getY()) { // right collision
                     setPosition(tile.getX() - tile.width - playerBoundsWidth, playerBounds.getY());
                     verticalVelocity = -1;
@@ -371,7 +371,7 @@ public class Player extends Sprite {
                     playerState = PlayerState.FALLING;
                 }
             } groundValue = 64;
-        }       
+        }
             int leftLimit = 1000;
             if (playerBounds.x < leftLimit) {
                 setPosition(leftLimit, getY());
@@ -380,8 +380,8 @@ public class Player extends Sprite {
             if (!isFloating && playerState != PlayerState.ATTACKING) {
                 gravityLogic(Gdx.graphics.getDeltaTime());
             }
-    }    
-    
+    }
+
 
     private Animation<TextureRegion> getCurrentAnimation() {
         switch (playerState) {
@@ -398,21 +398,21 @@ public class Player extends Sprite {
         }
     }
 
-    
+
     public TextureRegion getCurrentFrame() {
         if (playerState != previousState) {
             stateTime = 0;
             previousState = playerState;
         }
-    
+
         stateTime += Gdx.graphics.getDeltaTime();
 
         return getCurrentAnimation().getKeyFrame(stateTime, true);
     }
-        
 
 
-    
+
+
     public void dispose() {
         idleSheet.dispose();
         walkSheet.dispose();
@@ -423,7 +423,6 @@ public class Player extends Sprite {
         attackSound.dispose();
         gui.dispose();
     }
-    
 
 
 }
