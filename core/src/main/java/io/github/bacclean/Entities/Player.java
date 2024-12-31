@@ -362,13 +362,13 @@ public class Player extends Sprite {
                 }
                 else if (playerBounds.x > tile.getX() && tile.getY() > playerBounds.getY()) { // right collision
                     setPosition(tile.getX() - tile.width - playerBoundsWidth, playerBounds.getY());
-                    verticalVelocity = -1;
                     playerState = PlayerState.FALLING;
+                    verticalVelocity = -30f;
                 }
                 else if ((playerBounds.x - playerBoundsWidth) < (tile.getX() - tile.width) && tile.getY() > playerBounds.getY()) { // left collision
                     setPosition((playerBounds.getX() - (playerBoundsWidth * 3 + tile.width)), playerBounds.getY());
-                    verticalVelocity = -1; //! use -80 if - (playerBoundsWidth * 3 + tile.width) FAILS
                     playerState = PlayerState.FALLING;
+                    verticalVelocity = -30f;
                 }
             } groundValue = 64;
         }
