@@ -43,7 +43,7 @@ public class Player extends Sprite {
     private final Animation<TextureRegion> walkAnimation;
 
     // Animation frame durations
-    private final float attackFrameDuration = 0.08f;
+    private final float attackFrameDuration = 0.06f;
     private final float idleFrameDuration = 0.2f;
     private final float jumpingDownFrameDuration = 0.05f;
     private final float jumpingUpFrameDuration = 0.05f;
