@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class Fernet {
+public class Item {
     private final Texture texture;
     private final Vector2 position;
     private final Rectangle bounds;
 
-    public Fernet(String texturePath, float x, float y) {
+    public Item(String texturePath, float x, float y) {
         this.texture = new Texture(texturePath); 
         this.position = new Vector2(x, y);
         this.bounds = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
