@@ -94,7 +94,6 @@ public class Player extends Sprite {
     public boolean isFloating = true;
    
    
-   
     // Attack
     SoundController playerSounds;
     SoundController enemySounds;
