@@ -92,7 +92,9 @@ public class Player extends Sprite {
     public float verticalVelocity = 0; // Current vertical speed
     public float groundValue;
     public boolean isFloating = true;
-
+   
+   
+   
     // Attack
     SoundController playerSounds;
     SoundController enemySounds;
