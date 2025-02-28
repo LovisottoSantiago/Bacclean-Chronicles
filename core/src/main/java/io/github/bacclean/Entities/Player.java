@@ -13,7 +13,7 @@ import com.badlogic.gdx.math.Rectangle;
 import io.github.bacclean.Controllers.AnimationController;
 import io.github.bacclean.Controllers.GuiController;
 import io.github.bacclean.Controllers.SoundController;
-import io.github.bacclean.Entities.NormalEnemy.EnemyState;
+import io.github.bacclean.Entities.Enemy.EnemyState;
 import io.github.bacclean.Entities.Player.PlayerState;
 
 
@@ -250,7 +250,7 @@ public class Player extends Sprite {
     }
 
 
-    public void damageEnemy(NormalEnemy enemy) {
+    public void damageEnemy(Enemy enemy) {
         if (attackBounds.overlaps(enemy.enemyBounds) && !enemy.isDamaged && enemy.damageCooldown <= 0) {
             Gdx.app.log("Attack alert: ", "enemy has been damaged by player.");
 
@@ -268,7 +268,6 @@ public class Player extends Sprite {
             enemy.damageCooldown = 0.95f;
         }
     }
-
 
 
 
