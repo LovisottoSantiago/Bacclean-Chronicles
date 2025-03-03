@@ -1,18 +1,33 @@
 package io.github.Bacclean;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import entities.Player;
 
-/** First screen of the application. Displayed after the application is created. */
 public class FirstScreen implements Screen {
+
+    private SpriteBatch batch;
+    private Player player;
+
     @Override
     public void show() {
-        // Prepare your screen here.
+        batch = new SpriteBatch();
+        player = new Player();
     }
 
     @Override
     public void render(float delta) {
-        // Draw your screen here. "delta" is the time since last render in seconds.
+        // clear screen
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        batch.begin();
+        player.update(delta);
+        player.render(batch);
+        batch.end();
     }
+
 
     @Override
     public void resize(int width, int height) {
@@ -36,6 +51,6 @@ public class FirstScreen implements Screen {
 
     @Override
     public void dispose() {
-        // Destroy screen's assets here.
+        batch.dispose();
     }
 }
